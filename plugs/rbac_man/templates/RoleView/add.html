@@ -1,0 +1,20 @@
+{{extend "req_layout.html"}}
+
+{{block menu}}
+{{menu('config')}}
+{{end}}
+
+{{block sub_menu}}
+{{sub_menu(menu_items, 'admin_config', 'roles')}}
+{{end}}
+
+{{block content_main}}
+<div class="content">
+    <div class="box col_12 center">
+        <h2>Add New Role</h2>
+        <div class="box-body">
+            {{embed form}}
+        </div>
+    </div>
+</div>
+{{end}}

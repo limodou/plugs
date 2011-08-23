@@ -1,0 +1,41 @@
+#forum {margin: 0 auto;background:#fff;}
+#forum .nav {padding: 0 10px 0 0;float: left;line-height: 29px;margin-bottom: 0px;}
+#forum .nav .home {width: 16px; background: url(search.png) no-repeat -8px -119px;line-height: 200px;overflow: hidden;}
+#forum .nav em {width: 20px;background: url(item.png) no-repeat 3px 10px;line-height: 200px;overflow: hidden;}
+#forum .nav a, #forum .nav em, #forum .nav span {float: left;height: 29px;}
+#forum .tool {line-height: 29px;padding: 0 10px 0 0;float:right;height:29px;}
+#forum-body {background: white;}
+#forum-body th {height:25px;padding:2px;background: #E5EDF2 url("titlebg.png") repeat-x 0 0;border:1px solid #ccc;}
+#forum-body td {height:25px;padding:2px;border:1px solid #ccc;}
+#forum-body .title h3 {font-size:16px;height:1em;margin:10px 0 0 20px;}
+#forum-body .title p {height:1em;margin:0 0 10px 20px;}
+
+table.forum tr.head {border: 1px solid #CDCDCD;}
+table.forum tr.head .current{background-color:#f4e91a;padding:2px;}
+table.forum tr.head td{height:30px;background-color:#f2f2f2;}
+table.forum tr.head td.first{padding-left:8px;}
+#forum_table tr {border: 1px solid #CDCDCD;}
+#forum_table td {height:38px;background-color:white;}
+#forum_table td.first {padding-left:8px;}
+#forum cite {display: block;font-style: normal;}
+#forum em {display: block;font-style: normal;color: #999;font-size: 11px;font-family: Arial,PMingliu,sans-serif;}
+#forum_table a {font-weight:bold;}
+
+#forum .replay {margin-top:10px;}
+#forum .replay h3 {margin-bottom:5px;}
+#forum .topic h2 {border-bottom:3px solid #999;margin:0px;padding-bottom:4px;}
+#forum .topic .topic_msg {margin-top:4px; color:#999;}
+#forum .deleted {border:1px solid #f00;padding:10px;background-color:#f49596;}
+
+#posts {}
+#posts li {display: block;margin-top: 10px; border-bottom:1px dotted #ccc;}
+#posts .user_image {float: left;width: 65px;}
+#posts .user_image img{padding:4px; border:1px solid #d2d2d2;-webkit-box-shadow: 2px 2px 3px #ccc;
+-moz-box-shadow: 2px 2px 3px #ccc;
+box-shadow: 2px 2px 3px #ccc;
+}
+#posts .post_body {float:left;margin-left:5px;width:800px;}
+#posts .footer {height:22px;margin-top:5px;color:#999;}
+#posts .footer a{color:#668db6;}
+#posts .header {height:22px;margin-bottom:5px;color:#999;}
+#forum textarea {width:100%;}

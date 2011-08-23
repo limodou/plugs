@@ -1,0 +1,40 @@
+ul.simplemenu, ul.simplemenu ul {
+  list-style-type:none;
+  margin: 0;
+  padding-left: 10px;
+}
+
+ul.simplemenu a {
+  display: block;
+  text-decoration: none;	
+  font-weight:bold;
+}
+
+ul.simplemenu li {
+  margin-top: 1px;
+}
+
+ul.simplemenu li a, ul.simplemenu ul.simplemenu li a {
+  padding: 0.5em;
+}
+
+ul.simplemenu li a:hover, ul.simplemenu ul.simplemenu li a:hover {
+  background: #9EC2FF;
+  -moz-border-radius: 4px/*{cornerRadius}*/; -webkit-border-radius: 4px/*{cornerRadius}*/; border-radius: 4px/*{cornerRadius}*/;
+}
+
+ul.simplemenu li ul li a, ul.simplemenu ul.simplemenu li ul li a {
+  padding-left: 10px;
+}
+
+ul.simplemenu a.active {
+  background: #D9E7FF;
+  text-decoration: underline;
+  -moz-border-radius: 4px/*{cornerRadius}*/; -webkit-border-radius: 4px/*{cornerRadius}*/; border-radius: 4px/*{cornerRadius}*/;
+}
+
+ul.simplemenu span {
+    float:left;
+    margin: 0px 4px;
+}
+.ui-icon-blank {background-image:none;}

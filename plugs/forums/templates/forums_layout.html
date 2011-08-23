@@ -1,0 +1,24 @@
+{{extend "layout.html"}}
+
+{{block menu}}
+{{menu('forums')}}
+{{end}}
+
+{{block content}}
+{{link "forums/forums.css"}}
+<div id="forum" class="col_16">
+    {{block forum_nav}}
+    <div class="nav">
+        <a href="" class="home" title="首页">论坛首页</a>
+    </div>
+    <div class="tool">
+        {{if has_role(request.user, 'superuser'):}}
+        <a class="btn btn-green" href="/forum/admin_category">管理</a>
+        {{pass}}
+    </div>
+    {{end}}
+    <div class="clear"></div>
+    {{block content_main}}
+    {{end}}
+</div>
+{{end}}

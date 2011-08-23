@@ -1,0 +1,32 @@
+{{extend "user_admin_layout.html"}}
+
+{{block menu}}
+{{menu('admin')}}
+{{end}}
+
+{{block sub_menu}}
+{{sub_menu(menu_items, 'user_admin', 'users')}}
+{{end}}
+
+{{block content_tool}}
+{{if request.user.is_superuser or request.user.is_manager:}}
+    <a class="btn btn-blue" href="/users/add">{{=_('Click here to add new user.')}}</a>
+{{pass}}
+{{end}}
+
+{{block content_main}}
+{{use "jquery", ui=True}}
+
+<div class="content">
+    <div class="query">
+        {{embed query_form}}
+    </div>
+    {{table_id='users_manage'}}
+    {{include "inc_table.html"}}
+    <script>
+        $(function(){
+            create_table("{{=request.path}}");
+        });
+    </script>
+</div>
+{{end}}

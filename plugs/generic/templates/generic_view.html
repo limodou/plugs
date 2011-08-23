@@ -1,0 +1,17 @@
+{{extend layout}}
+
+{{block content_main}}
+{{use "jquery", css_only=True}}
+<div class="content">
+    <div class="box col_12">
+        <h2>{{=title}}</h2>
+        <div class="box-body">
+            {{<< view}}
+            <div style="padding:5px;">
+                <a class="btn btn-green" href="{{=get_url('edit', id=obj_id)}}">{{=_('Edit')}}</a>
+                <a class="btn btn-blue" href="{{=get_url('delete', id=obj_id)}}" onclick="return confirm('{{=_("Do you want to delete this record?")}}');">{{=_('Delete')}}</a>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}

@@ -1,0 +1,163 @@
+{{extend "config_layout.html"}}
+
+{{block menu}}
+{{menu('config')}}
+{{end}}
+
+{{block sub_menu}}
+{{sub_menu(menu_items, 'admin_config', 'roles')}}
+{{end}}
+
+{{block content_main}}
+{{use "jquery", css_only=True}}
+{{use "facebox"}}
+{{use "jqutils", ajaxForm=True}}
+<style type="text/css">
+<!--
+#role-users {overflow:auto;}
+#role-users li {list-style:none; float:left; margin: 2px 4px; padding: 4px; background-color:#e7eef8;}
+#role-users li img{margin-right:4px;cursor:pointer;}
+#role-permissions {overflow:auto;}
+#role-permissions li {list-style:none; float:left; margin: 2px 4px; padding: 4px; background-color:#e7eef8;}
+#role-permissions li img{margin-right:4px;cursor:pointer;}
+-->
+</style>
+
+<div class="content">
+    <div class="box col_14">
+        <h2>{{=_('Role')}}: {{=object.name}}</h2>
+        <div class="box-body">
+            {{<< view}}
+            <div class="box-bottom">
+                <a class="btn btn-green" href="/config/roles/edit/{{=object.id}}">编辑</a>
+                {{if not object.reserve:}}
+                    <a class="btn btn-blue" href="/config/roles/delete/{{=object.id}}">删除</a>
+                {{pass}}
+            </div>
+        </div>
+        <h2>{{=_('Users')}}</h2>
+        <div class="box-body">
+            <div id="role-users">
+            {{for user in object.users.all().order_by('username'):}}
+                <li class="rounded"><img src="/static/images/cross_grey_small.png" rel="{{=object.id}}_{{=user.id}}"/><span class="role-name">{{=user.username}}</span></li>
+            {{pass}}
+            </div>
+            <div class="box-bottom">
+                <a class="btn btn-green" href="javascript:void(0)" id="role-add">{{=_('Add')}}</a>
+                <input id="role-username" class="rselect" url='/config/users/search'></input>
+            </div>
+        </div>
+        <h2>{{=_('Permissions')}}</h2>
+        <div class="box-body">
+            <div id="role-permissions">
+            {{for p in object.permissions.all().order_by('name'):}}
+                <li class="rounded"><img src="/static/images/cross_grey_small.png" rel="{{=object.id}}_{{=p.id}}"/><span class="role-name" title="{{=p.description}}">{{=p.name}}</span></li>
+            {{pass}}
+            </div>
+            <div class="box-bottom">
+                <a class="btn btn-green" href="javascript:void(0)" id="perm-add">{{=_('Add')}}</a>
+                <input id="role-perm" class="rselect" url='/config/permissions/search'></input>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var del_user = function(){
+        var self = $(this);
+        var ids = $(this).attr('rel').split('_');
+        var user_id = ids[1];
+        var role_id = ids[0];
+        $.ajax({
+            type: 'POST',
+            url: '/config/roles/deluser',
+            data: {user_id:user_id, 'role_id':role_id},
+            dataType: 'json',
+            success: function(r){
+                if(r.success){
+                    show_message(r.message);
+                    self.parent('li').remove();
+                }else{
+                    show_message(r.message, 'error');
+                }
+            }
+        });
+    }
+    
+    $(function(){
+        $('#role-users img').click(del_user);
+        $('#perm-add').click(function(){
+            if (!$('#role-perm').val()){
+                alert('Please select an permission first.');
+            }else{
+                $.ajax({
+                    type: 'POST',
+                    url: '/config/roles/addperm',
+                    data: {perm_id:$('#role-perm').val(), 'role_id':{{=object.id}}},
+                    dataType: 'json',
+                    success: function(r){
+                        if(r.success){
+                            show_message(r.message);
+                            var e = $(template('<li class="rounded"><img src="/static/images/cross_grey_small.png" rel="{{=object.id}}_${id}"/><span class="role-name">${name}</span></li>', r.data));
+                            e.appendTo($('#role-permissions')).effect('highlight', 5000);
+                            e.find('img').click(del_user);
+                            $('.rselect').rselect('clear');
+                        }else{
+                            show_message(r.message, 'error');
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    var del_perm = function(){
+        var self = $(this);
+        var ids = $(this).attr('rel').split('_');
+        var perm_id = ids[1];
+        var role_id = ids[0];
+        $.ajax({
+            type: 'POST',
+            url: '/config/roles/delperm',
+            data: {perm_id:perm_id, 'role_id':role_id},
+            dataType: 'json',
+            success: function(r){
+                if(r.success){
+                    show_message(r.message);
+                    self.parent('li').remove();
+                }else{
+                    show_message(r.message, 'error');
+                }
+            }
+        });
+    }
+    
+    $(function(){
+        $('#role-permissions img').click(del_perm);
+        $('#role-add').click(function(){
+            if (!$('#role-username').val()){
+                alert('Please select an user first.');
+            }else{
+                $.ajax({
+                    type: 'POST',
+                    url: '/config/roles/adduser',
+                    data: {user_id:$('#role-username').val(), 'role_id':{{=object.id}}},
+                    dataType: 'json',
+                    success: function(r){
+                        if(r.success){
+                            show_message(r.message);
+                            var e = $(template('<li class="rounded"><img src="/static/images/cross_grey_small.png" rel="{{=object.id}}_${id}"/><span class="role-name">${username}</span></li>', r.data));
+                            e.appendTo($('#role-users')).effect('highlight', 5000);
+                            e.find('img').click(del_user);
+                            $('.rselect').rselect('clear');
+                        }else{
+                            show_message(r.message, 'error');
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+{{end}}

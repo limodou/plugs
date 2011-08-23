@@ -1,0 +1,17 @@
+{{extend layout}}
+
+{{block content_tool}}
+    <a class="btn btn-blue" href="{{=get_url('add')}}">{{=add_button_text}}</a>
+{{end}}
+
+{{block content_main}}
+<div class="content">
+    {{#table_id='system'}}
+    {{include "inc_table.html"}}
+    <script>
+        $(function(){
+            create_table("{{=request.path}}", download=true);
+        });
+    </script>
+</div>
+{{end}}

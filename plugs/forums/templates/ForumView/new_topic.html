@@ -1,0 +1,41 @@
+{{extend "forums_layout.html"}}
+
+{{block sub_menu}}
+{{sub_menu(menu_items, 'forum')}}
+{{end}}
+
+{{block forum_nav}}
+    <div class="nav">
+        <a href="/forum" class="home" title="首页">论坛首页</a>
+        <em>»</em>
+        <span><a href="/forum/{{=forum.id}}">{{=forum.name}}</a></span>
+    </div>
+    <div class="tool">
+        <a class="btn btn-green" href="/forum/{{=forum.id}}/new_topic">新主题</a>
+    </div>
+{{end}}
+
+{{block content_main}}
+{{use "xheditor"}}
+<div class="content">
+    <div class="box center">
+        <h2>发表新主题</h2>
+        <div class="box-body">
+            {{<< form}}
+        </div>
+    </div>
+</div>
+{{include "inc_xheditor_plugins.html"}}
+
+<script type="text/javascript">
+    $(function(){
+        $('textarea').xheditor({
+            tools:'Cut,Copy,Paste,Pastetext,|,Blocktag,Fontface,FontSize,Bold,Italic,Underline,Strikethrough,FontColor,BackColor,SelectAll,Removeformat,|,Align,List,Outdent,Indent,|,Link,Unlink,Img,Hr,Emot,Table,Code,Quote,|,About',
+            skin:'vista',
+            upLinkUrl:"!/forum/upload_file?forum_id={{=forum.id}}&slug={{=form.data['slug']}}",
+            upImgUrl:"!/forum/upload_image?forum_id={{=forum.id}}&slug={{=form.data['slug']}}",
+            plugins:plugins
+        });
+    });
+</script>
+{{end}}

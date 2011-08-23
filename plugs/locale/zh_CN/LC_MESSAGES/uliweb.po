@@ -1,0 +1,299 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: plugs 0.1\n"
+"POT-Creation-Date: Tue Jun 07 20:06:16 2011\n"
+"PO-Revision-Date: 2011-06-08 11:04+0800\n"
+"Last-Translator: limodou <limodou@gmail.com>\n"
+"Language-Team: limodou <limodou@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-Country: CHINA\n"
+
+#: .\audit\models.py:9
+msgid "OperationTable"
+msgstr "操作表"
+
+#: .\audit\models.py:10
+msgid "Title"
+msgstr "标题"
+
+#: .\audit\models.py:12
+msgid "ModifiedContent"
+msgstr "修改后的内容"
+
+#: .\audit\models.py:13
+msgid "OriginalContent"
+msgstr "初始内容"
+
+#: .\audit\models.py:14
+msgid "ModifiedFlag"
+msgstr "修改标志"
+
+#: .\audit\models.py:15
+msgid "ModifiedDate"
+msgstr "修改日期"
+
+#: .\audit\models.py:16
+msgid "ModifiedUser"
+msgstr "修改用户"
+
+#: .\audit\settings.ini:12
+msgid "Add"
+msgstr "添加"
+
+#: .\audit\settings.ini:12
+msgid "Change"
+msgstr "修改"
+
+#: .\audit\settings.ini:12
+#: .\generic\templates\generic_model_view.html:18
+#: .\user_admin\templates\UsersManageView\view.html:48
+msgid "Delete"
+msgstr "删除"
+
+#: .\generic\templates\generic_model_view.html:12
+#: .\user_admin\templates\UserView\view.html:34
+#: .\user_admin\templates\UsersManageView\view.html:34
+#: .\user_admin\templates\UsersManageView\view.html:38
+msgid "Edit"
+msgstr "编辑"
+
+#: .\generic\templates\generic_model_view.html:16
+msgid "Do you want to delete this record?"
+msgstr "你想要删除这条记录吗？"
+
+#: .\generic\views.py:76
+msgid "Click here to add new object"
+msgstr "点击这里添加新对象"
+
+#: .\generic\views.py:104
+msgid "Add %s"
+msgstr "添加 %s"
+
+#: .\generic\views.py:137
+msgid "Edit %s(#%d)"
+msgstr "编辑 %s(#%d)"
+
+#: .\layout\templates\layout.html:13
+msgid "Welcome"
+msgstr "欢迎"
+
+#: .\layout\templates\layout.html:17
+msgid "Logout"
+msgstr "注销"
+
+#: .\layout\templates\layout.html:21
+msgid "You've not loginned yet!"
+msgstr "你尚未登录！"
+
+#: .\tables\models.py:9
+msgid "TableName"
+msgstr "表名"
+
+#: .\tables\models.py:10
+msgid "Description"
+msgstr "描述"
+
+#: .\ui\jquery\jqeasyui\templates\inc_table.html:19
+msgid "Download"
+msgstr "下载"
+
+#: .\user\forms.py:6
+#: .\user\forms.py:7
+#: .\user\templates\login.html:4
+#: .\user\views.py:10
+msgid "Login"
+msgstr "登录"
+
+#: .\user\forms.py:9
+#: .\user_admin\forms.py:35
+msgid "Username:"
+msgstr "用户名："
+
+#: .\user\forms.py:10
+#: .\user_admin\forms.py:17
+#: .\user_admin\forms.py:37
+msgid "Password:"
+msgstr "口令："
+
+#: .\user\forms.py:11
+msgid "Remember Me"
+msgstr "记住我"
+
+#: .\user\forms.py:21
+msgid "User \"%s\" does not exist!"
+msgstr "用户 \"%s\" 不存在！"
+
+#: .\user\forms.py:23
+#: .\user_admin\forms.py:25
+#: .\user_admin\forms.py:50
+msgid "Password is not right."
+msgstr "口令不正确。"
+
+#: .\user_admin\forms.py:6
+#: .\user_admin\forms.py:14
+#: .\user_admin\forms.py:33
+msgid "Save"
+msgstr "保存"
+
+#: .\user_admin\forms.py:7
+msgid "Change Basic Information"
+msgstr "修改基本信息"
+
+#: .\user_admin\forms.py:9
+msgid "Email:"
+msgstr "邮箱："
+
+#: .\user_admin\forms.py:10
+msgid "Portrait:"
+msgstr "头像："
+
+#: .\user_admin\forms.py:16
+#: .\user_admin\forms.py:36
+msgid "Old Password:"
+msgstr "旧口令："
+
+#: .\user_admin\forms.py:18
+#: .\user_admin\forms.py:38
+msgid "Password again:"
+msgstr "再次输入口令："
+
+#: .\user_admin\forms.py:28
+#: .\user_admin\forms.py:53
+msgid "Passwords are not the same between two types."
+msgstr "两次输入的口令不一致。"
+
+#: .\user_admin\forms.py:47
+msgid "Username is not existed."
+msgstr "用户不存在。"
+
+#: .\user_admin\forms.py:64
+msgid "The username is already existed! Please change another one."
+msgstr "用户名已经存在！请换一个。"
+
+#: .\user_admin\forms.py:74
+msgid "Username is already existed."
+msgstr "用户名已经存在。"
+
+#: .\user_admin\templates\UserView\change_password.html:13
+#: .\user_admin\templates\user_admin_layout.html:19
+msgid "Change Password"
+msgstr "修改口令"
+
+#: .\user_admin\templates\UserView\edit.html:13
+msgid "User Information Edit"
+msgstr "用户信息修改"
+
+#: .\user_admin\templates\UserView\edit_image.html:21
+msgid "Save Portrait"
+msgstr "保存头像"
+
+#: .\user_admin\templates\UserView\edit_image.html:25
+msgid "There is no portrait image uploaded yet!"
+msgstr "头像图片还没有上传！"
+
+#: .\user_admin\templates\UserView\edit_image.html:37
+msgid "Upload"
+msgstr "上传"
+
+#: .\user_admin\templates\UserView\view.html:17
+#: .\user_admin\templates\UsersManageView\view.html:17
+msgid "Click to change portrait"
+msgstr "点击修改头像"
+
+#: .\user_admin\templates\UserView\view.html:27
+#: .\user_admin\templates\UsersManageView\view.html:27
+msgid "User Information"
+msgstr "用户信息"
+
+#: .\user_admin\templates\UsersManageView\add.html:13
+msgid "Create New User"
+msgstr "创建新用户"
+
+#: .\user_admin\templates\UsersManageView\edit.html:13
+msgid "Change User"
+msgstr "修改用户"
+
+#: .\user_admin\templates\UsersManageView\list.html:13
+msgid "Click here to add new user."
+msgstr "点击添加新用户"
+
+#: .\user_admin\templates\UsersManageView\view.html:46
+msgid "Do you really wnat to delete the user?"
+msgstr "你真正想要删除这个用户吗？"
+
+#: .\user_admin\templates\user_admin_layout.html:16
+msgid "Settings"
+msgstr "设置"
+
+#: .\user_admin\templates\user_admin_layout.html:18
+msgid "Information"
+msgstr "信息"
+
+#: .\user_admin\templates\user_admin_layout.html:28
+msgid "Admin Settings"
+msgstr "管理设置"
+
+#: .\user_admin\templates\user_admin_layout.html:30
+msgid "User Manager"
+msgstr "用户管理"
+
+#: .\user_admin\views_admin.py:73
+msgid "Save portrait successful"
+msgstr "保存头像成功"
+
+#: .\user_admin\views_admin.py:100
+#: .\user_admin\views_admin.py:104
+msgid "Password saved successfully."
+msgstr "口令保存成功。"
+
+#: .\user_admin\views_admin.py:110
+msgid "There are something wrong, please fix them."
+msgstr "存在错误，请修复。"
+
+#: .\user_admin\views_admin.py:216
+msgid "You have no previlege to create user."
+msgstr "你无权创建用户。"
+
+#: .\user_admin\views_admin.py:235
+msgid "User is not exists!"
+msgstr "用户不存在。"
+
+#: .\user_admin\views_admin.py:257
+msgid "You have no previlege to edit user."
+msgstr "你无权编辑用户。"
+
+#: .\user_admin\views_admin.py:267
+msgid "You have no previlege to delete user."
+msgstr "你无权删除用户。"
+
+#: .\user_admin\views_admin.py:277
+msgid "Password reset successfully."
+msgstr "口令重设成功。"
+
+#: .\user_admin\views_admin.py:280
+msgid "You have no previlege to reset user password."
+msgstr "你无权重设用户口令。"
+
+msgid "Admin"
+msgstr "管理"
+
+msgid "Uliweb Plugs Demo"
+msgstr "Uliweb Plugs 演示"
+
+msgid "All rights reversed!"
+msgstr "所有权保留！"
+
+msgid "Home"
+msgstr "首页"
+
+msgid "About"
+msgstr "关于"
+

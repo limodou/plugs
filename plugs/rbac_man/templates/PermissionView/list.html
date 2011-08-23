@@ -1,0 +1,30 @@
+{{extend "config_layout.html"}}
+
+{{block menu}}
+{{menu('config')}}
+{{end}}
+
+{{block sub_menu}}
+{{sub_menu(menu_items, 'admin_config', 'permissions')}}
+{{end}}
+
+{{block content_tool}}
+{{if request.user.is_superuser:}}
+    <a class="btn btn-blue" href="/config/permissions/add">点击这里增加新权限</a>
+{{pass}}
+{{end}}
+
+{{block content_main}}
+{{use "jquery"}}
+
+<div class="content">
+    {{table_id='permissions_table'}}
+    {{include "inc_table.html"}}
+    <script>
+        $(function(){
+            create_table("{{=request.path}}", false);
+        });
+    </script>
+</div>
+
+{{end}}

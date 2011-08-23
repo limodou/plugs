@@ -1,0 +1,65 @@
+{{extend "forums_layout.html"}}
+
+{{block forum_nav}}
+    <div class="nav">
+        <a href="{{=url_for('forums.views.ForumView.list')}}" class="home" title="首页">论坛首页</a>
+        <em>»</em>
+        <span><a href="{{=url_for('forums.views.ForumView.forum_index', id=forum.id)}}">{{=forum.name}}</a></span>
+    </div>
+    <div class="tool">
+        {{if request.user:}}
+        <a class="btn btn-green" href="/forum/{{=forum.id}}/new_topic">新主题</a>
+        {{else:}}
+        <font color="red">你还没有登录，无法发表新主题！</font>
+        {{pass}}
+    </div>
+{{end}}
+
+{{block content_main}}
+{{use "jquery"}}
+{{use "jqutils"}}
+<script type="text/html" id="topicTemplate">
+    <tr>
+        <td align="left" class="first">${subject}</td>
+        <td align="left"><cite>${posted_by}</cite><em>${created_on}</em></td>
+        <td align="left"><cite>${num_replies}</cite><em>${num_views}</em></td>
+        <td align="left"><cite>${last_post_user}</cite><em>${last_reply_on}</em></td>
+    </tr>
+</script>
+<table border="0" width="100%" class="forum">
+    <thead>
+        <tr class="head">
+            <td align="left" class="first">筛选：{{if filter=='all':}}<span class="current rounded">全部主题</span>{{else:}}<a href="?filter=all">全部主题</a>{{pass}} | {{if filter=='essence':}}<span class="current rounded">精华</span>{{else:}}<a href="?filter=essence">精华</a>{{pass}}</th>
+            <td width="100px">作者</th>
+            <td width="120px">文章/浏览</th>
+            <td width="150px">最后回复</th>
+        </tr>
+    </thead>
+    <tbody id="forum_table">
+    </tbody>
+</table>
+<div id="paginate"></div>
+{{include "inc_jpaginate.html"}}
+<script type="text/javascript">
+    var load_topics = function(page){
+        page = page || 1;
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            data: {data:'', page:page},
+            url: "{{=request.path}}"+$.query_string.toString(),
+            success: function(data){
+                var forum = $('#forum_table')
+                forum.empty();
+                $.each(data.rows, function(index, value){
+                    var topic = template($('#topicTemplate').html(), value).appendTo(forum);
+                });
+                create_pagination('#paginate', data.total, {{=settings.get_var('PARA/FORUM_INDEX_NUMS')}}, page, load_topics);
+            }
+        });
+    }
+    $(function(){
+        load_topics();
+    });
+</script>
+{{end}}

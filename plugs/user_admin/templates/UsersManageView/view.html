@@ -1,0 +1,39 @@
+{{extend "user_admin_layout.html"}}
+
+{{block menu}}
+{{menu('admin')}}
+{{end}}
+
+{{block sub_menu}}
+{{sub_menu(menu_items, 'user_admin', 'users')}}
+{{end}}
+
+
+{{block content_main}}
+{{use "jquery", css_only=True}}
+<div class="content">
+    <div class="col">
+        {{if can_modify:}}
+        <a href="{{=url_for('plugs.user_admin.views_admin.UserView.edit_image')}}" title="{{=_('Click to change portrait')}}"><img src="{{=image_url}}" class="portrait"/></a>
+        {{else:}}
+        <img src="{{=image_url}}" class="portrait"/>
+        {{pass}}
+    </div>
+    <div class="col">
+        <h2>{{=_('User Information')}}</h2>
+        <div class="box-body">
+            {{embed view}}
+            <div style="padding:5px;">
+            {{if request.user.is_superuser:}}
+            <a class="btn btn-green" href="/users/edit/{{=object.id}}">{{=_('Edit')}}</a>
+            {{elif object.id==request.user.id:}}
+            <a class="btn btn-green" href="/user/edit">{{=_('Edit')}}</a>
+            {{pass}}
+            {{if request.user.is_superuser:}}
+            <a class="btn btn-blue" href="/users/delete/{{=object.id}}" onclick="return confirm('{{=_('Do you really wnat to delete the user?')}}');">{{=_('Delete')}}</a>
+            {{pass}}
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}

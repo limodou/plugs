@@ -1,0 +1,97 @@
+{{extend "user_admin_layout.html"}}
+
+{{block sub_menu}}
+{{sub_menu(menu_items, 'user', 'information')}}
+{{end}}
+
+{{block content_main}}
+{{use "jquery", ui=True}}
+{{use "jqutils"}}
+{{use "jcrop"}}
+<div class="box">
+    {{if image_url:}}
+        <table border="0" cellpadding="10" cellspacing="0">
+            <tr>
+                <td><img src="{{=image_url}}" id="portrait"/></td>
+                <td>
+                    <div style="width:50px;height:50px;overflow:hidden;margin-left:5px;">
+                        <img src="{{=image_url}}" id="preview50x50">
+                    </div>
+                </td>
+                <td>
+                    <div style="width:20px;height:20px;overflow:hidden;margin-left:5px;">
+                        <img src="{{=image_url}}" id="preview20x20">
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div>
+        <form action="save_image" method="POST" onsubmit="return checkCoords();">
+        <input type="hidden" id="x" name="x" /> 
+        <input type="hidden" id="y" name="y" /> 
+        <input type="hidden" id="w" name="w" /> 
+        <input type="hidden" id="h" name="h" /> 
+        <input type="submit" value="{{=_('Save Portrait')}}" /> 
+        </form>
+        </div>
+    {{else:}}
+        {{include "inc_message.html"}}
+        {{message(_('There is no portrait image uploaded yet!'))}}
+    {{pass}}
+</div>
+<script type="text/javascript">
+
+function checkCoords()
+{
+	if (parseInt($('#w').val())) return true;
+	alert('Please select a crop region then press submit.');
+	return false;
+};
+
+
+$(function(){
+
+	$('#portrait').Jcrop({
+		onChange: showPreview,
+		onSelect: showPreview,
+		aspectRatio: 1
+	});
+
+});
+function showPreview(c)
+{
+	$('#x').val(c.x);
+    $('#y').val(c.y);
+    $('#w').val(c.w);
+    $('#h').val(c.h);
+
+    var rx = 50 / c.w;
+	var ry = 50 / c.h;
+
+	$('#preview50x50').css({
+		width: Math.round(rx * {{=size[0]}}) + 'px',
+		height: Math.round(ry * {{=size[1]}}) + 'px',
+		marginLeft: '-' + Math.round(rx * c.x) + 'px',
+		marginTop: '-' + Math.round(ry * c.y) + 'px'
+	});
+    
+    var rx = 20 / c.w;
+    var ry = 20 / c.h;
+
+    $('#preview20x20').css({
+        width: Math.round(rx * {{=size[0]}}) + 'px',
+        height: Math.round(ry * {{=size[1]}}) + 'px',
+        marginLeft: '-' + Math.round(rx * c.x) + 'px',
+        marginTop: '-' + Math.round(ry * c.y) + 'px'
+    });
+};
+
+</script>
+<div class="box-body">
+    <form action="" enctype="multipart/form-data" method="POST">
+        <label for="field_image">Portrait</label>
+        <input id="field_image" name="image" type="file">
+        <input type="submit" value="{{=_('Upload')}}">
+    </form>
+</div>
+{{end}}

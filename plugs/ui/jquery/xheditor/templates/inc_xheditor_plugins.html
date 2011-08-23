@@ -1,0 +1,66 @@
+<style type="text/css">  
+<!--  
+/* 增加插入代码工具图标 */  
+.btnCode {  
+    background:transparent url(/static/xheditor/xheditor_plugins/code.png) no-repeat 20px 20px;  
+    background-position:3px 3px;  
+}  
+.btnQuote {  
+    background:transparent url(/static/xheditor/xheditor_plugins/quote.gif) no-repeat 20px 20px;  
+    background-position:3px 3px;  
+}  
+-->  
+</style>  
+<script type="text/javascript">
+    var plugins = {
+        Code:{  
+            c:'btnCode',t:'插入代码',h:1,e:function(){  
+                var _this=this;  
+                var htmlCode=('<div><select id="xheCodeType">'+
+                '<option value="html">HTML/XML</option>'+
+                '<option value="javascript">JavaScript</option>'+
+                '<option value="css">CSS</option>'+
+                '<option value="php">PHP</option>'+
+                '<option value="csharp">C#</option>'+
+                '<option value="cpp">C++</option>'+
+                '<option value="java">Java</option>'+
+                '<option value="perl">Perl</option>'+
+                '<option value="python">Python</option>'+
+                '<option value="ruby">Ruby</option>'+
+                '<option value="vb">Visual Basic</option>'+
+                '<option value="delphi">Delphi</option>'+
+                '<option value="as3">Action Script 3</option>'+
+                '<option value="sql">SQL</option>'+
+                '<option value="plain">其它</option>'+
+                '</select></div>'+
+                '<div><textarea id="xheCodeValue" wrap="soft" spellcheck="false" style="width:300px;height:100px;" /></div>'+
+                '<div style="text-align:right;"><input type="button" id="xheSave" value="确定" /></div>');  
+                var jCode=$(htmlCode),jType=$('#xheCodeType',jCode),jValue=$('#xheCodeValue',jCode),jSave=$('#xheSave',jCode);  
+                jSave.click(function(){  
+                    _this.loadBookmark();  
+                    var txt = $('<div/>').text(jValue.val()).html();
+                    _this.pasteHTML('<pre class="brush: '+jType.val()+';">\r\n'+txt+'\r\n</pre><p>&nbsp;</p>');  
+                    _this.hidePanel();
+                    return false;     
+                });  
+                _this.showDialog(jCode);  
+            }  
+        },
+        Quote:{
+            c:'btnQuote',t:'引用文本',h:1,e:function(){  
+                var _this=this;
+                var htmlCode=('<div><textarea id="xheText" wrap="soft" spellcheck="false" style="width:300px;height:100px;" /></div>'+
+                '<div style="text-align:right;"><input type="button" id="xheSave" value="确定" /></div>');  
+                var jCode=$(htmlCode),jValue=$('#xheText',jCode),jSave=$('#xheSave',jCode);  
+                jSave.click(function(){  
+                    _this.loadBookmark();  
+                    var txt = $('<div/>').text(jValue.val()).html();
+                    _this.pasteHTML('<blockquote>'+txt+'</blockquote><p>&nbsp;</p>');  
+                    _this.hidePanel();
+                    return false;     
+                });  
+                _this.showDialog(jCode);  
+            }  
+        } 
+    }
+</script>

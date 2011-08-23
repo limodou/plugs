@@ -1,0 +1,22 @@
+{{extend "layout.html"}}
+
+{{block menu}}
+{{menu('forums')}}
+{{end}}
+
+{{block content_sidebar}}
+{{use "jquery", ui=True}}
+{{use "jsmenu"}}
+{{
+menu_items = [
+    {'name': 'category', 'title':'板块', 'link':'/forum/admin_category'},
+    {'name': 'forum', 'title':'论坛', 'link':'/forum/admin_forum'},
+    {'name': 'forumtopictype', 'title':'主题类型', 'link':'/forum/admin_forumtopictype'},
+]      
+}}
+<div class="sidebar">
+    {{block sub_menu}}
+    {{end}}
+</div>
+{{end}}
+

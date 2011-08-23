@@ -133,6 +133,7 @@ class ForumPost(Model):#can't edit...回复
     updated_on = Field(datetime.datetime, verbose_name='修改时间')
     floor = Field(int, verbose_name='楼层', required=True)
     deleted = Field(bool, verbose_name='删除标志', default=False)
+    slug = Field(CHAR, max_length=32, verbose_name='唯一识别串')
     modified_by = Reference('user', verbose_name='修改人', collection_name='user_modified_posts')
     deleted_by = Reference('user', verbose_name='删除人', collection_name='user_deleted_posts')
     deleted_on = Field(datetime.datetime, verbose_name='删除时间')
@@ -142,5 +143,5 @@ class ForumPost(Model):#can't edit...回复
         Index('fpost_indx', cls.c.topic, cls.c.floor, unique=True)
     
     class AddForm:
-        fields = ['content']
+        fields = ['content', 'slug']
     

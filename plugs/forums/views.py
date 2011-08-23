@@ -441,7 +441,6 @@ class ForumView(object):
             Topic.filter(Topic.c.id==int(topic_id)).update(num_replies=Topic.c.num_replies+1, last_post_user=request.user.id, last_reply_on=datetime.now())
             Forum.filter(Forum.c.id==int(forum_id)).update(num_posts=Forum.c.num_posts+1, last_post_user=request.user.id, last_reply_on=datetime.now())
             self._clear_files(obj.slug, data['content'])
-            print 'xxxxxxxxxxxxxxxxxxx', obj.slug, data
             
         def get_form_field(name):
             from uliweb.form import TextField

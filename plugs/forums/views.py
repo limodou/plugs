@@ -532,7 +532,7 @@ class ForumView(object):
                     filename = save_file(filename, f['file'])
                     if form.data['is_thumbnail']:
                         #process thumbnail
-                        rfilename, thumbnail = thumbnail_image(get_filename(filename), filename, settings.get_var('PARA/FORUM_THUMBNAIL_SIZE'))
+                        rfilename, thumbnail = thumbnail_image(get_filename(filename, filesystem=True), filename, settings.get_var('PARA/FORUM_THUMBNAIL_SIZE'))
                         _file = get_url(thumbnail)
                     else:
                         _file = get_url(filename)

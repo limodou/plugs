@@ -1,12 +1,34 @@
 #coding=utf-8
 import os
 from uliweb import expose
-from uliweb.orm import get_model
+from uliweb.orm import get_model, do_
 from datetime import datetime, timedelta
+from uliweb.utils.common import wraps
 
 #def __begin__():
 #    from uliweb.contrib.auth import if_login
 #    return if_login()
+
+def _check_role(role):
+    def f1(func, role=role):
+        @wraps(func)
+        def f2(*args, **kwargs):
+            _role = role
+            from uliweb.orm import get_model
+            if isinstance(_role, (str, unicode)):
+                Role = get_model('role')
+                _role = Role.get(Role.c.name==role)
+                if _role:
+                    name = _role.description or _role.name
+                else:
+                    name = _role
+            else:
+                name = _role.display or _role.name
+            if not has_role(request.user, _role):
+                error(u'你不是%s，无法访问该页面' % name)
+            return func(*args, **kwargs)
+        return f2
+    return f1
 
 @expose('/forum')
 class ForumView(object):
@@ -27,12 +49,14 @@ class ForumView(object):
         category = get_model('forumcategory')
         return {'categories':category.all().order_by(category.c.ordering), 'count':category.count()}
     
+    @_check_role('superuser')
     def admin(self):
         """
         显示管理页面
         """
         return {}
         
+    @_check_role('superuser')
     def admin_category(self):
         """
         显示管理板块页面
@@ -55,6 +79,7 @@ class ForumView(object):
             result.update({'table':view})
             return result
         
+    @_check_role('superuser')
     def category_add(self):
         """
         添加新的板块
@@ -64,6 +89,7 @@ class ForumView(object):
         view = AddView('forumcategory', url_for(ForumView.admin_category))
         return view.run()
     
+    @_check_role('superuser')
     def category_edit(self, id):
         """
         修改板块
@@ -77,12 +103,14 @@ class ForumView(object):
         view = EditView('forumcategory', url_for(ForumView.admin_category), obj=obj)
         return view.run()
     
+    @_check_role('superuser')
     def category_delete(self, id):
         """
         删除板块
         """
         from uliweb.utils.generic import DeleteView
         
+        self._check_superuser()
         category = get_model('forumcategory')
         
         obj = category.get(int(id))
@@ -96,6 +124,7 @@ class ForumView(object):
             obj=obj, validator=validator)
         return view.run()
     
+    @_check_role('superuser')
     def admin_forum(self):
         """
         显示管理论坛页面
@@ -117,6 +146,7 @@ class ForumView(object):
             result.update({'table':view})
             return result
     
+    @_check_role('superuser')
     def forum_add(self):
         """
         添加新的论坛
@@ -126,6 +156,7 @@ class ForumView(object):
         view = AddView('forum', url_for(ForumView.admin_forum))
         return view.run()
     
+    @_check_role('superuser')
     def forum_edit(self, id):
         """
         修改论坛
@@ -139,6 +170,7 @@ class ForumView(object):
         view = EditView('forum', url_for(ForumView.admin_forum), obj=obj)
         return view.run()
     
+    @_check_role('superuser')
     def forum_delete(self, id):
         """
         删除论坛
@@ -158,6 +190,7 @@ class ForumView(object):
             obj=obj, validator=validator)
         return view.run()
     
+    @_check_role('superuser')
     def admin_forumtopictype(self):
         """
         显示管理论坛主题类型页面
@@ -179,6 +212,7 @@ class ForumView(object):
             result.update({'table':view})
             return result
     
+    @_check_role('superuser')
     def forumtopictype_add(self):
         """
         添加新的论坛
@@ -188,6 +222,7 @@ class ForumView(object):
         view = AddView('forumtopictype', url_for(ForumView.admin_forumtopictype))
         return view.run()
     
+    @_check_role('superuser')
     def forumtopictype_edit(self, id):
         """
         修改论坛
@@ -201,6 +236,7 @@ class ForumView(object):
         view = EditView('forumtopictype', url_for(ForumView.admin_forumtopictype), obj=obj)
         return view.run()
     
+    @_check_role('superuser')
     def forumtopictype_delete(self, id):
         """
         删除论坛
@@ -272,6 +308,7 @@ class ForumView(object):
             return {'forum':forum, 'filter':filter}
     
     @expose('<int:id>/new_topic')
+    @_check_role('trusted')
     def new_topic(self, id):
         """
         发表新主题
@@ -421,6 +458,7 @@ class ForumView(object):
             return {'forum':forum, 'topic':topic, 'slug':slug}
     
     @expose('<forum_id>/<topic_id>/new_post')
+    @_check_role('trusted')
     def new_post(self, forum_id, topic_id):
         """
         发表新回复
@@ -435,7 +473,7 @@ class ForumView(object):
             from sqlalchemy.sql import select, func
 
             data['topic'] = int(topic_id)
-            data['floor'] = (select([func.max(Post.c.floor)], Post.c.topic==int(topic_id)).execute().scalar() or 0) + 1
+            data['floor'] = (do_(select([func.max(Post.c.floor)], Post.c.topic==int(topic_id))).scalar() or 0) + 1
             
         def post_save(obj, data):
             Topic.filter(Topic.c.id==int(topic_id)).update(num_replies=Topic.c.num_replies+1, last_post_user=request.user.id, last_reply_on=datetime.now())
@@ -453,6 +491,7 @@ class ForumView(object):
         return view.run()
     
     @expose('<forum_id>/<topic_id>/edit_topic')
+    @_check_role('trusted')
     def edit_topic(self, forum_id, topic_id):
         """
         修改主题
@@ -553,6 +592,7 @@ setTimeout(function(){callback(url);},100);
             else:
                 return {'form':form}
                 
+    @_check_role('trusted')
     def post_actions(self):
         Post = get_model('forumpost')
         

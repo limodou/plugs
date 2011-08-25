@@ -93,7 +93,7 @@
             $.ajax({
                 type: "POST",
                 data: {post_id:post_id, action:action},
-                url: "{{=url_for('forums.views.ForumView.post_actions')}}",
+                url: "{{=url_for('plugs.forums.views.ForumView.post_actions')}}",
                 success: function(data){
                     show_message(data.msg);
                     if(data.txt){
@@ -109,7 +109,7 @@
             type: "POST",
             dataType: 'json',
             data: {data:'', page:page},
-            url: "{{=url_for('forums.views.ForumView.topic_view', forum_id=forum.id, topic_id=topic.id)}}",
+            url: "{{=url_for('plugs.forums.views.ForumView.topic_view', forum_id=forum.id, topic_id=topic.id)}}",
             success: function(data){
                 var posts = $('#posts')
                 posts.empty();

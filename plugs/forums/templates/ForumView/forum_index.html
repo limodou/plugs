@@ -2,9 +2,9 @@
 
 {{block forum_nav}}
     <div class="nav">
-        <a href="{{=url_for('forums.views.ForumView.list')}}" class="home" title="首页">论坛首页</a>
+        <a href="{{=url_for('plugs.forums.views.ForumView.list')}}" class="home" title="首页">论坛首页</a>
         <em>»</em>
-        <span><a href="{{=url_for('forums.views.ForumView.forum_index', id=forum.id)}}">{{=forum.name}}</a></span>
+        <span><a href="{{=url_for('plugs.forums.views.ForumView.forum_index', id=forum.id)}}">{{=forum.name}}</a></span>
     </div>
     <div class="tool">
         {{if request.user:}}

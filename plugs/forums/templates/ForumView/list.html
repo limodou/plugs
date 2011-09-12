@@ -12,12 +12,13 @@
                     <th>文章</th>
                     <th>最新文章</th>
                 </tr>
-                {{for f in c.forums.all().order_by('ordering'):}}
+                {{from uliweb.utils.timesince import timesince
+                for f in c.forums.all().order_by('ordering'):}}
                     <tr>
                         <td width="*"><div class="title"><h3><a href="/forum/{{=f.id}}">{{=f.name}}</a></h3><p>{{=f.description}}</p></div></td>
                         <td align="center" width="60">{{=f.num_topics}}</td>
                         <td align="center" width="60">{{=f.num_posts}}</td>
-                        <td width="200"><cite>{{=f.get_display_value('last_post_user', f.last_post_user)}}</cite><em>{{=f.get_display_value('last_reply_on', f.last_reply_on)}}</em></td>
+                        <td align="center" width="200"><cite>{{=f.get_display_value('last_post_user', f.last_post_user)}}</cite><em>{{=timesince(f.last_reply_on)}}</em></td>
                     </tr>
                 {{pass}}
             {{pass}}

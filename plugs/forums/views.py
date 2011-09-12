@@ -266,6 +266,10 @@ class ForumView(object):
         def created_on(value, obj):
             return value.strftime('%Y-%m-%d')
         
+        def last_reply_on(value, obj):
+            from uliweb.utils.timesince import timesince
+            return timesince(value)
+        
         def subject(value, obj):
             if obj.topic_type:
                 _type = u'[%s]' % obj.get_display_value('topic_type')
@@ -282,7 +286,8 @@ class ForumView(object):
                 s += u'<font color="red">[精]</font>'
             return _type+ '<a href="/forum/%d/%d">%s</a>' % (int(id), obj.id, obj.subject) + s
         
-        fields_convert_map = {'created_on':created_on, 'subject':subject}
+        fields_convert_map = {'created_on':created_on, 'subject':subject,
+            'last_reply_on':last_reply_on}
         view = ListView(Topic, condition=condition, order_by=order_by,
             rows_per_page=rows_per_page, pageno=pageno,
             fields_convert_map=fields_convert_map)
@@ -311,8 +316,7 @@ class ForumView(object):
                 content=data['content'], floor=1)
             p.save()
             
-            Forum.filter(Forum.c.id==int(id)).update(num_topics=Forum.c.num_topics+1)
-            
+            Forum.filter(Forum.c.id==int(id)).update(num_posts=Forum.c.num_posts+1, last_post_user=request.user.id, last_reply_on=datetime.now())
             #根据slug的值清除附件中无效的文件
             self._clear_files(obj.slug, data['content'])
             
@@ -331,7 +335,7 @@ class ForumView(object):
         slug = uuid.uuid1().hex
         data = {'slug':slug}
         view = AddView('forumtopic', url_for(ForumView.forum_index, id=int(id)),
-            default_data={'forum':int(id)}, 
+            default_data={'forum':int(id), 'last_post_user':request.user.id, 'last_reply_on':datetime.now()}, 
             hidden_fields=['slug'], data=data,
             post_save=post_save, get_form_field=get_form_field, template_data={'forum':forum})
         return view.run()
@@ -379,7 +383,7 @@ class ForumView(object):
         order_by = [Post.c.floor]
         
         def created_on(value, obj):
-            return value.strftime('%Y-%m-%d')
+            return value.strftime('%Y-%m-%d %H:%M:%S')
         
         def content(value, obj):
             if obj.deleted:

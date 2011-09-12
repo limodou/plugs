@@ -22,7 +22,7 @@
     <tr>
         <td align="left" class="first">${subject}</td>
         <td align="left"><cite>${posted_by}</cite><em>${created_on}</em></td>
-        <td align="left"><cite>${num_replies}</cite><em>${num_views}</em></td>
+        <td align="center"><b>${num_replies}</b>/<b>${num_views}</b></td>
         <td align="left"><cite>${last_post_user}</cite><em>${last_reply_on}</em></td>
     </tr>
 </script>
@@ -31,7 +31,7 @@
         <tr class="head">
             <td align="left" class="first">筛选：{{if filter=='all':}}<span class="current rounded">全部主题</span>{{else:}}<a href="?filter=all">全部主题</a>{{pass}} | {{if filter=='essence':}}<span class="current rounded">精华</span>{{else:}}<a href="?filter=essence">精华</a>{{pass}}</th>
             <td width="100px">作者</th>
-            <td width="120px">文章/浏览</th>
+            <td width="100px" align="center">文章/浏览</th>
             <td width="150px">最后回复</th>
         </tr>
     </thead>
@@ -39,7 +39,7 @@
     </tbody>
 </table>
 <div id="paginate"></div>
-{{include "inc_jpaginate.html"}}
+{{include "inc_paginate.html"}}
 <script type="text/javascript">
     var load_topics = function(page){
         page = page || 1;

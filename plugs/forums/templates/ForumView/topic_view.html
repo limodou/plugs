@@ -16,6 +16,7 @@
 {{use "xheditor"}}
 {{use "jqimgzoom"}}
 <script type="text/html" id="postTemplate">
+    <a name="${id}"></a>
     <li class="post" id="post_${id}">
         <div class="user_image">
             <img title="${username}" src="${userimage}">
@@ -84,7 +85,7 @@
     </div>
 {{pass}}
 {{include "inc_xheditor_plugins.html"}}
-{{include "inc_jpaginate.html"}}
+{{include "inc_paginate.html"}}
 <script type="text/javascript">
     var bind_action = function(el, action){
         el.click(function(event){

@@ -160,14 +160,21 @@ pre 			{	margin:1.5em 0;white-space:pre;}
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
-	border:1px solid #ccc;
 }
 
 .rounded_top_right {
 	border-top-right-radius:5px;
 	-moz-border-radius-topright:5px;
 	-webkit-border-top-right-radius:5px;
-	border:1px solid #ccc;
+}
+
+.rounded_bottom {
+    border-bottom-right-radius:5px;
+    -moz-border-radius-bottomright:5px;
+    -webkit-border-bottom-right-radius:5px;
+    border-bottom-left-radius:5px;
+    -moz-border-radius-bottomleft:5px;
+    -webkit-border-bottom-left-radius:5px;
 }
 
 .box_shadow {
@@ -219,7 +226,7 @@ pre 			{	margin:1.5em 0;white-space:pre;}
 /*******************************************************************/
 body, html {}
 .container {margin:0; min-height:100%;width:100%!important;}
-.content {margin:0; padding-bottom: 10px;width:100% !important;}
+.container .content {margin-top: 5px; padding-bottom: 10px;width:100% !important;}
 header {height:52px;margin:0 auto 5px;position:relative;
 width:100%!important;background-color:#e7eef8;
 -webkit-box-shadow: 2px 2px 3px #ccc;
@@ -289,16 +296,11 @@ footer a, footer a:visited{color:#444;}
 .notice a {color:#514721; background:none; padding:0; margin:0; }
 .success a {color:#264409; background:none; padding:0; margin:0; }
 */
-.message {
--moz-border-radius: 5px; 
--webkit-border-radius: 5px;
-border-radius: 5px;
-}
 .center {margin:0 auto;}
 
 .notice {
     position: relative;
-    margin: 0 0 15px 0;
+    margin: 0 0 5px 0;
     padding: 0;
     border: 1px solid;
     background-position: 10px 11px !important;
@@ -373,7 +375,7 @@ border-radius: 5px;
 
 img.icon {border: 3px solid #eee; padding:2px; margin:5px;}
 
-.content_tool {margin-left: 2px; margin-bottom: 5px;}
+.content_tool {margin: 5px;}
 .content_body{margin-top:10px; width:100%;}
 .content_title{font-size:38px;font-weight:bold;}
 .content_date {color:#999;}
@@ -495,13 +497,12 @@ a.btn {
     font-size: 13px;
 	border-style: solid;
 	cursor:pointer;
-	font-weight:bold;
 	padding:2px 6px 2px 6px;
 	text-align:center;
 	vertical-align:middle;
 	white-space:nowrap;
 	border-width:1px;
-	margin-left:3px;
+	margin-right:3px;
 	background-position:0 0;
 	border-color:#999;
 	line-height:normal !important;
@@ -557,3 +558,109 @@ div.view div.field{
 .query .error {color:#f00;background:#D9E7FF none;}
 fieldset {padding:10px;margin:4px;color:#333;border:#06c solid 1px;} 
 fieldset legend {font-weight:bold;}
+ul.list-no-style, li.list-no-style {list-style:none;}
+
+/*********************
+tab
+<div class="tabnav">
+<ul>
+    <li><a href="#">Hone</a></li>
+    <li><a href="#" class="current">Page</a></li>
+</ul>
+</div>
+
+**********************/
+.tabnav {
+    background:#e7eef8;
+    padding: 0;
+    border-top:1px solid #9EC2FF;
+    border-left:1px solid #9EC2FF;
+    border-right:1px solid #9EC2FF;
+}
+ 
+.tabnav ul {
+    padding:10px 0px 5px 0px;
+    margin:5px 0px 5px 0px;
+    list-style:none;
+    background:#e7eef8;
+    border-bottom:1px solid #9EC2FF;
+}
+ 
+.tabnav ul li {
+    display:inline;
+    margin-left:10px;
+}
+ 
+.tabnav ul li a {
+    background:#e7eef8;
+    padding:5px 10px 5px 10px;
+}
+ 
+.tabnav ul li a:hover {
+    background:#FC9200;
+}
+ 
+.tabnav ul li a.current {
+    background:#fff;
+    padding:5px 10px 5px 10px;
+    border-top:1px solid #9EC2FF;
+    border-left:1px solid #9EC2FF;
+    border-right:1px solid #9EC2FF;
+    border-bottom:1px solid #fff;
+}
+ 
+.tabnav ul li a.current:hover {
+    background:#FC9200;
+    border-top:1px solid #FC9200;
+    border-left:1px solid #FC9200;
+    border-right:1px solid #FC9200;
+    border-bottom:1px solid #fff;
+}
+
+.hover-menu {cursor:pointer;display:inline;}
+.hover-menu .items {position:absolute;background-color: #fff;border:1px solid #9EC2FF;margin:0px;padding:2px;z-index:899;margin:0;list-style:none;}
+.hover-menu .items a{background-color:transparent;padding:2px 2px;}
+.hover-menu .items a:hover{background-color:transparent;}
+.hover-menu .items li{display:block;margin:0px;padding:5px;list-style:none;}
+.hover-menu .items li:hover {background-color:#9EC2FF;}
+.hover-menu cite {padding:5px 20px 5px 10px;font-style: normal;z-index:900;position:relative;}
+.hover-menu cite.hover {
+border-top:1px solid #9EC2FF;
+border-left:1px solid #9EC2FF;
+border-right:1px solid #9EC2FF;
+border-bottom:1px solid #fff;
+background-color: #fff;
+}
+.hover-menu b {
+position: absolute;
+right: 7px;
+top: 12px;
+width: 0;
+height: 0;
+border-width: 4px 4px;
+border-style: solid;
+border-color: #666 #EEE #EEE;
+font-size: 0;
+line-height: 0;
+-webkit-transition: -webkit-transform .2s ease-in;
+-moz-transition: -moz-transform .2s ease-in;
+-o-transition: -o-transform .2s ease-in;
+transition: transform .2s ease-in;
+}
+.hover-menu:hover b, .hover-menu .hover b{
+border-color: #666 #fff #fff;
+position: absolute;
+top: 12px;
+top: 6px\9\0;
+-moz-transform: rotate(180deg);
+-moz-transform-origin: 50% 30%;
+-webkit-transform: rotate(180deg);
+-webkit-transform-origin: 50% 30%;
+-o-transform: rotate(180deg);
+-o-transform-origin: 50% 30%;
+transform: rotate(180deg);
+transform-origin: 50% 30%;
+filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+-webkit-transform-origin-x: 50%;
+-webkit-transform-origin-y: 30%;
+}

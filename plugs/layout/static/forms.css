@@ -27,8 +27,8 @@
    */
 
   form.yform {
-    margin: 0 0 1em 0;
-    padding: 10px;
+/*    margin: 0 0 1em 0;
+    padding: 10px;*/
   }
 
   form.yform fieldset {
@@ -139,16 +139,23 @@
   form.yform div.type-select,
   form.yform div.type-check,
   form.yform div.type-button {
-    margin: 1em 0;
+    margin: 6px 4px;
    /* overflow: hidden;*/
   }
 
+  form.yform div.type-text{padding-right:12px;}  
   /* styling standard form elements with 'almost' equal flexible width | Gestaltung der einzelnen Formularelemente mit annähend gleicher Breite */
   form.yform .type-text input,
   form.yform .type-text textarea {
     display: block;
     padding: 0.3em 0.3em;
   }
+  form.yform .type-text textarea {
+    overflow-x:visible;
+    width: 100%;
+    padding-right:5px;
+  }
+
 
   form.yform .type-select select {
     display: block;

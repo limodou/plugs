@@ -54,7 +54,7 @@ class Forum(Model):#论坛
         fields = ['category', 'name', 'description', 'ordering', 'managers']
         
     class EditForm:
-        fields = ['name', 'description', 'ordering', 'managers']
+        fields = ['category', 'name', 'description', 'ordering', 'managers']
     
     class Table:
         fields = [

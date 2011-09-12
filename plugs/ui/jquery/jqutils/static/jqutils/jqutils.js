@@ -1,3 +1,6 @@
+/***************************
+QueryString
+****************************/
 (function($){
     QueryString = function(options){
         this.urlParams = {};
@@ -135,7 +138,7 @@ var template = function(tmp_string, hash_or_array){
         else return r;
     }
     return $(tmp_string.replace(/\$\{?([A-Za-z_0-9]+)\}?/g, _replace));
-}
+};
 
 /* process rselect input */
 $(function() {
@@ -143,3 +146,181 @@ $(function() {
         $(this).rselect();
     });
 });
+
+/* mytabs */
+(function( $ ) {
+    $.widget( "ui.mytabs", {
+        _id : 1,
+        options: {'container':'', 'current':0, 'ajax':true},
+        _create: function() {
+            var self = this, element = this.element;
+            $(element).find('a.tabitem').each(function(){
+                $($(this).attr('rel')).hide();
+            });
+            $(element).find('a.tabitem').click(function(e){
+                if (!self.options.ajax && !$(this).attr('rel')) 
+                    return true;
+                e.preventDefault();
+                self.show(this);
+            });
+            self.show(self.options.current);
+        },
+        show: function(index){
+            var el;
+            if (typeof index == 'number') el = $(this.element).find('a.tabitem:eq('+index+')');
+            else if (typeof index == 'string') el = $(this.element).find('#'+index);
+            else el = $(index);
+            //if current item has class="current" then do nothing
+            if (el.hasClass('current')) return;
+            this._load(el);
+            var cur = $(this.element).find('a.current');
+            cur.removeClass('current');
+            $(cur.attr('rel')).hide();
+            el.addClass('current');
+            $(el.attr('rel')).show();
+        },
+        _load: function(a){
+            var self=this;
+            //if it has rel attribute, then it means the content is loaded
+            if(a.attr('rel')) return;
+            var target = $(self.options.container);
+            if(a.hasClass('iframe')){
+                var id = '_mytabs_'+self._id;
+                self._id ++;
+                var div = $('<div id="'+id+'"></div>').appendTo(target);
+                var w = a.attr('fw') || target.width();
+                var h = a.attr('fh') || target.height();
+                div.html('<iframe src="'+a.attr('href')+'" width="'+w+'" height="'+h+'"></iframe>');
+                a.attr('rel', '#'+id);
+            }else{
+//            target.spin();
+            //then it means that the content should be loaded by ajax
+                $.ajax({
+                    type: "POST",
+                    url: a.attr('href'),
+                    success: function(data){
+                        var id = '_mytabs_'+self._id;
+                        self._id ++;
+                        var div = $('<div id="'+id+'"></div>').appendTo(target);
+                        div.html(data);
+                        a.attr('rel', '#'+id);
+    //                    target.spin(false);
+                    }
+                });
+            }
+        },
+        destroy: function() {
+            $(self).find('a.tabitem').show();
+            $.Widget.prototype.destroy.call( this );
+        }
+    });
+})( jQuery );
+
+/* spin plugin */
+$.fn.spin = function(opts) {
+  this.each(function() {
+    var $this = $(this),
+        data = $this.data();
+
+    if (data.spinner) {
+      data.spinner.stop();
+      delete data.spinner;
+    }
+    if (opts !== false) {
+      data.spinner = new Spinner(opts).spin(this);
+    }
+  });
+  return this;
+};
+
+$.fn.hover_menu = function(){
+    $(this).find('.items').hide();
+    $(this).each(function(){
+        $(this).hoverIntent({
+            sensitivity: 1, // number = sensitivity threshold (must be 1 or higher)
+            interval: 50,   // number = milliseconds for onMouseOver polling interval
+            over: function(){
+                var menu = $(this);
+                var t = menu.find('cite');
+                var offset = t.offset();
+                menu.find(".items").css({top:offset.top+t.outerHeight(), left:offset.left, margin:0}).slideDown();
+                t.addClass('hover');
+            },     // function = onMouseOver callback (required)
+            timeout: 300,   // number = milliseconds delay before onMouseOut
+            out: function(){ 
+                var menu = $(this);
+                menu.find(".items").slideUp();
+                menu.find("cite").removeClass('hover');
+            } // function = onMouseOut callback (required)
+         });
+    });
+};
+
+var show_simple_message = function(msg, target){
+    if (!msg) {
+        $('.simple_message').remove();
+        return;
+    }
+    var t = target || '.message-conainter';
+    var m = $('<div class="simple_message"><div class="mg">' + msg + '</div></div>');
+    if ($(t).size()==0){
+        m.css({
+            position:'fixed',
+            top:0, 
+            left:$(window).width() / 2 - (m.outerWidth() / 2),
+            zIndex: 1500
+        });
+        m.find('.mg').addClass('rounded_bottom');
+        $('body').append(m);
+    }else
+        m.find('.mg').addClass('rounded');
+        $(t).html(m);
+};
+
+/*
+  get select options from url
+  server shoud return data just like this:
+
+    [[value1, text1], [value2, text2], ...]
+    
+  or 
+
+    [{value:'value1', text:'text1'}, {value:'value2', text:'text2'}...]
+*/
+function get_select(target, url, data){
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: data || {},
+        dataType: 'json',
+        success: function(data){
+            var html = "<option value=''></option>";
+            var v,k,t;
+            for(var j in data){
+                if($.type(data[j]) == 'array'){
+                    v = data[j][0];
+                    k = data[j][1];
+                }else{
+                    v = data[j].value;
+                    k = data[j].text;
+                }
+                html = html + '<option value=' + v + '>' + k + '</option>'
+            }
+            if (typeof target == 'string') t = $('select[name='+target+']');
+            else t = $(target);
+            t.html(html);
+        }
+    });
+};
+/*
+    bind change event to an element, and when the element value is changed
+    then automatically fetch data from remote, and change the target select 
+    element
+*/
+$.fn.bind_select_remote = function(target, url){
+    return $(this).each(function(){
+        $(this).change(function(){
+            get_select(target, url, {value:t.val()});
+        });
+    });
+};

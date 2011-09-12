@@ -8,7 +8,7 @@
     </div>
     <div class="tool">
         {{if request.user:}}
-        <a class="btn btn-green" href="/forum/{{=forum.id}}/new_topic">新主题</a>
+        <a class="btn btn-green" href="{{=url_for('plugs.forums.views.ForumView.new_topic', id=forum.id)}}">新主题</a>
         {{else:}}
         <font color="red">你还没有登录，无法发表新主题！</font>
         {{pass}}

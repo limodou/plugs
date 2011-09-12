@@ -27,23 +27,8 @@
    */
 
   form.tform {
-    margin: 0 0 1em 0;
-    padding: 10px;
-  }
-
-  form.tform fieldset {
-    border: 1px #ddd solid;
-    background: #fafafa;
-    margin: 0 0 1em 0;
-    padding: 0.5em 1em;
-  }
-
-  form.tform legend {
-    font-size: 125%; font-weight: normal; color: #000;
-  }
-
-  form.tform label {
-    color: #666;
+/*    margin: 0 0 1em 0;
+    padding: 10px;*/
   }
 
   form.tform .type-text input,
@@ -122,9 +107,8 @@
 
   /* General form styling  | Allgemeine Formatierung des Formulars */
   form.tform { overflow: hidden; }
-  form.tform fieldset { overflow: hidden; }
-  form.tform legend { background: transparent; border: 0; }
-  form.tform label { display:inline; cursor: pointer; font-weight:bold; font-size:11pt;}
+  form.tform fieldset { overflow: hidden; padding:5px 10px;}
+  form.tform label { display:inline; cursor: pointer; font-weight:bold;}
   form.tform .message { display: block; margin-bottom: 0.5em; color: #666; }
   form.tform label.description {color: #999; font-weight:normal;}
   form.tform table {width:100%;}

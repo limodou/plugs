@@ -51,11 +51,12 @@
                     .appendTo( ul );
             };
 
-            this.button = $( "<button type='button'>&raquo;</button>" )
+            this.button = $( "<a href='#' class='jqrselect-button' title='click to search'>&nbsp;&nbsp;&nbsp;&nbsp;</a>" )
                 .attr( "tabIndex", -1 )
                 .attr( "title", title )
                 .insertAfter( input )
-                .click(function() {
+                .click(function(e) {
+                    e.preventDefault();
                     // close if already visible
                     if ( input.autocomplete( "widget" ).is( ":visible" ) ) {
                         input.autocomplete( "close" );
@@ -73,7 +74,20 @@
                     input.focus();
                 });
         },
+        
+        getValue: function(){
+            return this.element.val();
+        },
+        
+        getText: function(){
+            return this.input.val();
+        },
 
+        clear: function(){
+            this.input.val('');
+            this.element.val('');
+        },
+        
         destroy: function() {
             this.input.remove();
             this.button.remove();

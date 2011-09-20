@@ -2,8 +2,10 @@
 import os
 from uliweb import expose, decorators
 from uliweb.orm import get_model, do_
-from datetime import datetime, timedelta
-from uliweb.utils.common import wraps
+from datetime import timedelta
+from uliweb.utils.common import safe_str
+from uliweb.utils import date
+from uliweb.utils.timesince import timesince
 
 #def __begin__():
 #    from uliweb.contrib.auth import if_login
@@ -267,7 +269,6 @@ class ForumView(object):
             return value.strftime('%Y-%m-%d')
         
         def last_reply_on(value, obj):
-            from uliweb.utils.timesince import timesince
             return timesince(value)
         
         def subject(value, obj):
@@ -316,7 +317,9 @@ class ForumView(object):
                 content=data['content'], floor=1)
             p.save()
             
-            Forum.filter(Forum.c.id==int(id)).update(num_posts=Forum.c.num_posts+1, last_post_user=request.user.id, last_reply_on=datetime.now())
+            Forum.filter(Forum.c.id==int(id)).update(num_posts=Forum.c.num_posts+1, 
+                num_topics=Forum.c.num_topics+1,
+                last_post_user=request.user.id, last_reply_on=date.now())
             #根据slug的值清除附件中无效的文件
             self._clear_files(obj.slug, data['content'])
             
@@ -335,7 +338,7 @@ class ForumView(object):
         slug = uuid.uuid1().hex
         data = {'slug':slug}
         view = AddView('forumtopic', url_for(ForumView.forum_index, id=int(id)),
-            default_data={'forum':int(id), 'last_post_user':request.user.id, 'last_reply_on':datetime.now()}, 
+            default_data={'forum':int(id), 'last_post_user':request.user.id, 'last_reply_on':date.now()}, 
             hidden_fields=['slug'], data=data,
             post_save=post_save, get_form_field=get_form_field, template_data={'forum':forum})
         return view.run()
@@ -371,6 +374,7 @@ class ForumView(object):
         """
         from uliweb.utils.generic import ListView
         import uuid
+        from uliweb import settings
         
         pageno = int(request.values.get('page', 1)) - 1
         rows_per_page=int(request.values.get('rows', settings.get_var('PARA/FORUM_PAGE_NUMS')))
@@ -383,7 +387,7 @@ class ForumView(object):
         order_by = [Post.c.floor]
         
         def created_on(value, obj):
-            return value.strftime('%Y-%m-%d %H:%M:%S')
+            return date.to_local(value).strftime('%Y-%m-%d %H:%M:%S %Z')
         
         def content(value, obj):
             if obj.deleted:
@@ -412,21 +416,29 @@ class ForumView(object):
                     a.append('<a href="#" rel="%d" class="hidden">%s</a>' % (obj.id, self.status['hidden'][obj.topic.hidden]))
                     a.append('<a href="#" rel="%d" class="top">%s</a>' % (obj.id, self.status['sticky'][obj.topic.sticky]))
                     a.append('<a href="#" rel="%d" class="essence">%s</a>' % (obj.id, self.status['essence'][obj.topic.essence]))
-                if is_manager or (obj.posted_by.id == request.user.id and obj.created_on+timedelta(days=settings.get_var('PARA/FORUM_EDIT_DELAY'))>=datetime.now()):
+                if is_manager or (obj.posted_by.id == request.user.id and obj.created_on+timedelta(days=settings.get_var('PARA/FORUM_EDIT_DELAY'))>=date.now()):
                     #作者或管理员且在n天之内，则可以编辑
                     url = url_for(ForumView.edit_topic, forum_id=forum_id, topic_id=topic_id)
                     a.append('<a href="%s" rel="%d" class="edit">编辑</a>' % (url, obj.id))
+                if is_manager:
+                    url = url_for(ForumView.remove_topic, forum_id=forum_id, topic_id=topic_id)
+                    a.append('<a href="%s" rel="%d" class="delete_topic">删除主题</a>' % (url, obj.id))
             if is_manager or (obj.posted_by.id == request.user.id):
                 if (obj.deleted and (obj.deleted_by.id == request.user.id or is_manager)) or not obj.deleted:
                     a.append('<a href="#" rel="%d" class="delete">%s</a>' % (obj.id, self.status['delete'][obj.deleted]))
         
             return ' | '.join(a)
         
+        def updated(value, obj):
+            if obj.topic.updated_on:
+                return u'<div class="updated">由 %s 于 %s 更新</div>' % (obj.topic.modified_user.username, timesince(obj.topic.updated_on))
+        
         fields = ['topic', 'id', 'username', 'userimage', 'posted_by', 'content',
-            'created_on', 'actions', 'floor',
+            'created_on', 'actions', 'floor', 'updated',
             ]
         fields_convert_map = {'created_on':created_on, 'content':content,
-            'username':username, 'userimage':userimage, 'actions':actions}
+            'username':username, 'userimage':userimage, 'actions':actions,
+            'updated':updated}
         view = ListView(Post, fields=fields, condition=condition, order_by=order_by,
             rows_per_page=rows_per_page, pageno=pageno,
             fields_convert_map=fields_convert_map)
@@ -464,8 +476,8 @@ class ForumView(object):
             data['floor'] = (do_(select([func.max(Post.c.floor)], Post.c.topic==int(topic_id))).scalar() or 0) + 1
             
         def post_save(obj, data):
-            Topic.filter(Topic.c.id==int(topic_id)).update(num_replies=Topic.c.num_replies+1, last_post_user=request.user.id, last_reply_on=datetime.now())
-            Forum.filter(Forum.c.id==int(forum_id)).update(num_posts=Forum.c.num_posts+1, last_post_user=request.user.id, last_reply_on=datetime.now())
+            Topic.filter(Topic.c.id==int(topic_id)).update(num_replies=Topic.c.num_replies+1, last_post_user=request.user.id, last_reply_on=date.now())
+            Forum.filter(Forum.c.id==int(forum_id)).update(num_posts=Forum.c.num_posts+1, last_post_user=request.user.id, last_reply_on=date.now())
             self._clear_files(obj.slug, data['content'])
             
         def get_form_field(name):
@@ -506,11 +518,11 @@ class ForumView(object):
                 flag = True
             if not flag and data['subject'] != obj.subject:
                 flag = True
-            if not flag and data['content'] != post.content:
+            if not flag and data['content'] != safe_str(post.content):
                 flag = True
             if flag:
                 data['modified_user'] = request.user.id
-                data['updated_on'] = datetime.now()
+                data['updated_on'] = date.now()
             
         def get_form_field(name, obj):
             from uliweb.form import TextField
@@ -544,7 +556,7 @@ class ForumView(object):
         forum_id = request.GET.get('forum_id')
         slug = request.GET.get('slug')
         form = Form()
-        suffix = datetime.now().strftime('_%Y_%m_%d')
+        suffix = date.now().strftime('_%Y_%m_%d')
         if request.method == 'GET':
             form.bind({'is_thumbnail':True})
             return {'form':form}
@@ -580,6 +592,45 @@ setTimeout(function(){callback(url);},100);
             else:
                 return {'form':form}
                 
+    @expose('<forum_id>/<topic_id>/remove_topic')
+    @decorators.check_role('trusted')
+    def remove_topic(self, forum_id, topic_id):
+        from uliweb.contrib.upload import get_filename
+        from sqlalchemy.sql import select
+        
+        Forum = get_model('forum')
+        forum = Forum.get(int(forum_id))
+        Topic = get_model('forumtopic')
+        topic = Topic.get(int(topic_id))
+        Post = get_model('forumpost')
+        post = Post.get((Post.c.topic==int(topic_id)) & (Post.c.floor==1))
+        FA = get_model('forumattachment')
+        
+        if not topic:
+            error("主题已经不存在的")
+            
+        is_manager = post.topic.forum.managers.has(request.user)
+        if is_manager:
+            query = FA.filter(FA.c.slug==Post.c.slug).filter(Post.c.topic==int(topic_id))
+            #删除相应附件
+            for a in query:
+                f = get_filename(a.file_name)
+                if os.path.exists(f):
+                    os.unlink(f)
+            #删除FA记录
+            FA.filter(FA.c.slug.in_(select([Post.c.slug], Post.c.topic==int(topic_id)))).remove()
+            #删除所有POST
+            post_query = Post.filter(Post.c.topic==int(topic_id))
+            post_count = post_query.count()
+            post_query.remove()
+            Topic.get(int(topic_id)).delete()
+            Forum.filter(Forum.c.id==int(forum_id)).update(num_posts=Forum.c.num_posts-post_count, num_topics=Forum.c.num_topics-1)
+            flash('删除成功！')
+            return redirect(url_for(ForumView.forum_index, id=forum_id))
+        else:
+            flash('你无权限删除主题！')
+            return redirect(url_for(ForumView.topic_view, forum_id=forum_id, topic_id=topic_id))
+        
     @decorators.check_role('trusted')
     def post_actions(self):
         Post = get_model('forumpost')
@@ -616,7 +667,7 @@ setTimeout(function(){callback(url);},100);
                 txt = self.status['hidden'][topic.hidden]
         #post
         ok = False
-        if is_manager or (post.posted_by.id == request.user.id and post.created_on+timedelta(days=settings.get_var('PARA/FORUM_EDIT_DELAY'))>=datetime.now()):
+        if is_manager or (post.posted_by.id == request.user.id and post.created_on+timedelta(days=settings.get_var('PARA/FORUM_EDIT_DELAY'))>=date.now()):
             if action == 'delete':
                 if post.deleted:
                     #如果要反删除，如果是管理员则可以。如果不是，则如果是管理员
@@ -634,7 +685,7 @@ setTimeout(function(){callback(url);},100);
                     post.deleted = not post.deleted
                     if post.deleted:
                         post.deleted_by = request.user.id
-                        post.deleted_on = datetime.now()
+                        post.deleted_on = date.now()
                     flag = True
                     txt = self.status['delete'][post.deleted]
 

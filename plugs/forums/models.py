@@ -99,7 +99,7 @@ class ForumTopic(Model):#主题
     num_views = Field(int, verbose_name='浏览次数',default = 1)
     num_replies = Field(int, verbose_name='回复总数',default = 1)#posts...
     created_on = Field(datetime.datetime, verbose_name='创建时间', auto_now_add=True)
-    updated_on = Field(datetime.datetime, verbose_name='修改时间', auto_now_add=True)
+    updated_on = Field(datetime.datetime, verbose_name='修改时间')
     last_reply_on = Field(datetime.datetime, verbose_name='最新回复时间')
     last_post_user = Reference('user', verbose_name='最后回复人', collection_name="last_post_user_topics")
     modified_user = Reference('user', verbose_name='最后修改人', default=get_modified_user, auto=True, collection_name="last_modified_user_topics")

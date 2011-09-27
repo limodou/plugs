@@ -22,12 +22,12 @@ class TracebackMiddle(Middleware):
         
         if settings.GLOBAL.EXCEPTION_PROCESS_TYPE == 'mail':
             Mail().send_mail(settings.get_var('PARA/EMAIL_SENDER'), settings.get_var('PARA/DEV_TEAM'),
-                u'FLPM程序运行出错', txt)
+                u'Program running error', txt)
         elif settings.GLOBAL.EXCEPTION_PROCESS_TYPE == 'print':
             print txt
         elif settings.GLOBAL.EXCEPTION_PROCESS_TYPE == 'redis':
             mail = {'from':settings.get_var('PARA/EMAIL_SENDER'), 'to':settings.get_var('PARA/DEV_TEAM'),
-                'title':u'FLPM程序运行出错', 'message':txt}
+                'title':u'Program running error', 'message':txt}
             _t = Serial.dump(mail)
             self.redis.lpush('send_mails', _t)
         

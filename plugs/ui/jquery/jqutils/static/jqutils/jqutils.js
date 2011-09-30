@@ -324,3 +324,52 @@ $.fn.bind_select_remote = function(target, url){
         });
     });
 };
+
+/*
+    ajax Form callback process
+    for example:
+    
+    var result_process = create_result_process('form.yform', 
+        {success:success});
+    
+    var options = { 
+        success: result_process,  // post-submit callback 
+        dataType: 'json'
+    }; 
+    // bind form using 'ajaxForm' 
+    $('form.yform').ajaxForm(options); 
+    
+    response json data should be:
+    
+    {'success':true or false, 'message': 'xxx', 'data': {}}
+    if success if false, then data should be {'field_name':'error_msg'}
+    
+*/
+var create_result_process = function(target, opt){
+    return function(r){
+        var t = $(target);
+        t.find('input').poshytip('hide');
+        show_simple_message(r.message);
+        if (r.success){
+            opt.success(r.data);
+        } else if (!r.success){
+            $.each(r.data, function(key, value){
+                var el = t.find('input[name='+key+']');
+                $(el).poshytip({
+                    className: 'tip-yellowsimple',
+                    content: value,
+                    showOn: 'none',
+                    alignTo: 'target',
+                    alignX: 'inner-left',
+                    offsetX: 0,
+                    offsetY: 5,
+                    closeButton: true
+                });
+                $(el).poshytip('show');
+                $(el).focus(function(){
+                    $(this).poshytip('hide');
+                });
+            });
+        }
+    }
+}

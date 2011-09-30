@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.2
+ * jQuery EasyUI 1.2.4
  * 
- * Licensed under the GPL:
- *   http://www.gnu.org/licenses/gpl.txt
+ * Licensed under the GPL terms
+ * To use it on other terms please contact us
  *
- * Copyright 2010 stworthy [ stworthy@gmail.com ] 
+ * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -12,7 +12,7 @@ function _1(_2){
 var _3=$.data(_2,"menubutton").options;
 var _4=$(_2);
 _4.removeClass("m-btn-active m-btn-plain-active");
-_4.linkbutton(_3);
+_4.linkbutton($.extend({},_3,{text:_3.text+"<span class=\"m-btn-downarrow\">&nbsp;</span>"}));
 if(_3.menu){
 $(_3.menu).menu({onShow:function(){
 _4.addClass((_3.plain==true)?"m-btn-plain-active":"m-btn-active");
@@ -71,7 +71,6 @@ var _f=$.data(this,"menubutton");
 if(_f){
 $.extend(_f.options,_d);
 }else{
-$(this).append("<span class=\"m-btn-downarrow\">&nbsp;</span>");
 $.data(this,"menubutton",{options:$.extend({},$.fn.menubutton.defaults,$.fn.menubutton.parseOptions(this),_d)});
 $(this).removeAttr("disabled");
 }

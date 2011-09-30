@@ -6,6 +6,9 @@ if ($.fn.pagination){
 if ($.fn.datagrid){
 	$.fn.datagrid.defaults.loadMsg = "Traitement, s'il vous plaît patienter ...";
 }
+if ($.fn.treegrid && $.fn.datagrid){
+	$.fn.treegrid.defaults.loadMsg = $.fn.datagrid.defaults.loadMsg;
+}
 if ($.messager){
 	$.messager.defaults.ok = 'Ok';
 	$.messager.defaults.cancel = 'Annuler';
@@ -24,6 +27,9 @@ if ($.fn.combobox){
 }
 if ($.fn.combotree){
 	$.fn.combotree.defaults.missingMessage = 'Ce champ est obligatoire.';
+}
+if ($.fn.combogrid){
+	$.fn.combogrid.defaults.missingMessage = 'Ce champ est obligatoire.';
 }
 if ($.fn.calendar){
 	$.fn.calendar.defaults.weeks = ['S','M','T','W','T','F','S'];

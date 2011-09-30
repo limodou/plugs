@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.2
+ * jQuery EasyUI 1.2.4
  * 
- * Licensed under the GPL:
- *   http://www.gnu.org/licenses/gpl.txt
+ * Licensed under the GPL terms
+ * To use it on other terms please contact us
  *
- * Copyright 2010 stworthy [ stworthy@gmail.com ] 
+ * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -12,7 +12,7 @@ function _1(_2){
 var _3=$.data(_2,"splitbutton").options;
 var _4=$(_2);
 _4.removeClass("s-btn-active s-btn-plain-active");
-_4.linkbutton(_3);
+_4.linkbutton($.extend({},_3,{text:_3.text+"<span class=\"s-btn-downarrow\">&nbsp;</span>"}));
 if(_3.menu){
 $(_3.menu).menu({onShow:function(){
 _4.addClass((_3.plain==true)?"s-btn-plain-active":"s-btn-active");
@@ -72,7 +72,6 @@ var _10=$.data(this,"splitbutton");
 if(_10){
 $.extend(_10.options,_e);
 }else{
-$(this).append("<span class=\"s-btn-downarrow\">&nbsp;</span>");
 $.data(this,"splitbutton",{options:$.extend({},$.fn.splitbutton.defaults,$.fn.splitbutton.parseOptions(this),_e)});
 $(this).removeAttr("disabled");
 }

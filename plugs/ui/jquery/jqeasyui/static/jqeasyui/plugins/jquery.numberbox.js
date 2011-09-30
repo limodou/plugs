@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.2
+ * jQuery EasyUI 1.2.4
  * 
- * Licensed under the GPL:
- *   http://www.gnu.org/licenses/gpl.txt
+ * Licensed under the GPL terms
+ * To use it on other terms please contact us
  *
- * Copyright 2010 stworthy [ stworthy@gmail.com ] 
+ * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -15,10 +15,10 @@ if(isNaN(_4)){
 $(_2).val("");
 return;
 }
-if(_3.min!=null&&_3.min!=undefined&&_3.min!=""&&_4<_3.min){
+if(typeof (_3.min)=="number"&&_4<_3.min){
 $(_2).val(_3.min.toFixed(_3.precision));
 }else{
-if(_3.max!=null&&_3.max!=undefined&&_3.max!=""&&_4>_3.max){
+if(typeof (_3.max)=="number"&&_4>_3.max){
 $(_2).val(_3.max.toFixed(_3.precision));
 }else{
 $(_2).val(_4);

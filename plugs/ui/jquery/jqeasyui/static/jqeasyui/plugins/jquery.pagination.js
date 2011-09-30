@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.2
+ * jQuery EasyUI 1.2.4
  * 
- * Licensed under the GPL:
- *   http://www.gnu.org/licenses/gpl.txt
+ * Licensed under the GPL terms
+ * To use it on other terms please contact us
  *
- * Copyright 2010 stworthy [ stworthy@gmail.com ] 
+ * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -16,7 +16,10 @@ var tr=$("tr",t);
 if(_3.showPageList){
 var ps=$("<select class=\"pagination-page-list\"></select>");
 for(var i=0;i<_3.pageList.length;i++){
-$("<option></option>").text(_3.pageList[i]).attr("selected",_3.pageList[i]==_3.pageSize?"selected":"").appendTo(ps);
+var _5=$("<option></option>").text(_3.pageList[i]).appendTo(ps);
+if(_3.pageList[i]==_3.pageSize){
+_5.attr("selected","selected");
+}
 }
 $("<td></td>").append(ps).appendTo(tr);
 _3.pageSize=parseInt(ps.val());
@@ -38,12 +41,12 @@ $("<td><a href=\"javascript:void(0)\" icon=\"pagination-load\"></a></td>").appen
 if(_3.buttons){
 $("<td><div class=\"pagination-btn-separator\"></div></td>").appendTo(tr);
 for(var i=0;i<_3.buttons.length;i++){
-var _5=_3.buttons[i];
-if(_5=="-"){
+var _6=_3.buttons[i];
+if(_6=="-"){
 $("<td><div class=\"pagination-btn-separator\"></div></td>").appendTo(tr);
 }else{
 var td=$("<td></td>").appendTo(tr);
-$("<a href=\"javascript:void(0)\"></a>").addClass("l-btn").css("float","left").text(_5.text||"").attr("icon",_5.iconCls||"").bind("click",eval(_5.handler||function(){
+$("<a href=\"javascript:void(0)\"></a>").addClass("l-btn").css("float","left").text(_6.text||"").attr("icon",_6.iconCls||"").bind("click",eval(_6.handler||function(){
 })).appendTo(td).linkbutton({plain:true});
 }
 }
@@ -53,120 +56,120 @@ $("<div style=\"clear:both;\"></div>").appendTo(_4);
 $("a[icon^=pagination]",_4).linkbutton({plain:true});
 _4.find("a[icon=pagination-first]").unbind(".pagination").bind("click.pagination",function(){
 if(_3.pageNumber>1){
-_a(_2,1);
+_b(_2,1);
 }
 });
 _4.find("a[icon=pagination-prev]").unbind(".pagination").bind("click.pagination",function(){
 if(_3.pageNumber>1){
-_a(_2,_3.pageNumber-1);
+_b(_2,_3.pageNumber-1);
 }
 });
 _4.find("a[icon=pagination-next]").unbind(".pagination").bind("click.pagination",function(){
-var _6=Math.ceil(_3.total/_3.pageSize);
-if(_3.pageNumber<_6){
-_a(_2,_3.pageNumber+1);
+var _7=Math.ceil(_3.total/_3.pageSize);
+if(_3.pageNumber<_7){
+_b(_2,_3.pageNumber+1);
 }
 });
 _4.find("a[icon=pagination-last]").unbind(".pagination").bind("click.pagination",function(){
-var _7=Math.ceil(_3.total/_3.pageSize);
-if(_3.pageNumber<_7){
-_a(_2,_7);
+var _8=Math.ceil(_3.total/_3.pageSize);
+if(_3.pageNumber<_8){
+_b(_2,_8);
 }
 });
 _4.find("a[icon=pagination-load]").unbind(".pagination").bind("click.pagination",function(){
 if(_3.onBeforeRefresh.call(_2,_3.pageNumber,_3.pageSize)!=false){
-_a(_2,_3.pageNumber);
+_b(_2,_3.pageNumber);
 _3.onRefresh.call(_2,_3.pageNumber,_3.pageSize);
 }
 });
 _4.find("input.pagination-num").unbind(".pagination").bind("keydown.pagination",function(e){
 if(e.keyCode==13){
-var _8=parseInt($(this).val())||1;
-_a(_2,_8);
+var _9=parseInt($(this).val())||1;
+_b(_2,_9);
 }
 });
 _4.find(".pagination-page-list").unbind(".pagination").bind("change.pagination",function(){
 _3.pageSize=$(this).val();
 _3.onChangePageSize.call(_2,_3.pageSize);
-var _9=Math.ceil(_3.total/_3.pageSize);
-_a(_2,_3.pageNumber);
+var _a=Math.ceil(_3.total/_3.pageSize);
+_b(_2,_3.pageNumber);
 });
 };
-function _a(_b,_c){
-var _d=$.data(_b,"pagination").options;
-var _e=Math.ceil(_d.total/_d.pageSize)||1;
-var _f=_c;
-if(_c<1){
-_f=1;
+function _b(_c,_d){
+var _e=$.data(_c,"pagination").options;
+var _f=Math.ceil(_e.total/_e.pageSize)||1;
+var _10=_d;
+if(_d<1){
+_10=1;
 }
-if(_c>_e){
-_f=_e;
+if(_d>_f){
+_10=_f;
 }
-_d.onSelectPage.call(_b,_f,_d.pageSize);
-_d.pageNumber=_f;
-_10(_b);
+_e.pageNumber=_10;
+_e.onSelectPage.call(_c,_10,_e.pageSize);
+_11(_c);
 };
-function _10(_11){
-var _12=$.data(_11,"pagination").options;
-var _13=Math.ceil(_12.total/_12.pageSize)||1;
-var num=$(_11).find("input.pagination-num");
-num.val(_12.pageNumber);
-num.parent().next().find("span").html(_12.afterPageText.replace(/{pages}/,_13));
-var _14=_12.displayMsg;
-_14=_14.replace(/{from}/,_12.pageSize*(_12.pageNumber-1)+1);
-_14=_14.replace(/{to}/,Math.min(_12.pageSize*(_12.pageNumber),_12.total));
-_14=_14.replace(/{total}/,_12.total);
-$(_11).find(".pagination-info").html(_14);
-$("a[icon=pagination-first],a[icon=pagination-prev]",_11).linkbutton({disabled:(_12.pageNumber==1)});
-$("a[icon=pagination-next],a[icon=pagination-last]",_11).linkbutton({disabled:(_12.pageNumber==_13)});
-if(_12.loading){
-$(_11).find("a[icon=pagination-load]").find(".pagination-load").addClass("pagination-loading");
+function _11(_12){
+var _13=$.data(_12,"pagination").options;
+var _14=Math.ceil(_13.total/_13.pageSize)||1;
+var num=$(_12).find("input.pagination-num");
+num.val(_13.pageNumber);
+num.parent().next().find("span").html(_13.afterPageText.replace(/{pages}/,_14));
+var _15=_13.displayMsg;
+_15=_15.replace(/{from}/,_13.pageSize*(_13.pageNumber-1)+1);
+_15=_15.replace(/{to}/,Math.min(_13.pageSize*(_13.pageNumber),_13.total));
+_15=_15.replace(/{total}/,_13.total);
+$(_12).find(".pagination-info").html(_15);
+$("a[icon=pagination-first],a[icon=pagination-prev]",_12).linkbutton({disabled:(_13.pageNumber==1)});
+$("a[icon=pagination-next],a[icon=pagination-last]",_12).linkbutton({disabled:(_13.pageNumber==_14)});
+if(_13.loading){
+$(_12).find("a[icon=pagination-load]").find(".pagination-load").addClass("pagination-loading");
 }else{
-$(_11).find("a[icon=pagination-load]").find(".pagination-load").removeClass("pagination-loading");
+$(_12).find("a[icon=pagination-load]").find(".pagination-load").removeClass("pagination-loading");
 }
 };
-function _15(_16,_17){
-var _18=$.data(_16,"pagination").options;
-_18.loading=_17;
-if(_18.loading){
-$(_16).find("a[icon=pagination-load]").find(".pagination-load").addClass("pagination-loading");
+function _16(_17,_18){
+var _19=$.data(_17,"pagination").options;
+_19.loading=_18;
+if(_19.loading){
+$(_17).find("a[icon=pagination-load]").find(".pagination-load").addClass("pagination-loading");
 }else{
-$(_16).find("a[icon=pagination-load]").find(".pagination-load").removeClass("pagination-loading");
+$(_17).find("a[icon=pagination-load]").find(".pagination-load").removeClass("pagination-loading");
 }
 };
-$.fn.pagination=function(_19,_1a){
-if(typeof _19=="string"){
-return $.fn.pagination.methods[_19](this,_1a);
+$.fn.pagination=function(_1a,_1b){
+if(typeof _1a=="string"){
+return $.fn.pagination.methods[_1a](this,_1b);
 }
-_19=_19||{};
+_1a=_1a||{};
 return this.each(function(){
-var _1b;
-var _1c=$.data(this,"pagination");
-if(_1c){
-_1b=$.extend(_1c.options,_19);
+var _1c;
+var _1d=$.data(this,"pagination");
+if(_1d){
+_1c=$.extend(_1d.options,_1a);
 }else{
-_1b=$.extend({},$.fn.pagination.defaults,_19);
-$.data(this,"pagination",{options:_1b});
+_1c=$.extend({},$.fn.pagination.defaults,_1a);
+$.data(this,"pagination",{options:_1c});
 }
 _1(this);
-_10(this);
+_11(this);
 });
 };
 $.fn.pagination.methods={options:function(jq){
 return $.data(jq[0],"pagination").options;
 },loading:function(jq){
 return jq.each(function(){
-_15(this,true);
+_16(this,true);
 });
 },loaded:function(jq){
 return jq.each(function(){
-_15(this,false);
+_16(this,false);
 });
 }};
-$.fn.pagination.defaults={total:1,pageSize:10,pageNumber:1,pageList:[10,20,30,50],loading:false,buttons:null,showPageList:true,showRefresh:true,onSelectPage:function(_1d,_1e){
-},onBeforeRefresh:function(_1f,_20){
-},onRefresh:function(_21,_22){
-},onChangePageSize:function(_23){
+$.fn.pagination.defaults={total:1,pageSize:10,pageNumber:1,pageList:[10,20,30,50],loading:false,buttons:null,showPageList:true,showRefresh:true,onSelectPage:function(_1e,_1f){
+},onBeforeRefresh:function(_20,_21){
+},onRefresh:function(_22,_23){
+},onChangePageSize:function(_24){
 },beforePageText:"Page",afterPageText:"of {pages}",displayMsg:"Displaying {from} to {to} of {total} items"};
 })(jQuery);
 

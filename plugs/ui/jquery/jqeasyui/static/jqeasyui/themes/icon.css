@@ -1,3 +1,6 @@
+.icon-blank{
+	background:url('icons/blank.gif') no-repeat;
+}
 .icon-add{
 	background:url('icons/edit_add.png') no-repeat;
 }
@@ -42,4 +45,10 @@
 }
 .icon-back{
 	background:url('icons/back.png') no-repeat;
+}
+.icon-sum{
+	background:url('icons/sum.png') no-repeat;
+}
+.icon-tip{
+	background:url('icons/tip.png') no-repeat;
 }

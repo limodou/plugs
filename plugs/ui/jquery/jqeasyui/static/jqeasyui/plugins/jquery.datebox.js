@@ -1,16 +1,17 @@
 ﻿/**
- * jQuery EasyUI 1.2.2
+ * jQuery EasyUI 1.2.4
  * 
- * Licensed under the GPL:
- *   http://www.gnu.org/licenses/gpl.txt
+ * Licensed under the GPL terms
+ * To use it on other terms please contact us
  *
- * Copyright 2010 stworthy [ stworthy@gmail.com ] 
+ * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
 function _1(_2){
 var _3=$.data(_2,"datebox");
 var _4=_3.options;
+$(_2).addClass("datebox-f");
 $(_2).combo($.extend({},_4,{onShowPanel:function(){
 _3.calendar.calendar("resize");
 _4.onShowPanel.call(_2);

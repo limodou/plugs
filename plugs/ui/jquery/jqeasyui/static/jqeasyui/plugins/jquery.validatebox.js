@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.2
+ * jQuery EasyUI 1.2.4
  * 
- * Licensed under the GPL:
- *   http://www.gnu.org/licenses/gpl.txt
+ * Licensed under the GPL terms
+ * To use it on other terms please contact us
  *
- * Copyright 2010 stworthy [ stworthy@gmail.com ] 
+ * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -12,48 +12,54 @@ function _1(_2){
 $(_2).addClass("validatebox-text");
 };
 function _3(_4){
-var _5=$.data(_4,"validatebox").tip;
-if(_5){
-_5.remove();
+var _5=$.data(_4,"validatebox");
+_5.validating=false;
+var _6=_5.tip;
+if(_6){
+_6.remove();
 }
 $(_4).unbind();
 $(_4).remove();
 };
-function _6(_7){
-var _8=$(_7);
-var _9=$.data(_7,"validatebox");
-_9.validating=false;
-_8.unbind(".validatebox").bind("focus.validatebox",function(){
-_9.validating=true;
+function _7(_8){
+var _9=$(_8);
+var _a=$.data(_8,"validatebox");
+_a.validating=false;
+_9.unbind(".validatebox").bind("focus.validatebox",function(){
+_a.validating=true;
+_a.value=undefined;
 (function(){
-if(_9.validating){
-_11(_7);
+if(_a.validating){
+if(_a.value!=_9.val()){
+_a.value=_9.val();
+_11(_8);
+}
 setTimeout(arguments.callee,200);
 }
 })();
 }).bind("blur.validatebox",function(){
-_9.validating=false;
-_a(_7);
+_a.validating=false;
+_b(_8);
 }).bind("mouseenter.validatebox",function(){
-if(_8.hasClass("validatebox-invalid")){
-_b(_7);
+if(_9.hasClass("validatebox-invalid")){
+_c(_8);
 }
 }).bind("mouseleave.validatebox",function(){
-_a(_7);
+_b(_8);
 });
 };
-function _b(_c){
-var _d=$(_c);
-var _e=$.data(_c,"validatebox").message;
-var _f=$.data(_c,"validatebox").tip;
-if(!_f){
-_f=$("<div class=\"validatebox-tip\">"+"<span class=\"validatebox-tip-content\">"+"</span>"+"<span class=\"validatebox-tip-pointer\">"+"</span>"+"</div>").appendTo("body");
-$.data(_c,"validatebox").tip=_f;
+function _c(_d){
+var _e=$(_d);
+var _f=$.data(_d,"validatebox").message;
+var tip=$.data(_d,"validatebox").tip;
+if(!tip){
+tip=$("<div class=\"validatebox-tip\">"+"<span class=\"validatebox-tip-content\">"+"</span>"+"<span class=\"validatebox-tip-pointer\">"+"</span>"+"</div>").appendTo("body");
+$.data(_d,"validatebox").tip=tip;
 }
-_f.find(".validatebox-tip-content").html(_e);
-_f.css({display:"block",left:_d.offset().left+_d.outerWidth(),top:_d.offset().top});
+tip.find(".validatebox-tip-content").html(_f);
+tip.css({display:"block",left:_e.offset().left+_e.outerWidth(),top:_e.offset().top});
 };
-function _a(_10){
+function _b(_10){
 var tip=$.data(_10,"validatebox").tip;
 if(tip){
 tip.remove();
@@ -76,7 +82,7 @@ if(_13.required){
 if(_14==""){
 box.addClass("validatebox-invalid");
 _15(_13.missingMessage);
-_b(_12);
+_c(_12);
 return false;
 }
 }
@@ -94,13 +100,13 @@ _1a=_1a.replace(new RegExp("\\{"+i+"\\}","g"),_19[i]);
 }
 }
 _15(_13.invalidMessage||_1a);
-_b(_12);
+_c(_12);
 return false;
 }
 }
 }
 box.removeClass("validatebox-invalid");
-_a(_12);
+_b(_12);
 return true;
 };
 $.fn.validatebox=function(_1b,_1c){
@@ -116,7 +122,7 @@ $.extend(_1d.options,_1b);
 _1(this);
 $.data(this,"validatebox",{options:$.extend({},$.fn.validatebox.defaults,$.fn.validatebox.parseOptions(this),_1b)});
 }
-_6(this);
+_7(this);
 });
 };
 $.fn.validatebox.methods={destroy:function(jq){
@@ -132,7 +138,7 @@ return _11(jq[0]);
 }};
 $.fn.validatebox.parseOptions=function(_1e){
 var t=$(_1e);
-return {required:(t.attr("required")?(t.attr("required")=="true"||t.attr("required")==true):undefined),validType:(t.attr("validType")||undefined),missingMessage:(t.attr("missingMessage")||undefined),invalidMessage:(t.attr("invalidMessage")||undefined)};
+return {required:(t.attr("required")?(t.attr("required")=="required"||t.attr("required")=="true"||t.attr("required")==true):undefined),validType:(t.attr("validType")||undefined),missingMessage:(t.attr("missingMessage")||undefined),invalidMessage:(t.attr("invalidMessage")||undefined)};
 };
 $.fn.validatebox.defaults={required:false,validType:null,missingMessage:"This field is required.",invalidMessage:null,rules:{email:{validator:function(_1f){
 return /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i.test(_1f);
@@ -141,6 +147,11 @@ return /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF
 },message:"Please enter a valid URL."},length:{validator:function(_21,_22){
 var len=$.trim(_21).length;
 return len>=_22[0]&&len<=_22[1];
-},message:"Please enter a value between {0} and {1}."}}};
+},message:"Please enter a value between {0} and {1}."},remote:{validator:function(_23,_24){
+var _25={};
+_25[_24[1]]=_23;
+var _26=$.ajax({url:_24[0],dataType:"json",data:_25,async:false,cache:false,type:"post"}).responseText;
+return _26=="true";
+},message:"Please fix this field."}}};
 })(jQuery);
 

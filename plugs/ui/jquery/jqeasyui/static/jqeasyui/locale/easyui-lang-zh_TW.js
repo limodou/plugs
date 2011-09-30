@@ -6,6 +6,9 @@ if ($.fn.pagination){
 if ($.fn.datagrid){
 	$.fn.datagrid.defaults.loadMsg = '正在處理，請稍待。。。';
 }
+if ($.fn.treegrid && $.fn.datagrid){
+	$.fn.treegrid.defaults.loadMsg = $.fn.datagrid.defaults.loadMsg;
+}
 if ($.messager){
 	$.messager.defaults.ok = '確定';
 	$.messager.defaults.cancel = '取消';
@@ -15,6 +18,7 @@ if ($.fn.validatebox){
 	$.fn.validatebox.defaults.rules.email.message = '請輸入有效的電子郵件地址';
 	$.fn.validatebox.defaults.rules.url.message = '請輸入有效的URL地址';
 	$.fn.validatebox.defaults.rules.length.message = '輸入內容長度必須介於{0}和{1}之間';
+	$.fn.validatebox.defaults.rules.remote.message = '請修正此欄位';
 }
 if ($.fn.numberbox){
 	$.fn.numberbox.defaults.missingMessage = '該輸入項為必輸項';
@@ -24,6 +28,9 @@ if ($.fn.combobox){
 }
 if ($.fn.combotree){
 	$.fn.combotree.defaults.missingMessage = '該輸入項為必輸項';
+}
+if ($.fn.combogrid){
+	$.fn.combogrid.defaults.missingMessage = '該輸入項為必輸項';
 }
 if ($.fn.calendar){
 	$.fn.calendar.defaults.weeks = ['日','一','二','三','四','五','六'];

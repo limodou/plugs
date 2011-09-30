@@ -6,6 +6,9 @@ if ($.fn.pagination){
 if ($.fn.datagrid){
 	$.fn.datagrid.defaults.loadMsg = 'Verwerking, even geduld ...';
 }
+if ($.fn.treegrid && $.fn.datagrid){
+	$.fn.treegrid.defaults.loadMsg = $.fn.datagrid.defaults.loadMsg;
+}
 if ($.messager){
 	$.messager.defaults.ok = 'Okee';
 	$.messager.defaults.cancel = 'Annuleren';
@@ -24,6 +27,9 @@ if ($.fn.combobox){
 }
 if ($.fn.combotree){
 	$.fn.combotree.defaults.missingMessage = 'Dit veld is verplicht.';
+}
+if ($.fn.combogrid){
+	$.fn.combogrid.defaults.missingMessage = 'Dit veld is verplicht.';
 }
 if ($.fn.calendar){
 	$.fn.calendar.defaults.weeks = ['S','M','T','W','T','F','S'];

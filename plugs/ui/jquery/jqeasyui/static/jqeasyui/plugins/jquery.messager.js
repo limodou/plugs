@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.2
+ * jQuery EasyUI 1.2.4
  * 
- * Licensed under the GPL:
- *   http://www.gnu.org/licenses/gpl.txt
+ * Licensed under the GPL terms
+ * To use it on other terms please contact us
  *
- * Copyright 2010 stworthy [ stworthy@gmail.com ] 
+ * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -81,11 +81,12 @@ for(var _10 in _e){
 $("<a></a>").attr("href","javascript:void(0)").text(_10).css("margin-left",10).bind("click",eval(_e[_10])).appendTo(tb).linkbutton();
 }
 }
-_f.window({title:_c,width:300,height:"auto",modal:true,collapsible:false,minimizable:false,maximizable:false,resizable:false,onClose:function(){
+_f.window({title:_c,noheader:(_c?false:true),width:300,height:"auto",modal:true,collapsible:false,minimizable:false,maximizable:false,resizable:false,onClose:function(){
 setTimeout(function(){
 _f.window("destroy");
 },100);
 }});
+_f.window("window").addClass("messager-window");
 return _f;
 };
 $.messager={show:function(_11){
@@ -169,6 +170,39 @@ return false;
 }
 };
 var win=_b(_1a,_1b,_1c);
+},progress:function(_1d){
+var _1e=$.extend({title:"",msg:"",text:undefined,interval:300},_1d||{});
+var _1f={bar:function(){
+return $("body>div.messager-window").find("div.messager-p-bar");
+},close:function(){
+var win=$("body>div.messager-window>div.messager-body");
+if(win.length){
+if(win[0].timer){
+clearInterval(win[0].timer);
+}
+win.window("close");
+}
+}};
+if(typeof _1d=="string"){
+var _20=_1f[_1d];
+return _20();
+}
+var _21="<div class=\"messager-progress\"><div class=\"messager-p-msg\"></div><div class=\"messager-p-bar\"></div></div>";
+var win=_b(_1e.title,_21,null);
+win.find("div.messager-p-msg").html(_1e.msg);
+var bar=win.find("div.messager-p-bar");
+bar.progressbar({text:_1e.text});
+win.window({closable:false});
+if(_1e.interval){
+win[0].timer=setInterval(function(){
+var v=bar.progressbar("getValue");
+v+=10;
+if(v>100){
+v=0;
+}
+bar.progressbar("setValue",v);
+},_1e.interval);
+}
 }};
 $.messager.defaults={ok:"Ok",cancel:"Cancel"};
 })(jQuery);

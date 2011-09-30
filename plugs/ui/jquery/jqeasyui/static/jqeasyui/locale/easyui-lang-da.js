@@ -6,6 +6,9 @@ if ($.fn.pagination){
 if ($.fn.datagrid){
 	$.fn.datagrid.defaults.loadMsg = 'Behandling, vent venligst ...';
 }
+if ($.fn.treegrid && $.fn.datagrid){
+	$.fn.treegrid.defaults.loadMsg = $.fn.datagrid.defaults.loadMsg;
+}
 if ($.messager){
 	$.messager.defaults.ok = 'Ok';
 	$.messager.defaults.cancel = 'Annuller';
@@ -24,6 +27,9 @@ if ($.fn.combobox){
 }
 if ($.fn.combotree){
 	$.fn.combotree.defaults.missingMessage = 'Dette felt er påkrævet.';
+}
+if ($.fn.combogrid){
+	$.fn.combogrid.defaults.missingMessage = 'Dette felt er påkrævet.';
 }
 if ($.fn.calendar){
 	$.fn.calendar.defaults.weeks = ['S','M','T','W','T','F','S'];

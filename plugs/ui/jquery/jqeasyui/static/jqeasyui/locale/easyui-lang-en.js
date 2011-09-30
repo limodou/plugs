@@ -6,6 +6,9 @@ if ($.fn.pagination){
 if ($.fn.datagrid){
 	$.fn.datagrid.defaults.loadMsg = 'Processing, please wait ...';
 }
+if ($.fn.treegrid && $.fn.datagrid){
+	$.fn.treegrid.defaults.loadMsg = $.fn.datagrid.defaults.loadMsg;
+}
 if ($.messager){
 	$.messager.defaults.ok = 'Ok';
 	$.messager.defaults.cancel = 'Cancel';
@@ -15,6 +18,7 @@ if ($.fn.validatebox){
 	$.fn.validatebox.defaults.rules.email.message = 'Please enter a valid email address.';
 	$.fn.validatebox.defaults.rules.url.message = 'Please enter a valid URL.';
 	$.fn.validatebox.defaults.rules.length.message = 'Please enter a value between {0} and {1}.';
+	$.fn.validatebox.defaults.rules.remote.message = 'Please fix this field.';
 }
 if ($.fn.numberbox){
 	$.fn.numberbox.defaults.missingMessage = 'This field is required.';
@@ -24,6 +28,9 @@ if ($.fn.combobox){
 }
 if ($.fn.combotree){
 	$.fn.combotree.defaults.missingMessage = 'This field is required.';
+}
+if ($.fn.combogrid){
+	$.fn.combogrid.defaults.missingMessage = 'This field is required.';
 }
 if ($.fn.calendar){
 	$.fn.calendar.defaults.weeks = ['S','M','T','W','T','F','S'];

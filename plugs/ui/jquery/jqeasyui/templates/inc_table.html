@@ -12,7 +12,7 @@
             striped: false,
             singleSelect: true,
             rownumbers:true,
-            nowrap: true,
+            nowrap: false,
             width:'auto',
             height:450,
             url:url + query_string,
@@ -22,14 +22,13 @@
         if (options){
             $.extend( settings, options );
         }
-
         $('#{{=table_id}}').datagrid(settings);
         
         if (download){
             var pager = $('#{{=table_id}}').datagrid('getPager');    // get the pager of datagrid
             pager.pagination({
                 buttons:[{
-                    text:"{{=_('Download')}}",
+                    text:'下载数据',
                     iconCls:'icon-save',
                     handler:function(){
                         var query_string = $.query_string.remove('data').set('download', '').toString();

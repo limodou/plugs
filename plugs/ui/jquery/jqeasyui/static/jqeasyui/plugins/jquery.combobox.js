@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.2
+ * jQuery EasyUI 1.2.4
  * 
- * Licensed under the GPL:
- *   http://www.gnu.org/licenses/gpl.txt
+ * Licensed under the GPL terms
+ * To use it on other terms please contact us
  *
- * Copyright 2010 stworthy [ stworthy@gmail.com ] 
+ * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -36,7 +36,7 @@ _a=_b;
 _a=_8.find("div.combobox-item:visible:last");
 }
 var _c=_a.attr("value");
-_d(_7,[_c]);
+_d(_7,_c);
 _1(_7,_c);
 };
 function _e(_f){
@@ -52,27 +52,27 @@ _12=_13;
 _12=_10.find("div.combobox-item:visible:first");
 }
 var _14=_12.attr("value");
-_d(_f,[_14]);
+_d(_f,_14);
 _1(_f,_14);
 };
-function _15(_16,_17){
-var _18=$.data(_16,"combobox").options;
-var _19=$.data(_16,"combobox").data;
-if(_18.multiple){
-var _1a=$(_16).combo("getValues");
-for(var i=0;i<_1a.length;i++){
-if(_1a[i]==_17){
+function _d(_15,_16){
+var _17=$.data(_15,"combobox").options;
+var _18=$.data(_15,"combobox").data;
+if(_17.multiple){
+var _19=$(_15).combo("getValues");
+for(var i=0;i<_19.length;i++){
+if(_19[i]==_16){
 return;
 }
 }
-_1a.push(_17);
-_d(_16,_1a);
+_19.push(_16);
+_1a(_15,_19);
 }else{
-_d(_16,[_17]);
+_1a(_15,[_16]);
 }
-for(var i=0;i<_19.length;i++){
-if(_19[i][_18.valueField]==_17){
-_18.onSelect.call(_16,_19[i]);
+for(var i=0;i<_18.length;i++){
+if(_18[i][_17.valueField]==_16){
+_17.onSelect.call(_15,_18[i]);
 return;
 }
 }
@@ -84,7 +84,7 @@ var _20=$(_1c).combo("getValues");
 for(var i=0;i<_20.length;i++){
 if(_20[i]==_1d){
 _20.splice(i,1);
-_d(_1c,_20);
+_1a(_1c,_20);
 break;
 }
 }
@@ -95,7 +95,7 @@ return;
 }
 }
 };
-function _d(_21,_22,_23){
+function _1a(_21,_22,_23){
 var _24=$.data(_21,"combobox").options;
 var _25=$.data(_21,"combobox").data;
 var _26=$(_21).combo("panel");
@@ -124,7 +124,7 @@ var _29=$.data(_28,"combobox").options;
 var _2a=[];
 $(">option",_28).each(function(){
 var _2b={};
-_2b[_29.valueField]=$(this).attr("value")||$(this).html();
+_2b[_29.valueField]=$(this).attr("value")!=undefined?$(this).attr("value"):$(this).html();
 _2b[_29.textField]=$(this).html();
 _2b["selected"]=$(this).attr("selected");
 _2a.push(_2b);
@@ -159,12 +159,12 @@ _32.push(v);
 }
 }
 if(_30.multiple){
-_d(_2d,_32,_2f);
+_1a(_2d,_32,_2f);
 }else{
 if(_32.length){
-_d(_2d,[_32[_32.length-1]],_2f);
+_1a(_2d,[_32[_32.length-1]],_2f);
 }else{
-_d(_2d,[],_2f);
+_1a(_2d,[],_2f);
 }
 }
 _30.onLoadSuccess.call(_2d,_2e);
@@ -178,10 +178,10 @@ if(_30.multiple){
 if(_34.hasClass("combobox-item-selected")){
 _1b(_2d,_34.attr("value"));
 }else{
-_15(_2d,_34.attr("value"));
+_d(_2d,_34.attr("value"));
 }
 }else{
-_15(_2d,_34.attr("value"));
+_d(_2d,_34.attr("value"));
 $(_2d).combo("hidePanel");
 }
 });
@@ -195,7 +195,7 @@ if(!_39.url){
 return;
 }
 _37=_37||{};
-$.ajax({url:_39.url,dataType:"json",data:_37,success:function(_3a){
+$.ajax({type:_39.method,url:_39.url,dataType:"json",data:_37,success:function(_3a){
 _2c(_36,_3a,_38);
 },error:function(){
 _39.onLoadError.apply(this,arguments);
@@ -204,9 +204,9 @@ _39.onLoadError.apply(this,arguments);
 function _3b(_3c,q){
 var _3d=$.data(_3c,"combobox").options;
 if(_3d.multiple&&!q){
-_d(_3c,[],true);
+_1a(_3c,[],true);
 }else{
-_d(_3c,[q],true);
+_1a(_3c,[q],true);
 }
 if(_3d.mode=="remote"){
 _35(_3c,null,{q:q},true);
@@ -221,7 +221,7 @@ var s=_3f[i][_3d.textField];
 var _40=_3e.find("div.combobox-item[value="+v+"]");
 _40.show();
 if(s==q){
-_d(_3c,[v],true);
+_1a(_3c,[v],true);
 _40.addClass("combobox-item-selected");
 }
 }
@@ -269,11 +269,11 @@ return $.data(jq[0],"combobox").options;
 return $.data(jq[0],"combobox").data;
 },setValues:function(jq,_48){
 return jq.each(function(){
-_d(this,_48);
+_1a(this,_48);
 });
 },setValue:function(jq,_49){
 return jq.each(function(){
-_d(this,[_49]);
+_1a(this,[_49]);
 });
 },clear:function(jq){
 return jq.each(function(){
@@ -291,7 +291,7 @@ _35(this,url);
 });
 },select:function(jq,_4c){
 return jq.each(function(){
-_15(this,_4c);
+_d(this,_4c);
 });
 },unselect:function(jq,_4d){
 return jq.each(function(){
@@ -300,9 +300,9 @@ _1b(this,_4d);
 }};
 $.fn.combobox.parseOptions=function(_4e){
 var t=$(_4e);
-return $.extend({},$.fn.combo.parseOptions(_4e),{valueField:t.attr("valueField"),textField:t.attr("textField"),mode:t.attr("mode"),url:t.attr("url")});
+return $.extend({},$.fn.combo.parseOptions(_4e),{valueField:t.attr("valueField"),textField:t.attr("textField"),mode:t.attr("mode"),method:(t.attr("method")?t.attr("method"):undefined),url:t.attr("url")});
 };
-$.fn.combobox.defaults=$.extend({},$.fn.combo.defaults,{valueField:"value",textField:"text",mode:"local",url:null,data:null,keyHandler:{up:function(){
+$.fn.combobox.defaults=$.extend({},$.fn.combo.defaults,{valueField:"value",textField:"text",mode:"local",method:"post",url:null,data:null,keyHandler:{up:function(){
 _6(this);
 },down:function(){
 _e(this);

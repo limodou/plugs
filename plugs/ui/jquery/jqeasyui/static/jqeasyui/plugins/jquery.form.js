@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.2
+ * jQuery EasyUI 1.2.4
  * 
- * Licensed under the GPL:
- *   http://www.gnu.org/licenses/gpl.txt
+ * Licensed under the GPL terms
+ * To use it on other terms please contact us
  *
- * Copyright 2010 stworthy [ stworthy@gmail.com ] 
+ * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -84,16 +84,26 @@ function _11(_12){
 var _13=$(_c);
 for(var _14 in _12){
 var val=_12[_14];
+var rr=$("input[name="+_14+"][type=radio]",_13);
+$.fn.prop?rr.prop("checked",false):rr.attr("checked",false);
+var rv=$("input[name="+_14+"][type=radio][value=\""+val+"\"]",_13);
+$.fn.prop?rv.prop("checked",true):rv.attr("checked",true);
+var cc=$("input[name="+_14+"][type=checkbox]",_13);
+$.fn.prop?cc.prop("checked",false):cc.attr("checked",false);
+var cv=$("input[name="+_14+"][type=checkbox][value=\""+val+"\"]",_13);
+$.fn.prop?cv.prop("checked",true):cv.attr("checked",true);
+if(!rr.length&&!cc.length){
 $("input[name="+_14+"]",_13).val(val);
 $("textarea[name="+_14+"]",_13).val(val);
 $("select[name="+_14+"]",_13).val(val);
-var cc=["combo","combobox","combotree","combogrid"];
+}
+var cc=["combo","combobox","combotree","combogrid","datebox","datetimebox"];
 for(var i=0;i<cc.length;i++){
 _15(cc[i],_14,val);
 }
 }
 _e.onLoadSuccess.call(_c,_12);
-_1f(_c);
+_20(_c);
 };
 function _15(_16,_17,val){
 var _18=$(_c);
@@ -113,11 +123,17 @@ var t=this.type,tag=this.tagName.toLowerCase();
 if(t=="text"||t=="hidden"||t=="password"||tag=="textarea"){
 this.value="";
 }else{
+if(t=="file"){
+var _1b=$(this);
+_1b.after(_1b.clone().val(""));
+_1b.remove();
+}else{
 if(t=="checkbox"||t=="radio"){
 this.checked=false;
 }else{
 if(tag=="select"){
 this.selectedIndex=-1;
+}
 }
 }
 }
@@ -135,59 +151,59 @@ if($.fn.combogrid){
 $(".combogrid-f",_1a).combogrid("clear");
 }
 };
-function _1b(_1c){
-var _1d=$.data(_1c,"form").options;
-var _1e=$(_1c);
-_1e.unbind(".form").bind("submit.form",function(){
+function _1c(_1d){
+var _1e=$.data(_1d,"form").options;
+var _1f=$(_1d);
+_1f.unbind(".form").bind("submit.form",function(){
 setTimeout(function(){
-_1(_1c,_1d);
+_1(_1d,_1e);
 },0);
 return false;
 });
 };
-function _1f(_20){
+function _20(_21){
 if($.fn.validatebox){
-var box=$(".validatebox-text",_20);
+var box=$(".validatebox-text",_21);
 if(box.length){
 box.validatebox("validate");
 box.trigger("blur");
-var _21=$(".validatebox-invalid:first",_20).focus();
-return _21.length==0;
+var _22=$(".validatebox-invalid:first",_21).focus();
+return _22.length==0;
 }
 }
 return true;
 };
-$.fn.form=function(_22,_23){
-if(typeof _22=="string"){
-return $.fn.form.methods[_22](this,_23);
+$.fn.form=function(_23,_24){
+if(typeof _23=="string"){
+return $.fn.form.methods[_23](this,_24);
 }
-_22=_22||{};
+_23=_23||{};
 return this.each(function(){
 if(!$.data(this,"form")){
-$.data(this,"form",{options:$.extend({},$.fn.form.defaults,_22)});
+$.data(this,"form",{options:$.extend({},$.fn.form.defaults,_23)});
 }
-_1b(this);
+_1c(this);
 });
 };
-$.fn.form.methods={submit:function(jq,_24){
+$.fn.form.methods={submit:function(jq,_25){
 return jq.each(function(){
-_1(this,$.extend({},$.fn.form.defaults,_24||{}));
+_1(this,$.extend({},$.fn.form.defaults,_25||{}));
 });
-},load:function(jq,_25){
+},load:function(jq,_26){
 return jq.each(function(){
-_b(this,_25);
+_b(this,_26);
 });
 },clear:function(jq){
 return jq.each(function(){
 _19(this);
 });
 },validate:function(jq){
-return _1f(jq[0]);
+return _20(jq[0]);
 }};
 $.fn.form.defaults={url:null,onSubmit:function(){
-},success:function(_26){
-},onBeforeLoad:function(_27){
-},onLoadSuccess:function(_28){
+},success:function(_27){
+},onBeforeLoad:function(_28){
+},onLoadSuccess:function(_29){
 },onLoadError:function(){
 }};
 })(jQuery);

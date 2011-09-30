@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.2
+ * jQuery EasyUI 1.2.4
  * 
- * Licensed under the GPL:
- *   http://www.gnu.org/licenses/gpl.txt
+ * Licensed under the GPL terms
+ * To use it on other terms please contact us
  *
- * Copyright 2010 stworthy [ stworthy@gmail.com ] 
+ * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -167,9 +167,11 @@ var _20=$.data(_1f,"panel");
 if(_20.options.href&&(!_20.isLoaded||!_20.options.cache)){
 _20.isLoaded=false;
 var _21=_20.panel.find(">div.panel-body");
+if(_20.options.loadingMessage){
 _21.html($("<div class=\"panel-loading\"></div>").html(_20.options.loadingMessage));
+}
 $.ajax({url:_20.options.href,cache:false,success:function(_22){
-_21.html(_22);
+_21.html(_20.options.extractor.call(_1f,_22));
 if($.parser){
 $.parser.parse(_21);
 }
@@ -291,7 +293,9 @@ if(_43.maximized==true){
 return;
 }
 _45.addClass("panel-tool-restore");
+if(!$.data(_42,"panel").original){
 $.data(_42,"panel").original={width:_43.width,height:_43.height,left:_43.left,top:_43.top,fit:_43.fit};
+}
 _43.left=0;
 _43.top=0;
 _43.fit=true;
@@ -326,6 +330,7 @@ _4c.fit=_4f.fit;
 _3(_4b);
 _4c.minimized=false;
 _4c.maximized=false;
+$.data(_4b,"panel").original=null;
 _4c.onRestore.call(_4b);
 };
 function _50(_51){
@@ -362,7 +367,7 @@ var _58=$("body.layout");
 if(_58.length){
 _58.layout("resize");
 }else{
-$("body>div.panel").triggerHandler("_resize");
+$("body").children("div.panel,div.accordion,div.tabs-container,div.layout").triggerHandler("_resize");
 }
 _57=true;
 TO=false;
@@ -465,17 +470,25 @@ _3b(this,_65);
 }};
 $.fn.panel.parseOptions=function(_66){
 var t=$(_66);
-return {width:(parseInt(_66.style.width)||undefined),height:(parseInt(_66.style.height)||undefined),left:(parseInt(_66.style.left)||undefined),top:(parseInt(_66.style.top)||undefined),title:(t.attr("title")||undefined),iconCls:(t.attr("iconCls")||t.attr("icon")),cls:t.attr("cls"),headerCls:t.attr("headerCls"),bodyCls:t.attr("bodyCls"),href:t.attr("href"),cache:(t.attr("cache")?t.attr("cache")=="true":undefined),fit:(t.attr("fit")?t.attr("fit")=="true":undefined),border:(t.attr("border")?t.attr("border")=="true":undefined),noheader:(t.attr("noheader")?t.attr("noheader")=="true":undefined),collapsible:(t.attr("collapsible")?t.attr("collapsible")=="true":undefined),minimizable:(t.attr("minimizable")?t.attr("minimizable")=="true":undefined),maximizable:(t.attr("maximizable")?t.attr("maximizable")=="true":undefined),closable:(t.attr("closable")?t.attr("closable")=="true":undefined),collapsed:(t.attr("collapsed")?t.attr("collapsed")=="true":undefined),minimized:(t.attr("minimized")?t.attr("minimized")=="true":undefined),maximized:(t.attr("maximized")?t.attr("maximized")=="true":undefined),closed:(t.attr("closed")?t.attr("closed")=="true":undefined)};
+return {width:(parseInt(_66.style.width)||undefined),height:(parseInt(_66.style.height)||undefined),left:(parseInt(_66.style.left)||undefined),top:(parseInt(_66.style.top)||undefined),title:(t.attr("title")||undefined),iconCls:(t.attr("iconCls")||t.attr("icon")),cls:t.attr("cls"),headerCls:t.attr("headerCls"),bodyCls:t.attr("bodyCls"),href:t.attr("href"),loadingMessage:(t.attr("loadingMessage")!=undefined?t.attr("loadingMessage"):undefined),cache:(t.attr("cache")?t.attr("cache")=="true":undefined),fit:(t.attr("fit")?t.attr("fit")=="true":undefined),border:(t.attr("border")?t.attr("border")=="true":undefined),noheader:(t.attr("noheader")?t.attr("noheader")=="true":undefined),collapsible:(t.attr("collapsible")?t.attr("collapsible")=="true":undefined),minimizable:(t.attr("minimizable")?t.attr("minimizable")=="true":undefined),maximizable:(t.attr("maximizable")?t.attr("maximizable")=="true":undefined),closable:(t.attr("closable")?t.attr("closable")=="true":undefined),collapsed:(t.attr("collapsed")?t.attr("collapsed")=="true":undefined),minimized:(t.attr("minimized")?t.attr("minimized")=="true":undefined),maximized:(t.attr("maximized")?t.attr("maximized")=="true":undefined),closed:(t.attr("closed")?t.attr("closed")=="true":undefined)};
 };
-$.fn.panel.defaults={title:null,iconCls:null,width:"auto",height:"auto",left:null,top:null,cls:null,headerCls:null,bodyCls:null,style:{},href:null,cache:true,fit:false,border:true,doSize:true,noheader:false,content:null,collapsible:false,minimizable:false,maximizable:false,closable:false,collapsed:false,minimized:false,maximized:false,closed:false,tools:[],href:null,loadingMessage:"Loading...",onLoad:function(){
+$.fn.panel.defaults={title:null,iconCls:null,width:"auto",height:"auto",left:null,top:null,cls:null,headerCls:null,bodyCls:null,style:{},href:null,cache:true,fit:false,border:true,doSize:true,noheader:false,content:null,collapsible:false,minimizable:false,maximizable:false,closable:false,collapsed:false,minimized:false,maximized:false,closed:false,tools:[],href:null,loadingMessage:"Loading...",extractor:function(_67){
+var _68=/<body[^>]*>((.|[\n\r])*)<\/body>/im;
+var _69=_68.exec(_67);
+if(_69){
+return _69[1];
+}else{
+return _67;
+}
+},onLoad:function(){
 },onBeforeOpen:function(){
 },onOpen:function(){
 },onBeforeClose:function(){
 },onClose:function(){
 },onBeforeDestroy:function(){
 },onDestroy:function(){
-},onResize:function(_67,_68){
-},onMove:function(_69,top){
+},onResize:function(_6a,_6b){
+},onMove:function(_6c,top){
 },onMaximize:function(){
 },onRestore:function(){
 },onMinimize:function(){

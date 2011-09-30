@@ -8,7 +8,7 @@
             display.insertAfter(select);
             var remove_all = this.remove_all = $(template('<input type="button" class="remove_all" value="${remove_all_txt}"></input>', this.options));
             var add = this.remove = $(template('<input type="button" class="add" value="${add_txt}"></input>', this.options));
-            var rselect = $(template('<input type="text" name="username" class="rselect" url="${0}"></input>', [$(select).attr('url')]));
+            var rselect = self.rselect = $(template('<input type="text" name="username" class="rselect" url="${0}"></input>', [$(select).attr('url')]));
             $('.rmselect-tool', display).append(remove_all).append(add).append(rselect);
             rselect.rselect();
             
@@ -62,6 +62,7 @@
                         se.options[se.options.length-1].selected=true;
                         self._add_item(v, txt);
                     }
+                    rselect.rselect('clear');
                 }
             });
             

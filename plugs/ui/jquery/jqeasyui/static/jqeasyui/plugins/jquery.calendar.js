@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.2
+ * jQuery EasyUI 1.2.4
  * 
- * Licensed under the GPL:
- *   http://www.gnu.org/licenses/gpl.txt
+ * Licensed under the GPL terms
+ * To use it on other terms please contact us
  *
- * Copyright 2010 stworthy [ stworthy@gmail.com ] 
+ * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -239,14 +239,14 @@ var day=_32[j];
 $("<td class=\"calendar-day calendar-other-month\"></td>").attr("abbr",day[0]+","+day[1]+","+day[2]).html(day[2]).appendTo(tr);
 }
 }
-t.find("td[abbr^="+_2f.year+","+_2f.month+"]").removeClass("calendar-other-month");
+t.find("td[abbr^=\""+_2f.year+","+_2f.month+"\"]").removeClass("calendar-other-month");
 var now=new Date();
 var _33=now.getFullYear()+","+(now.getMonth()+1)+","+now.getDate();
-t.find("td[abbr="+_33+"]").addClass("calendar-today");
+t.find("td[abbr=\""+_33+"\"]").addClass("calendar-today");
 if(_2f.current){
 t.find(".calendar-selected").removeClass("calendar-selected");
 var _34=_2f.current.getFullYear()+","+(_2f.current.getMonth()+1)+","+_2f.current.getDate();
-t.find("td[abbr="+_34+"]").addClass("calendar-selected");
+t.find("td[abbr=\""+_34+"\"]").addClass("calendar-selected");
 }
 t.find("tr").find("td:first").addClass("calendar-sunday");
 t.find("tr").find("td:last").addClass("calendar-saturday");

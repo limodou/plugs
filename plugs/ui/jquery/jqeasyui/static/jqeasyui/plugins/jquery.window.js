@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.2
+ * jQuery EasyUI 1.2.4
  * 
- * Licensed under the GPL:
- *   http://www.gnu.org/licenses/gpl.txt
+ * Licensed under the GPL terms
+ * To use it on other terms please contact us
  *
- * Copyright 2010 stworthy [ stworthy@gmail.com ] 
+ * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -43,7 +43,7 @@ _8.shadow.css({left:_8.options.left,top:_8.options.top});
 };
 function _9(_a){
 var _b=$.data(_a,"window");
-var _c=$(_a).panel($.extend({},_b.options,{border:false,doSize:true,closed:true,cls:"window",headerCls:"window-header",bodyCls:"window-body",onBeforeDestroy:function(){
+var _c=$(_a).panel($.extend({},_b.options,{border:false,doSize:true,closed:true,cls:"window",headerCls:"window-header",bodyCls:"window-body "+(_b.options.noheader?"window-body-noheader":""),onBeforeDestroy:function(){
 if(_b.options.onBeforeDestroy.call(_a)==false){
 return false;
 }
@@ -175,6 +175,8 @@ _16.proxy.remove();
 _16.proxy=null;
 }});
 _16.window.resizable({disabled:_16.options.resizable==false,onStartResize:function(e){
+_16.pmask=$("<div class=\"window-proxy-mask\"></div>").insertAfter(_16.window);
+_16.pmask.css({zIndex:$.fn.window.defaults.zIndex++,left:e.data.left,top:e.data.top,width:_16.window.outerWidth(),height:_16.window.outerHeight()});
 if(!_16.proxy){
 _16.proxy=$("<div class=\"window-proxy\"></div>").insertAfter(_16.window);
 }
@@ -188,6 +190,8 @@ _16.options.top=e.data.top;
 _16.options.width=e.data.width;
 _16.options.height=e.data.height;
 _1(_15);
+_16.pmask.remove();
+_16.pmask=null;
 _16.proxy.remove();
 _16.proxy=null;
 }});

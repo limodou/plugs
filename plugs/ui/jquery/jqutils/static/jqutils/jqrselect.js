@@ -21,21 +21,49 @@
             }else{
                 url = this.options.url;
             }
+            function fetch_data( request, response ) {
+                $.ajax({
+                    url: url,
+                    dataType: "json",
+                    data: {
+                        term: request.term
+                    },
+                    success: function( data ) {
+                        if (data.length == 0){
+                            self.element.val('');
+                            self.input.val('');
+                            response([]);
+                        }
+                        else{
+                            d = $.map(data, function(x){
+                                if ($.type(x) == 'array')
+                                    return {'id':x[0], 'title':x[1]};
+                                else
+                                    return x;
+                            });
+                            response(d);
+                        }
+                    }
+                });
+            }
+            
             var input = this.input = $( "<input>" )
                 .insertAfter( select )
                 .val( display )
+                .css('display', 'inline')
                 .autocomplete({
                     delay: 0,
                     minLength: 999,
-                    source: url,
+                    source: fetch_data,
                     select: function( event, ui ) {
                         self.element.val(ui.item.id);
                         input.val(ui.item.title);
                         return false;
                     }
-                }).keypress(function(event){
+                }).keydown(function(event){
                     var keycode = (event.keyCode ? event.keyCode : event.which);
-                    if(keycode == '13'){
+                    if(keycode == 13){
+                        event.preventDefault();
                         var old_minLength = input.autocomplete('option', 'minLength');
                         input.autocomplete('option', 'minLength', 0);
                         input.autocomplete( "search", input.val() );
@@ -73,6 +101,21 @@
                     input.autocomplete('option', 'minLength', old_minLength);
                     input.focus();
                 });
+            this.clearBtn = $("<a href='#' class='jqrselect-clearButton' title='click to clear'>&nbsp;&nbsp;&nbsp;&nbsp;</a>" )
+            .attr( "tabIndex", -1 )
+            .insertAfter( this.button )
+            .click(function(e) {
+                e.preventDefault();
+                if ( input.autocomplete( "widget" ).is( ":visible" ) ) {
+                    input.autocomplete( "close" );
+                    return;
+                }
+                
+                // work around a bug (likely same cause as #5265)
+                $( this ).blur();
+                input.val('');
+                self.element.val('');
+            });
         },
         
         getValue: function(){
@@ -91,6 +134,7 @@
         destroy: function() {
             this.input.remove();
             this.button.remove();
+            this.clearBtn.remove();
             this.element.show();
             $.Widget.prototype.destroy.call( this );
         }

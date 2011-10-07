@@ -3,6 +3,7 @@
 #forum .nav .home {width: 16px; background: url(search.png) no-repeat -8px -119px;line-height: 200px;overflow: hidden;}
 #forum .nav em {width: 20px;background: url(item.png) no-repeat 3px 10px;line-height: 200px;overflow: hidden;}
 #forum .nav a, #forum .nav em, #forum .nav span {float: left;height: 29px;}
+#forum .post ol, #forum .post ul {margin-left:20px;}
 #forum .tool {line-height: 29px;padding: 0 10px 0 0;float:right;height:29px;}
 #forum-body {background: white;}
 #forum-body th {height:25px;padding:2px;background: #E5EDF2 url("titlebg.png") repeat-x 0 0;border:1px solid #ccc;}

@@ -19,18 +19,18 @@ div.sexy input {
     padding:1px 3px;
     background:#fff url(text-bg.gif) repeat-x 0 0;
     border:1px solid #B5B8C8;
-    height: 22px;
+    height: 20px;
     line-height:18px;
     vertical-align:middle; 
     left: 0px;
     top: 0px; 
-    width: 129px;  
+    width: 121px;  
 
 }
 
 div.sexy div.icon {
     width:17px;
-    height:21px;
+    height:23px;
     border: 0;
     background:transparent url(trigger.gif) no-repeat 0 0;
     cursor:pointer;

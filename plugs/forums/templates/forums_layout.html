@@ -13,7 +13,7 @@
     </div>
     <div class="tool">
         {{if has_role(request.user, 'superuser'):}}
-        <a class="btn btn-green" href="/forum/admin_category">管理</a>
+        <a class="btn btn-green" href="{{=url_for('plugs.forums.views.ForumView.admin')}}">管理</a>
         {{pass}}
     </div>
     {{end}}

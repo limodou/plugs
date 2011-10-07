@@ -8,8 +8,8 @@ from uliweb.utils import date
 from uliweb.utils.timesince import timesince
 
 #def __begin__():
-#    from uliweb.contrib.auth import if_login
-#    return if_login()
+#   from uliweb import function
+#   return function('require_login')()
 
 @expose('/forum')
 class ForumView(object):
@@ -150,7 +150,12 @@ class ForumView(object):
     
         obj = forum.get(int(id))
         
-        view = EditView('forum', url_for(ForumView.admin_forum), obj=obj)
+        def post_created_form(fcls, model, obj):
+            fcls.managers.html_attrs['url'] = '/config/users/search'
+            fcls.managers.query = obj.managers.all()
+        
+        view = EditView('forum', url_for(ForumView.admin_forum), obj=obj,
+            post_created_form=post_created_form)
         return view.run()
     
     @expose('forum_delete/<id>')
@@ -430,7 +435,7 @@ class ForumView(object):
             return ' | '.join(a)
         
         def updated(value, obj):
-            if obj.topic.updated_on:
+            if obj.floor == 1 and obj.topic.updated_on:
                 return u'<div class="updated">由 %s 于 %s 更新</div>' % (obj.topic.modified_user.username, timesince(obj.topic.updated_on))
         
         fields = ['topic', 'id', 'username', 'userimage', 'posted_by', 'content',

@@ -1,8 +1,7 @@
 #coding=utf-8
 from __future__ import with_statement
 
-from uliweb import expose
-from uliweb.contrib.auth import require_login
+from uliweb import expose, decorators
 import plugs.generic.views as g_views
 
 get_url = g_views.get_url('/users')
@@ -17,18 +16,18 @@ def _get_portrait_image_thumbnail(id, size=50):
     
 @expose('/user')
 class UserView(object):
-    @require_login
+    @decorators.require_login
     def view(self):
         return UsersManageView().view(request.user.id)
 
-    @require_login
+    @decorators.require_login
     def edit(self):
         from uliweb.utils.generic import EditView
         
         view = EditView('user', condition=request.user.id, ok_url=url_for(UserView.view))
         return view.run()
     
-    @require_login
+    @decorators.require_login
     def edit_image(self):
         from forms import UploadImageForm
         from uliweb.utils.generic import EditView
@@ -55,7 +54,7 @@ class UserView(object):
         
         return view.run()
     
-    @require_login
+    @decorators.require_login
     def save_image(self):
         from uliweb.utils.image import crop_resize
         from uliweb.contrib.upload import get_filename
@@ -145,9 +144,9 @@ def get_users_list_view(c):
 @expose('/users')
 class UsersManageView(object):
     def __begin__(self):
-        from uliweb.contrib.auth import if_login
-        return if_login()
-
+        from uliweb import function
+        return function('require_login')()
+        
     def _get_users_list_view(self, c):
         from uliweb.utils.generic import ListView
         from uliweb.orm import get_model

@@ -4,9 +4,9 @@ from uliweb.orm import get_model
 from uliweb.i18n import ugettext_lazy as _
 
 def __begin__():
-    from uliweb.contrib.auth import if_login
-    return if_login()
-
+    from uliweb import function
+    return function('has_login')()
+    
 @expose('/config/roles')
 class RoleView(object):
     def __init__(self):

@@ -2,8 +2,8 @@
 from uliweb import expose
 
 def __begin__():
-    from uliweb.contrib.auth import if_login
-    return if_login()
+    from uliweb import function
+    return function('has_login')()
 
 def get_audit_list(c):
     from uliweb.utils.generic import ListView

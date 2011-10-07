@@ -130,8 +130,8 @@
 	    this.input = $("<input type='text' />").
 	    appendTo(this.wrapper).
 	    attr("autocomplete", "off").
-	    attr("value", "").
-	    attr("name", this.selectbox.attr("name") + this.config.suffix);
+	    attr("value", "");
+//	    attr("name", this.selectbox.attr("name") + this.config.suffix);
 	    
 	    var origName = this.selectbox.attr("name");
 	    var newName = origName + this.config.hiddenSuffix;
@@ -142,8 +142,8 @@
 	    this.hidden = $("<input type='hidden' />").
 	    appendTo(this.wrapper).
 	    attr("autocomplete", "off").
-	    attr("value", this.config.initialHiddenValue).
-	    attr("name", this.config.renameOriginal ? origName : newName);
+	    attr("value", this.config.initialHiddenValue);
+//	    attr("name", this.config.renameOriginal ? origName : newName);
 	
         this.icon = $("<div />").
 	    appendTo(this.wrapper).

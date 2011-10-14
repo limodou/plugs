@@ -296,16 +296,16 @@ function get_select(target, url, data){
         success: function(data){
             var html = "<option value=''></option>";
             var v,k,t;
-            for(var j in data){
-                if($.type(data[j]) == 'array'){
-                    v = data[j][0];
-                    k = data[j][1];
+            $.each(data, function(j, value){
+                if($.type(value) == 'array'){
+                    v = value[0];
+                    k = value[1];
                 }else{
-                    v = data[j].value;
-                    k = data[j].text;
+                    v = value.value;
+                    k = value.text;
                 }
                 html = html + '<option value=' + v + '>' + k + '</option>'
-            }
+            });
             if (typeof target == 'string') t = $('select[name='+target+']');
             else t = $(target);
             t.html(html);

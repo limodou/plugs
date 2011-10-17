@@ -86,9 +86,11 @@
     <div class="container">
       {{block content}}
       <div class="content">
-        {{block page-header}}
+        {{block page-header-container}}
         <div class="page-header">
+          {{block page-header}}
           <h1>Page name <small>Supporting text or tagline</small></h1>
+          {{end}}
         </div>
         {{end}}
         <div class="row">

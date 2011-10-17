@@ -373,3 +373,6 @@ var create_result_process = function(target, opt){
         }
     }
 }
+
+/* ajaxSetup */
+$.ajaxSetup({cache:false});

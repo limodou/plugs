@@ -7,7 +7,7 @@
 // BASELINE STYLES
 // ---------------
 
-table {
+.table {
   width: 100%;
   margin-bottom: @baseline;
   padding: 0;
@@ -51,7 +51,6 @@ table {
   }
 }
 
-
 // ZEBRA-STRIPING
 // --------------
 
@@ -65,7 +64,9 @@ table {
       background-color: #f5f5f5;
     }
   }
+}
 
+.table {
   // Tablesorting styles w/ jQuery plugin
   .header {
     cursor: pointer;
@@ -111,9 +112,6 @@ table {
       .opacity(60);
     }
   }
-}
-
-table {
   // Blue Table Headings
   .blue {
     color: @blue;

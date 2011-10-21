@@ -6,118 +6,150 @@
 // FORM STYLES
 // -----------
 
-form {
+.form {
   margin-bottom: @baseline;
-}
 
-// Groups of fields with labels on top (legends)
-fieldset {
-  margin-bottom: @baseline;
-  padding-top: @baseline;
-  legend {
-    display: block;
-    padding-left: 150px;
-    font-size: @basefont * 1.5;
-    line-height: 1;
-    color: @grayDark;
-    *padding: 0 0 5px 145px; /* IE6-7 */
-    *line-height: 1.5; /* IE6-7 */
+  // Groups of fields with labels on top (legends)
+  fieldset {
+    margin-bottom: @baseline;
+    padding-top: @baseline;
+    legend {
+      display: block;
+      padding-left: 150px;
+      font-size: @basefont * 1.5;
+      line-height: 1;
+      color: @grayDark;
+      *padding: 0 0 5px 145px; /* IE6-7 */
+      *line-height: 1.5; /* IE6-7 */
+    }
   }
+
+  // Set font for forms
+  label,
+  input,
+  select,
+  textarea {
+    #font > .sans-serif(normal,13px,normal);
+  }
+  
+  // Float labels left
+  label {
+    padding-top: 6px;
+    font-size: @basefont;
+    line-height: @baseline;
+    float: left;
+    width: 130px;
+    text-align: right;
+    color: @grayDark;
+  }
+  
+  // Shift over the inside div to align all label's relevant content
+  .input {
+    margin-left: 150px;
+  }
+
+  // Inputs, Textareas, Selects
+  input,
+  textarea,
+  select,
+  .uneditable-input {
+    display: inline-block;
+    width: 210px;
+    height: @baseline;
+    padding: 4px;
+    font-size: @basefont;
+    line-height: @baseline;
+    color: @gray;
+    border: 1px solid #ccc;
+    .border-radius(3px);
+  }
+
+  /* mini reset for non-html5 file types */
+  input[type=checkbox],
+  input[type=radio] {
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 3px 0;
+    *margin-top: 0; /* IE6-7 */
+    line-height: normal;
+    border: none;
+  }
+  
+  input[type=file] {
+    background-color: @white;
+    padding: initial;
+    border: initial;
+    line-height: initial;
+    .box-shadow(none);
+  }
+  
+  input[type=button],
+  input[type=reset],
+  input[type=submit] {
+    width: auto;
+    height: auto;
+  }
+  
+  select,
+  input[type=file] {
+    height: @baseline * 1.5; // In IE7, the height of the select element cannot be changed by height, only font-size
+    line-height: @baseline * 1.5;
+    *margin-top: 4px; /* For IE7, add top margin to align select with labels */
+  }
+  
+  // Make multiple select elements height not fixed
+  select[multiple] {
+    height: inherit;
+  }
+  
+  textarea {
+    height: auto;
+  }
+
+  // Error styles
+  div.clearfix.error {
+    background: lighten(@red, 57%);
+    padding: 10px 0;
+    margin: -10px 0 10px;
+    .border-radius(4px);
+    @error-text: desaturate(lighten(@red, 25%), 25%);
+    > label,
+    span.help-inline,
+    span.help-block {
+      color: @red;
+    }
+    input,
+    textarea {
+      border-color: @error-text;
+      .box-shadow(0 0 3px rgba(171,41,32,.25));
+      &:focus {
+        border-color: darken(@error-text, 10%);
+        .box-shadow(0 0 6px rgba(171,41,32,.5));
+      }
+    }
+    .input-prepend,
+    .input-append {
+      span.add-on {
+        background: lighten(@red, 50%);
+        border-color: @error-text;
+        color: darken(@error-text, 10%);
+      }
+    }
+  }
+  
 }
 
 // Parent element that clears floats and wraps labels and fields together
-form .clearfix {
+.form .clearfix {
   margin-bottom: @baseline;
   .clearfix()
-}
-
-// Set font for forms
-label,
-input,
-select,
-textarea {
-  #font > .sans-serif(normal,13px,normal);
-}
-
-// Float labels left
-label {
-  padding-top: 6px;
-  font-size: @basefont;
-  line-height: @baseline;
-  float: left;
-  width: 130px;
-  text-align: right;
-  color: @grayDark;
-}
-
-// Shift over the inside div to align all label's relevant content
-form .input {
-  margin-left: 150px;
 }
 
 // Checkboxs and radio buttons
 input[type=checkbox],
 input[type=radio] {
   cursor: pointer;
-}
-
-// Inputs, Textareas, Selects
-input,
-textarea,
-select,
-.uneditable-input {
-  display: inline-block;
-  width: 210px;
-  height: @baseline;
-  padding: 4px;
-  font-size: @basefont;
-  line-height: @baseline;
-  color: @gray;
-  border: 1px solid #ccc;
-  .border-radius(3px);
-}
-
-/* mini reset for non-html5 file types */
-input[type=checkbox],
-input[type=radio] {
-  width: auto;
-  height: auto;
-  padding: 0;
-  margin: 3px 0;
-  *margin-top: 0; /* IE6-7 */
-  line-height: normal;
-  border: none;
-}
-
-input[type=file] {
-  background-color: @white;
-  padding: initial;
-  border: initial;
-  line-height: initial;
-  .box-shadow(none);
-}
-
-input[type=button],
-input[type=reset],
-input[type=submit] {
-  width: auto;
-  height: auto;
-}
-
-select,
-input[type=file] {
-  height: @baseline * 1.5; // In IE7, the height of the select element cannot be changed by height, only font-size
-  line-height: @baseline * 1.5;
-  *margin-top: 4px; /* For IE7, add top margin to align select with labels */
-}
-
-// Make multiple select elements height not fixed
-select[multiple] {
-  height: inherit;
-}
-
-textarea {
-  height: auto;
 }
 
 // For text that needs to appear as an input but should not be an input
@@ -156,37 +188,6 @@ input[type=checkbox]:focus,
 select:focus {
   .box-shadow(none); // override for file inputs
   outline: 1px dotted #666; // Selet elements don't get box-shadow styles, so instead we do outline
-}
-
-// Error styles
-form div.clearfix.error {
-  background: lighten(@red, 57%);
-  padding: 10px 0;
-  margin: -10px 0 10px;
-  .border-radius(4px);
-  @error-text: desaturate(lighten(@red, 25%), 25%);
-  > label,
-  span.help-inline,
-  span.help-block {
-    color: @red;
-  }
-  input,
-  textarea {
-    border-color: @error-text;
-    .box-shadow(0 0 3px rgba(171,41,32,.25));
-    &:focus {
-      border-color: darken(@error-text, 10%);
-      .box-shadow(0 0 6px rgba(171,41,32,.5));
-    }
-  }
-  .input-prepend,
-  .input-append {
-    span.add-on {
-      background: lighten(@red, 50%);
-      border-color: @error-text;
-      color: darken(@error-text, 10%);
-    }
-  }
 }
 
 // Form element sizes
@@ -236,7 +237,7 @@ textarea.xxlarge {
 .formColumns(@columnSpan: 1) {
   display: inline-block;
   float: none;
-  width: ((@gridColumnWidth - 10) * @columnSpan) + ((@gridColumnWidth - 10) * (@columnSpan - 1));
+  width: ((@gridColumnWidth) * @columnSpan) + (@gridGutterWidth * (@columnSpan - 1)) - 10;
   margin-left: 0;
 }
 input,

@@ -15,7 +15,7 @@
 	position: absolute;
 	height: auto;
 	/* Ensure that the notices are on top of everything else. */
-	z-index: 9999;
+	z-index: 20000;
 }
 /* This hides position: fixed from IE6, which doesn't understand it. */
 html > body .ui-pnotify {

@@ -354,7 +354,7 @@ var create_result_process = function(target, opt){
             opt.success(r.data);
         } else if (!r.success){
             $.each(r.data, function(key, value){
-                var el = t.find('input[name='+key+']');
+                var el = t.find('input[name='+key+'],select[name='+key+'],textarea[name='+key+']');
                 $(el).poshytip({
                     className: 'tip-yellowsimple',
                     content: value,

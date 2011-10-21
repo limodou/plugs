@@ -86,13 +86,14 @@
     <div class="container">
       {{block content}}
       <div class="content">
-        {{block page-header-container}}
+        {{block page_header_container}}
         <div class="page-header">
-          {{block page-header}}
+          {{block page_header}}
           <h1>Page name <small>Supporting text or tagline</small></h1>
           {{end}}
         </div>
         {{end}}
+        {{block content_main_container}}
         <div class="row">
           {{block content_main}}
           <div class="span10">
@@ -103,12 +104,15 @@
           </div>
           {{end}}
         </div>
+        {{end}}
       </div>
       {{end content}}
     
-      {{block footer}}
+      {{block footer_container}}
       <footer>
+        {{block footer}}
         <p>&copy; Company 2011</p>
+        {{end}}
       </footer>
       {{end}}
     

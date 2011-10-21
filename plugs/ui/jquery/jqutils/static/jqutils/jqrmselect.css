@@ -1,6 +1,6 @@
 .rmselect-widget {border:1px solid #ccc;}
 .rmselect-widget .rmselect-tool {background-color:#e7eee8; margin:0px; padding: 2px;}
-.rmselect-widget .rmselect-body ul {list-style:none;}
+.rmselect-widget .rmselect-body ul {list-style:none;margin:0;}
 .rmselect-widget .rmselect-body ul li{list-style:none;display:block; padding:3px;}
 .rmselect-widget .rmselect-body ul li:hover{background-color:#9EC2FF;}
 .rmselect-widget .rmselect-body ul li span.rm-blank{float:left;width:20px;height:20px;display:block; cursor:pointer;}

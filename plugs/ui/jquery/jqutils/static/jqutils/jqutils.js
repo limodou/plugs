@@ -268,7 +268,7 @@ var show_simple_message = function(msg, target){
             position:'fixed',
             top:0, 
             left:$(window).width() / 2 - (m.outerWidth() / 2),
-            zIndex: 1500
+            zIndex: 21000
         });
         m.find('.mg').addClass('rounded_bottom');
         $('body').append(m);

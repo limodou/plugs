@@ -203,13 +203,14 @@ class UsersManageView(object):
         from uliweb.utils.generic import AddView
         from uliweb.orm import get_model
         from forms import AddUserForm
+        from functools import partial
         
         
         def post_save(obj, data):
             obj.set_password(settings.USER_ADMIN.DEFAULT_PASSWORD)
             
         if request.user.is_superuser:
-            view = AddView('user', get_url('view'), post_save=post_save, form_cls=AddUserForm)
+            view = AddView('user', partial(get_url, 'view'), post_save=post_save, form_cls=AddUserForm)
             return view.run()
         else:
             flash(_('You have no previlege to create user.'), 'error')

@@ -1,6 +1,5 @@
 .pager
 {
-	width: 720px;
 	height: 30px;
 	padding: 0;
 	margin: 0;
@@ -8,6 +7,7 @@
 	padding-left: 10px;
 	/*border-radius: 8px;
 	-moz-border-radius: 8px;*/
+	vertical-align: middle;
 }
 .pager div.short
 {
@@ -17,7 +17,7 @@
 	margin-right: 10px;
 	width: 84px;
 }
-.pager div.short input
+.pager div.short input[type=text]
 {
 	width: 28px;
 	height: 18px;
@@ -29,9 +29,9 @@
 {
 	list-style: none;
 	padding: 0;
-	margin: 0;
+	margin: 0 20px 0 4px;
 	float: left;
-	margin-right: 4px;
+	white-space:nowrap;
 }
 .pager ul li
 {
@@ -164,7 +164,6 @@
 {
 	background-color: #d9e8ff;
 	color: black;
-	border: solid 1px #d9e8ff;
 	height: 22px;
 }
 .pager.blue span
@@ -174,4 +173,5 @@
 .pager.blue div.short input
 {
 	border: 1px solid #d9e8ff;
+	font-size: 12px;
 }

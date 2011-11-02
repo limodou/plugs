@@ -43,7 +43,7 @@ QueryString
             return result;
         },
         set:function(k, v, replace){
-            replace = replace || false;
+            replace = replace || true;
             if (replace)
                 this.urlParams[k] = v;
             else{

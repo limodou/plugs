@@ -6,9 +6,12 @@
                 totalrecords    : total,
                 initval 		: start,
                 theme           : 'blue',
-                recordsperpage  : 12,
-                next: '下一页', prev: '上一页', first: '首页', last: '末页',
-                go :'跳转',
+                recordsperpage  : page_nums,
+                next: '{{=_('Next')}}', 
+                prev: '{{=_('Prev')}}', 
+                first: '{{=_('First')}}', 
+                last: '{{=_('Last')}}',
+                go :'{{=_('Go')}}',
                 onchange        : callback
             });
         }

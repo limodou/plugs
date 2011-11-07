@@ -1,8 +1,8 @@
 html{height:100%;}
 body,td,th{font-family:Arial,Verdana,sans-serif;font-size: 12px;}
-body{background-color: #FFFFFF;word-break:break-word;word-wrap:break-word;}
+body{height:100%;box-sizing:border-box;background-color: #FFFFFF;word-break:break-word;word-wrap:break-word;}
 
-.editMode{margin:5px;padding:0px;overflow-y:auto;}
+.editMode{margin:0px;padding:5px;overflow-y:auto;}
 .editMode img:-moz-broken {-moz-force-broken-image-icon:1;height:24px;width:24px;}
 .editMode table.xhe-border,.editMode table.xhe-border th,.editMode table.xhe-border td{border:1px dotted #d3d3d3;}
 .editMode embed{display:inline-block;border:1px dashed #FF4E4E;}

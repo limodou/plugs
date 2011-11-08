@@ -22,7 +22,7 @@ QueryString
             while (e = r.exec(param)){
                 k = d(e[1]);
                 v = d(e[2]);
-                this.set(k, v);
+                this.set(k, v, false);
             }
             return this;
         },
@@ -43,7 +43,7 @@ QueryString
             return result;
         },
         set:function(k, v, replace){
-            replace = replace || true;
+            replace = replace || false;
             if (replace)
                 this.urlParams[k] = v;
             else{

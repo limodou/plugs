@@ -10,13 +10,16 @@ def call(app, var, env, plugins=None, use_less=False):
         a.append('bootstrap/bootstrap.min.css')
     
     jquery = False
+    jquery_ui = False
     for x in plugins:
         a.append('bootstrap/js/bootstrap-%s.js' % x)
         jquery = True
+        if x in ['pagination']:
+            jquery_ui = True
       
     d = {'toplinks':a, 'depends':[]}
     if jquery:
-        d['depends'] = ['jquery']
+        d['depends'] = [('jquery', {'ui':jquery_ui})]
     if use_less:
         d['depends_after'] = ['less']
         

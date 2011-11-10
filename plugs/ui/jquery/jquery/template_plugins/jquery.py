@@ -1,4 +1,4 @@
-def call(app, var, env, version='1.6.4', ui=False, theme='redmond', css_only=False):
+def call(app, var, env, version='1.7', ui=False, theme='redmond', css_only=False):
     a = []
     ui_version = '1.8.16'
     if css_only:

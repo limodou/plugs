@@ -381,9 +381,9 @@ img.icon {border: 3px solid #eee; padding:2px; margin:5px;}
 .content_date {color:#999;}
 .content_info {border-bottom: 1px solid #ccc; margin-bottom:10px;position:relative;}
 .box {margin-bottom:12px; position:relative;
--webkit-box-shadow: 2px 2px 3px #ccc;
--moz-box-shadow: 2px 2px 3px #ccc;
-box-shadow: 2px 2px 3px #ccc;
+-webkit-box-shadow: 0 0 5px #ccc;
+-moz-box-shadow: 0 0 5px #ccc;
+box-shadow: 0 0 5px #ccc;
 }
 .box h2 {
 background-color:#E7EEF7;
@@ -471,11 +471,12 @@ white-space:nowrap;
 table.query tr {height: 30px;}
 table.query td {
 background-color: #D9E7FF;
-padding: 2px 8px;
+padding: 2px 0px 2px 2px;
 white-space:nowrap;
 }
 table.query label {
 font-size:100%;
+margin-left:4px;
 }
 table.fix-header th{
 white-space:nowrap;

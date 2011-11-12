@@ -20,6 +20,8 @@ class ForumView(object):
             'essence':{True:'取消精华', False:'精华'},
             'delete':{True:'恢复', False:'删除'},
             'hidden':{True:'取消隐藏', False:'隐藏'},
+            'email':{True:'取消邮件关注', False:'设置邮件关注'},
+            'homepage':{True:'取消首页显示', False:'设置首页显示'},
         }
     
     @expose('')
@@ -290,6 +292,8 @@ class ForumView(object):
                 s += u'<font color="red">[关]</font>'
             if obj.essence:
                 s += u'<font color="red">[精]</font>'
+            if obj.homepage:
+                s += u'<font color="red">[首]</font>'
             return _type+ '<a href="/forum/%d/%d">%s</a>' % (int(id), obj.id, obj.subject) + s
         
         fields_convert_map = {'created_on':created_on, 'subject':subject,
@@ -319,7 +323,7 @@ class ForumView(object):
             Post = get_model('forumpost')
             
             p = Post(topic=obj.id, posted_by=request.user,
-                content=data['content'], floor=1)
+                content=data['content'], floor=1, reply_email=data['reply_email'])
             p.save()
             
             Forum.filter(Forum.c.id==int(id)).update(num_posts=Forum.c.num_posts+1, 
@@ -330,22 +334,27 @@ class ForumView(object):
             
         def get_form_field(name):
             from uliweb.utils.generic import ReferenceSelectField
-            from uliweb.form import TextField
+            from uliweb.form import TextField, BooleanField
             
             forumtopictype = get_model('forumtopictype')
             
             if name == 'content':
-                return TextField('内容', required=True, rows=20, convert_html=True)
-            if name == 'topic_type':
+                return TextField('内容', required=True, convert_html=True)
+            elif name == 'topic_type':
                 return ReferenceSelectField('forumtopictype', 
                     condition=forumtopictype.c.forum==forum.id, label='主题分类名称')
+            elif name == 'reply_email':
+                return BooleanField('有回复时邮件通知我')
             
         slug = uuid.uuid1().hex
-        data = {'slug':slug}
+        data = {'slug':slug, 'reply_email':True}
+        
+        has_email = bool(request.user and request.user.email)
+        
         view = AddView('forumtopic', url_for(ForumView.forum_index, id=int(id)),
             default_data={'forum':int(id), 'last_post_user':request.user.id, 'last_reply_on':date.now()}, 
             hidden_fields=['slug'], data=data,
-            post_save=post_save, get_form_field=get_form_field, template_data={'forum':forum})
+            post_save=post_save, get_form_field=get_form_field, template_data={'forum':forum, 'has_email':has_email})
         return view.run()
         
     def _clear_files(self, slug, text):
@@ -355,7 +364,7 @@ class ForumView(object):
         from uliweb.utils.image import fix_filename
         File = get_model('forumattachment')
         
-        r_links = re.compile(r'<a.*?href=\"([^"]+)\"|<img.*?src=\"([^"]+)\"', re.DOTALL)
+        r_links = re.compile(r'<a.*?href=\"([^"]+)\"|<img.*?src=\"([^"]+)\"|<embed.*?src=\"([^"]+)\"', re.DOTALL)
         files = filter(None, itertools.chain(*re.findall(r_links, text)))
         for row in File.filter(File.c.slug==slug):
             _f = get_filename(row.file_name)
@@ -421,6 +430,7 @@ class ForumView(object):
                     a.append('<a href="#" rel="%d" class="hidden">%s</a>' % (obj.id, self.status['hidden'][obj.topic.hidden]))
                     a.append('<a href="#" rel="%d" class="top">%s</a>' % (obj.id, self.status['sticky'][obj.topic.sticky]))
                     a.append('<a href="#" rel="%d" class="essence">%s</a>' % (obj.id, self.status['essence'][obj.topic.essence]))
+                    a.append('<a href="#" rel="%d" class="homepage">%s</a>' % (obj.id, self.status['homepage'][obj.topic.homepage]))
                 if is_manager or (obj.posted_by.id == request.user.id and obj.created_on+timedelta(days=settings.get_var('PARA/FORUM_EDIT_DELAY'))>=date.now()):
                     #作者或管理员且在n天之内，则可以编辑
                     url = url_for(ForumView.edit_topic, forum_id=forum_id, topic_id=topic_id)
@@ -431,7 +441,8 @@ class ForumView(object):
             if is_manager or (obj.posted_by.id == request.user.id):
                 if (obj.deleted and (obj.deleted_by.id == request.user.id or is_manager)) or not obj.deleted:
                     a.append('<a href="#" rel="%d" class="delete">%s</a>' % (obj.id, self.status['delete'][obj.deleted]))
-        
+            if obj.posted_by.id == request.user.id:    
+                a.append('<a href="#" rel="%d" class="email">%s</a>' % (obj.id, self.status['email'][obj.reply_email]))
             return ' | '.join(a)
         
         def updated(value, obj):
@@ -460,7 +471,7 @@ class ForumView(object):
 
             slug = uuid.uuid1().hex
             topic = Topic.get(int(topic_id))
-            return {'forum':forum, 'topic':topic, 'slug':slug}
+            return {'forum':forum, 'topic':topic, 'slug':slug, 'has_email':bool(request.user and request.user.email)}
     
     @expose('<forum_id>/<topic_id>/new_post')
     @decorators.check_role('trusted')
@@ -473,6 +484,7 @@ class ForumView(object):
         Post = get_model('forumpost')
         Topic = get_model('forumtopic')
         Forum = get_model('forum')
+        User = get_model('user')
 
         def pre_save(data):
             from sqlalchemy.sql import select, func
@@ -481,9 +493,40 @@ class ForumView(object):
             data['floor'] = (do_(select([func.max(Post.c.floor)], Post.c.topic==int(topic_id))).scalar() or 0) + 1
             
         def post_save(obj, data):
+            from uliweb import functions
+            from uliweb.utils.common import Serial
+            from uliweb.mail import Mail
+            
             Topic.filter(Topic.c.id==int(topic_id)).update(num_replies=Topic.c.num_replies+1, last_post_user=request.user.id, last_reply_on=date.now())
             Forum.filter(Forum.c.id==int(forum_id)).update(num_posts=Forum.c.num_posts+1, last_post_user=request.user.id, last_reply_on=date.now())
             self._clear_files(obj.slug, data['content'])
+            
+            #増加发送邮件的处理
+            emails = []
+            for u_id in Post.filter((Post.c.topic==int(topic_id)) & (Post.c.reply_email==True) & (Post.c.floor<obj.floor)).values(Post.c.posted_by):
+                user = User.get(u_id[0])
+                if user and user.email and (user.email not in emails) and (user.email!=request.user.email):
+                    emails.append(user.email)
+            
+            if not emails:
+                return
+            
+            _type = settings.get_var('PARA/FORUM_REPLY_PROCESS', 'print')
+            url = '%s/forum/%s/%s' % (settings.get_var('PARA/DOMAIN'), forum_id, topic_id)
+            d = {'url':str(url)}
+            mail = {'from_':settings.get_var('PARA/EMAIL_SENDER'), 'to_':emails,
+                'subject':settings.get_var('FORUM_EMAIL/FORUM_EMAIL_TITLE'),
+                'message':settings.get_var('FORUM_EMAIL/FORUM_EMAIL_TEXT') % d,
+                'html':True}
+            
+            if _type == 'mail':
+                Mail().send_mail(**mail)
+            elif _type == 'print':
+                print mail
+            elif _type == 'redis':
+                redis = functions.get_redis()
+                _t = Serial.dump(mail)
+                redis.lpush('send_mails', _t)
             
         def get_form_field(name):
             from uliweb.form import TextField
@@ -541,12 +584,12 @@ class ForumView(object):
         return view.run()
     
     def upload_file(self):
-        return self._upload_file(image=False)
+        return self._upload_file(image=False, show_filename=False)
     
     def upload_image(self):
         return self._upload_file(image=True)
 
-    def _upload_file(self, image=False):
+    def _upload_file(self, image=False, show_filename=True):
         import os
         import Image
         from uliweb.contrib.upload import get_url, save_file, get_filename
@@ -589,11 +632,15 @@ class ForumView(object):
                         name = _f
                 ff = File(slug=slug, file_name=filename, name=name)
                 ff.save()
+                if show_filename:
+                    fargs = '||%s' % name
+                else:
+                    fargs = ''
                 return '''<script type="text/javascript">
-var url='%s||%s';
+var url='%s%s';
 setTimeout(function(){callback(url);},100);
 </script>
-''' % (_file, name)
+''' % (_file, fargs)
             else:
                 return {'form':form}
                 
@@ -670,6 +717,11 @@ setTimeout(function(){callback(url);},100);
                 topic.hidden = not topic.hidden
                 topic_flag = True
                 txt = self.status['hidden'][topic.hidden]
+            elif action == 'homepage':
+                topic.homepage = not topic.homepage
+                topic_flag = True
+                txt = self.status['homepage'][topic.homepage]
+            
         #post
         ok = False
         if is_manager or (post.posted_by.id == request.user.id and post.created_on+timedelta(days=settings.get_var('PARA/FORUM_EDIT_DELAY'))>=date.now()):
@@ -693,7 +745,14 @@ setTimeout(function(){callback(url);},100);
                         post.deleted_on = date.now()
                     flag = True
                     txt = self.status['delete'][post.deleted]
-
+            elif action == 'email':
+                post.reply_email = not post.reply_email
+                flag = True
+                txt = self.status['email'][post.reply_email]
+                #检查用户邮箱是否存在
+                if post.reply_email and not post.posted_by.email:
+                    msg = '您的邮箱尚未设置，将无法处理邮件'
+                
         if flag:
             post.save()
         if topic_flag:

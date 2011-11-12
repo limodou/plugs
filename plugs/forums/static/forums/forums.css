@@ -1,4 +1,4 @@
-#forum {margin: 0 auto;background:#fff;}
+#forum {margin: 0 auto;background:#fff;margin-top:10px;}
 #forum .nav {padding: 0 10px 0 0;float: left;line-height: 29px;margin-bottom: 0px;}
 #forum .nav .home {width: 16px; background: url(search.png) no-repeat -8px -119px;line-height: 200px;overflow: hidden;}
 #forum .nav em {width: 20px;background: url(item.png) no-repeat 3px 10px;line-height: 200px;overflow: hidden;}
@@ -26,7 +26,7 @@ table.forum tr.head td.first{padding-left:8px;}
 #forum .replay h3 {margin-bottom:5px;}
 #forum .topic h2 {border-bottom:3px solid #999;margin:0px;padding-bottom:4px;}
 #forum .topic .topic_msg {margin-top:4px; color:#999;}
-#forum .deleted {border:1px solid #f00;padding:10px;background-color:#f49596;}
+#forum .deleted {border:none;padding:10px;color:#999;font-style:italic;}
 #forum .updated {margin:10px 30px;font-style:italic;color:#999;}
 
 #posts {}

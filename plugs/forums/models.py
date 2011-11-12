@@ -106,13 +106,14 @@ class ForumTopic(Model):#主题
     slug = Field(CHAR, max_length=32, verbose_name='唯一识别串')
     
     #Moderation features
-    closed = Field(bool, verbose_name='是否关闭', default=False)
-    sticky = Field(bool, verbose_name='是否置顶', default=False)
-    hidden = Field(bool, verbose_name='是否隐藏', default=False)
+    closed = Field(bool, verbose_name='是否关闭')
+    sticky = Field(bool, verbose_name='是否置顶')
+    hidden = Field(bool, verbose_name='是否隐藏')
+    homepage = Field(bool, verbose_name='是否放首页')
     essence = Field(bool, verbose_name='是否精华贴')
     
     class AddForm:
-        fields = ['topic_type', 'subject', 'content', 'slug']
+        fields = ['topic_type', 'subject', 'content', 'slug', 'reply_email']
         
     class EditForm:
         fields = ['topic_type', 'subject', 'content', 'slug']
@@ -137,11 +138,12 @@ class ForumPost(Model):#can't edit...回复
     modified_by = Reference('user', verbose_name='修改人', collection_name='user_modified_posts')
     deleted_by = Reference('user', verbose_name='删除人', collection_name='user_deleted_posts')
     deleted_on = Field(datetime.datetime, verbose_name='删除时间')
+    reply_email = Field(bool, verbose_name='有回复时是否邮件通知')
 
     @classmethod
     def OnInit(cls):
         Index('fpost_indx', cls.c.topic, cls.c.floor, unique=True)
     
     class AddForm:
-        fields = ['content', 'slug']
+        fields = ['content', 'slug', 'reply_email']
     

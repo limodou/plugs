@@ -1,10 +1,8 @@
 ========================================
-Plugs (Uliewb app collections project
+Plugs (Uliewb app collections project)
 ========================================
 
 :Author: Limodou <limodou@gmail.com>
-
-.. contents:: 
 
 About Plugs
 ----------------

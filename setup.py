@@ -22,9 +22,10 @@ apps not written by me(limodou), it'll under the license of itself.
 """
 
 from setuptools import setup
+import plugs
 
 setup(name='plugs',
-    version='0.0.1b1',
+    version=plugs.__version__,
     description="Apps collection for uliweb",
     long_description=__doc__,
     classifiers=[
@@ -40,10 +41,10 @@ setup(name='plugs',
     packages = ['plugs'],
     platforms = 'any',
     keywords='wsgi web framework',
-    author='limodou',
-    author_email='limodou@gmail.com',
-    url='http://code.google.com/p/plugs',
-    license='BSD',
+    author=plugs.__author__,
+    author_email=plugs.__author_email__,
+    url=plugs.__url__,
+    license=plugs.__license__,
     include_package_data=True,
     zip_safe=False,
     entry_points = {

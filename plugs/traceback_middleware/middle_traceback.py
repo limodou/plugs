@@ -1,5 +1,5 @@
 #coding=utf8
-from uliweb.middleware import Middleware
+from uliweb import Middleware
 import sys
 
 class TracebackMiddle(Middleware):

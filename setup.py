@@ -21,7 +21,7 @@ apps not written by me(limodou), it'll under the license of itself.
 
 """
 
-from setuptools import setup
+from uliweb.utils.setup import setup
 import plugs
 
 setup(name='plugs',

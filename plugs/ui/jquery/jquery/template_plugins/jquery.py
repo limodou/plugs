@@ -1,6 +1,9 @@
-def call(app, var, env, version='1.7.1', ui=False, theme='redmond', css_only=False):
+def call(app, var, env, version=None, ui=False, theme='redmond', css_only=False):
+    from uliweb import settings
+    
     a = []
-    ui_version = '1.8.16'
+    version = version or settings.UI_CONFIG.jquery_version
+    ui_version = settings.UI_CONFIG.jquery_ui_version
     if css_only:
         return {'toplinks':['jquery/ui/css/%s/jquery-ui-%s.custom.css' % (theme, ui_version)]}
     if version:

@@ -101,6 +101,7 @@
 .xheDialog input[type=checkbox]{border:0;}
 .xheDialog select{margin:0;border:1px #ABADB3 solid;padding:1px;}
 .xheDialog input,.xheDialog select,.xheDialog textarea{border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;}
+.xheDialog input:focus,.xheDialog select:focus,.xheDialog textarea:focus{outline: 0;border-color: #EEC068;-webkit-box-shadow: 0 0 1px #EEC068;-moz-box-shadow: 0 0 1px #EEC068;box-shadow: 0 0 1px #EEC068;}
 .xheDialog .xheUpload{position: relative;display:inline-block;width:164px;}
 .xheDialog .xheUpload .xheBtn{position: absolute;top: 0px;left: 114px;width:50px;z-index: 1000001;padding:0;}
 .xheDialog .xheUpload .xheFile{cursor:pointer;position: absolute;top: 0px;left: 0px;width:164px;opacity:0;-ms-filter:'alpha(opacity=0)';filter:alpha(opacity=0);z-index: 1000002;}

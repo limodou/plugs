@@ -1,7 +1,17 @@
-def call(app, var, env, version='1.5.2', ui=False, theme='redmond', css_only=False, ui_version='1.8.13', ajax_error=False):
+def call(app, var, env, plugins=None):
+    from uliweb import settings
+    
+    plugins = plugins or []
     a = []
-    a.append('ztree/style/zTreeStyle.css')
-    a.append('ztree/style/zTreeIcons.css')
-    a.append('ztree/jquery.ztree-2.6.min.js')
+    version = settings.UI_CONFIG.ztree_version
+    if version == '2.6':
+        a.append('ztree/%s/style/zTreeStyle.css' % version)
+        a.append('ztree/%s/style/zTreeIcons.css' % version)
+        a.append('ztree/%s/jquery.ztree-%s.min.js' % (version, version))
+    elif version == '3.0':
+        a.append('ztree/%s/style/zTreeStyle.css' % version)
+        a.append('ztree/%s/jquery.ztree.core-%s.min.js' % (version, version))
+        for p in plugins:
+            a.append('ztree/%s/jquery.ztree.%s-%s.min.js' % (version, p, version))
         
     return {'toplinks':a, 'depends':['jquery']}

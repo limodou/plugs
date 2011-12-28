@@ -20,11 +20,11 @@
 }
 
 .treeTable tr.collapsed td a.expander {
-  background-image: url(/static/treetable/images/toggle-expand-dark.png);
+  background-image: url(/static/treetable/images/plus.gif);
 }
 
 .treeTable tr.expanded td a.expander {
-  background-image: url(/static/treetable/images/toggle-collapse-dark.png);
+  background-image: url(/static/treetable/images/minus.gif);
 }
 
 /* jquery.treeTable.sortable

@@ -16,7 +16,8 @@
             width:'auto',
             height:450,
             url:url + query_string,
-            columns:{{=json_dumps(table.get_columns())}},
+            frozenColumns:{{=json_dumps(table.get_columns(True))}},
+            columns:{{=json_dumps(table.get_columns(False))}},
             idField:'id'
         }
         if (options){

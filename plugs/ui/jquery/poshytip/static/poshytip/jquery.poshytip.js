@@ -25,7 +25,7 @@
         if (this.opts.closeButton) this.opts.allowTipHover = true;
         var inner;
         if (this.opts.closeButton){
-            inner = '<div><div class="tip-inner tip-bg-image"></div><span class="tip-close-button"></span></div>'
+            inner = '<div><div class="tip-inner tip-bg-image"></div><span class="tip-close-button">&times;</span></div>'
         }else{
             inner = '<div><div class="tip-inner tip-bg-image"></div></div>'
         }
@@ -429,8 +429,7 @@
 			'</style>'].join('')).appendTo('head');
     if (opts.closeButton && !$('#poshytip-css-close-button')[0]){
 			$(['<style id="poshytip-css-close-button" type="text/css">',
- 				'span.tip-close-button{cursor:pointer;width:7px;height:7px;position:absolute;right:4px;top:4px;margin:4px;overflow:hidden;background-image:url('+opts.closeImage+');}',
-				'span.tip-close-button:hover{border:1px solid #ccc;}',
+ 				'span.tip-close-button{cursor:pointer;width:7px;height:7px;position:absolute;right:4px;top:2px;margin:4px;font-size:120%;}',
  			'</style>'].join('\n')).appendTo('head');
  		}
 		// check if we need to hook live events

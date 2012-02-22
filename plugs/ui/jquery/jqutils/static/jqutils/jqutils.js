@@ -257,8 +257,8 @@ $.fn.hover_menu = function(){
 };
 
 var show_simple_message = function(msg, target){
+    $('.simple_message').remove();
     if (!msg) {
-        $('.simple_message').remove();
         return;
     }
     var t = target || '.message-conainter';

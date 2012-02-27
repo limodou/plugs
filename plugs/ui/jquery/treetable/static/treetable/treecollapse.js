@@ -220,7 +220,8 @@
         if(options.expandable) {
           //cell.wrapInner('<a href="#" title="' + options.stringExpand + '" style="margin-left: -' + options.indent + 'px; padding-left: ' + options.indent + 'px" class="expander"></a>');
           //cell.wrapInner('<a href="#" title="' + options.stringExpand + '" style="'+ 'padding-left: ' + options.indent + 'px" class="expander"></a>');
-          var anchor = cell.children(options.itemTarget).prepend('<a href="#" title="' + options.stringExpand + '" style="'+ 'padding-left: ' + 16 + 'px" class="expander"></a>');
+          var anchor = $('<a href="#" title="' + options.stringExpand + '" style="'+ 'padding-left: ' + 16 + 'px" class="expander"></a>')
+          cell.children(options.itemTarget).prepend(anchor);
           $(anchor).click(function() { node.toggleBranch(); return false; });
           $(anchor).keydown(function(e) { if(e.keyCode == 13) {node.toggleBranch(); return false; }});
 

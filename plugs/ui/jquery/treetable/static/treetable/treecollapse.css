@@ -1,0 +1,55 @@
+/* jQuery treeCollapse stylesheet
+ *
+ * This file contains styles that are used to display the tree table. Each tree
+ * table is assigned the +treeCollapse+ class.
+ * ========================================================================= */
+
+/* jquery.treeCollapse.collapsible
+ * ------------------------------------------------------------------------- */
+.treeCollapse .expander {
+  cursor: pointer;
+  padding: 0;
+  zoom: 1; /* IE7 Hack */
+}
+
+.treeCollapse a.expander {
+  background-position: left center;
+  background-repeat: no-repeat;
+  color: #000;
+  text-decoration: none;
+}
+
+.treeCollapse .collapsed a.expander {
+  background-image: url(/static/treetable/images/plus.gif);
+}
+
+.treeCollapse .expanded a.expander {
+  background-image: url(/static/treetable/images/minus.gif);
+}
+
+/* jquery.treeCollapse.sortable
+ * ------------------------------------------------------------------------- */
+.treeCollapse .selected, .treeCollapse .accept {
+  background-color: #3875d7;
+}
+
+.treeCollapse .selected a.expander, .treeCollapse .accept a.expander {
+  color: #fff;
+}
+
+.treeCollapse .collapsed.selected a.expander, .treeCollapse .collapsed.accept a.expander {
+  background-image: url(/static/treetable/images/toggle-expand-light.png);
+}
+
+.treeCollapse .expanded.selected a.expander, .treeCollapse .expanded.accept a.expander {
+  background-image: url(/static/treetable/images/toggle-collapse-light.png);
+}
+
+.treeCollapse .ui-draggable-dragging {
+  color: #000;
+  z-index: 1;
+}
+
+/* Layout helper taken from jQuery UI. This way I don't have to require the
+ * full jQuery UI CSS to be loaded. */
+.ui-helper-hidden { display: none; }

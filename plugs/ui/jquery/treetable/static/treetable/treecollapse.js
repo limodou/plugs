@@ -187,12 +187,14 @@
   };
 
   function getPaddingLeft(node) {
-    var paddingLeft = parseInt(node[0].style.paddingLeft, 10);
+//    var paddingLeft = parseInt(node[0].style.paddingLeft, 10);
+    var paddingLeft = parseInt(node[0].style.marginLeft, 10);
     return (isNaN(paddingLeft)) ? defaultPaddingLeft : paddingLeft;
   }
 
   function indent(node, value) {
-    node.style.paddingLeft = getPaddingLeft(cell) + value + "px";
+//    node.style.paddingLeft = getPaddingLeft(cell) + value + "px";
+    node.style.marginLeft = getPaddingLeft(cell) + value + "px";
 
     childrenOf(node).each(function() {
       indent($(this), value);
@@ -214,7 +216,8 @@
         var padding = getPaddingLeft($(node)) + options.indent;
 
         childNodes.each(function() {
-          this.style.paddingLeft = padding + "px";
+          //this.style.paddingLeft = padding + "px";
+          this.style.marginLeft = padding + "px";
         });
 
         if(options.expandable) {

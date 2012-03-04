@@ -1,4 +1,4 @@
-def call(app, var, env, plugins=None, use_less=False, version=None):
+def call(app, var, env, plugins=None, js=True, responsive=False, use_less=False, version=None):
     from uliweb import settings
     
     plugins = plugins or []
@@ -11,6 +11,8 @@ def call(app, var, env, plugins=None, use_less=False, version=None):
         a.append('bootstrap/%s/lib/bootstrap.less' % version)
     else:
         a.append('bootstrap/%s/bootstrap.min.css' % version)
+    if responsive:
+        a.append('bootstrap/%s/bootstrap-responsive.min.css')
     
     jquery = False
     jquery_ui = False
@@ -19,6 +21,10 @@ def call(app, var, env, plugins=None, use_less=False, version=None):
         jquery = True
         if x in ['pagination']:
             jquery_ui = True
+            
+    if js:
+        jquery = True
+        a.append('bootstrap/%s/js/bootstrap.min.js' % version)
       
     d = {'toplinks':a, 'depends':[]}
     if jquery:

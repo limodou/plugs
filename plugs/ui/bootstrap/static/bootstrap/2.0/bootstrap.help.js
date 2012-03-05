@@ -1,5 +1,9 @@
 function model(options){
-    //options = {'header':'Test', 'message':'Hello', 'btnClass':'success'}
+    /*options = {'header':'Test', 'message':'Hello', 
+        'btnClass':'success',
+        'footer':''}
+    */
+    $('.model').remove();
     var settings = $.extend({'btnClass':'success'}, options);
     var txt = ['<div class="modal hide fade">'];
     if (settings.header){
@@ -11,9 +15,13 @@ function model(options){
     txt.push('<div class="modal-body">'
         + settings.message 
         + '</div>');
-    txt.push('<div class="modal-footer">'
-        + '<a href="#" class="btn btn-warning" data-dismiss="modal">关闭</a>'
-        + '</div>');
+    if (settings.footer){
+        txt.push(settings.footer);
+    }else{
+        txt.push('<div class="modal-footer">'
+            + '<a href="#" class="btn btn-warning" data-dismiss="modal">关闭</a>'
+            + '</div>');
+    }
     var el = $(txt.join(''));
     $('body').append(el);
     el.modal('show');

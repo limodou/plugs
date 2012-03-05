@@ -272,9 +272,11 @@ var show_simple_message = function(msg, target){
         });
         m.find('.mg').addClass('rounded_bottom');
         $('body').append(m);
-    }else
+    }else{
         m.find('.mg').addClass('rounded');
         $(t).html(m);
+    }
+    setTimeout('show_simple_message("")', 5000);
 };
 
 /*
@@ -350,6 +352,7 @@ var create_result_process = function(target, opt){
         var t = $(target);
         t.find('input').poshytip('hide');
         show_simple_message(r.message);
+        //show_message(r.message);
         if (r.success){
             opt.success(r.data);
         } else if (!r.success){

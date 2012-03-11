@@ -139,10 +139,14 @@ class ForumPost(Model):#can't edit...回复
     deleted_by = Reference('user', verbose_name='删除人', collection_name='user_deleted_posts')
     deleted_on = Field(datetime.datetime, verbose_name='删除时间')
     reply_email = Field(bool, verbose_name='有回复时是否邮件通知')
+    parent = SelfReference(verbose_name='所属回复', collection_name='children_post')
+    num_replies = Field(int, verbose_name='回复总数',default = 0)
+    last_reply_on = Field(datetime.datetime, verbose_name='最新回复时间')
+    last_post_user = Reference('user', verbose_name='最后回复人', collection_name='last_reply_user_post')
 
     @classmethod
     def OnInit(cls):
-        Index('fpost_indx', cls.c.topic, cls.c.floor, unique=True)
+        Index('fpost_indx', cls.c.topic, cls.c.parent, cls.c.floor, unique=True)
     
     class AddForm:
         fields = ['content', 'slug', 'reply_email']

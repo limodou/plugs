@@ -1,5 +1,14 @@
 {{extend "forums_layout.html"}}
 
+{{block _css}}
+<style type="text/css">
+*{margin:0;padding:0;}
+.box{margin-bottom:12px;margin-left:1px;overflow-x:hidden;overflow-y:hidden;padding:1px;background:#FFFFEE;border:solid 1px #999;}
+#posts li.post {margin-top: 1px; margin-left: 1px;}
+#posts .post_body {margin-left: 1px; padding-left: 1px;}
+</style>
+{{end}}
+
 {{block forum_nav}}
     <div class="nav">
         <a href="/forum" class="home" title="首页">论坛首页</a>
@@ -28,6 +37,10 @@
             </div>
             <div class="body">
             ${content}
+            <ul id="sub_posts_${id}">
+                <li class="sub_post">
+                </li>
+            </ul>
             ${updated}
             </div>
             <div class="footer">
@@ -40,6 +53,34 @@
     </li>
 </script>
 
+<script type="text/html" id="subPostTemplate">
+    <a name="${id}"></a>
+    <div class="box">
+    <li class="post" id="post_${id}">
+        <div class="post_body">
+            <ul id="sub_posts_${id}">
+                <li class="sub_post">
+                </li>
+            </ul>        
+            <div class="body">
+            <div class="header">
+                由 <span class="user">${posted_by}</span> 回复于 
+                <span class="date">${created_on}</span>
+            </div>
+            ${content}
+            ${updated}
+            </div>
+            <div class="footer">           
+                <span class="actions" style="display:none">
+                    ${actions}
+                </span>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </li>
+    </div>
+</script>
+
 <a name="a_topic"></a>
 <div class="topic">
     <h2>{{=topic.subject}}</h2>
@@ -49,7 +90,8 @@
     </div>
 </div>
 <ul id="posts">
-    <li class="post">正在装入...</li>
+    <li class="post">正在装入...
+    </li>
 </ul>
 <div id="paginate"></div>
 {{include "inc_syntaxhighlighter.html"}}
@@ -110,6 +152,32 @@
             });
         });
     }
+    
+    var load_sub_posts = function(data,value){
+        var sub_posts = $("#sub_posts_"+value.id)
+        sub_posts.empty();
+        $.each(data.post2.rows, function(index, value1){
+            if(value1.floor == value.floor){
+                if(value1.parent == value.id){
+                    var post = template($('#subPostTemplate').html(), value1).appendTo(sub_posts);
+                    post.hover(
+                        function(){
+                            post.find('span.actions').slideDown();
+                        },
+                        function(){
+                            post.find('span.actions').slideUp();
+                        }
+                    );
+                    $.each(['close', 'hidden', 'delete', 'top', 'essence', 'homepage', 'email'], function(index, value){
+                            bind_action(post.find('a.'+value), value);
+                            bind_action(post.find('a.un'+value), 'un'+value);
+                        }); 
+                    load_sub_posts(data,value1);
+                }
+            }
+        });
+    }
+    
     var load_posts = function(page){
         page = page || 1;
         $.ajax({
@@ -120,7 +188,7 @@
             success: function(data){
                 var posts = $('#posts')
                 posts.empty();
-                $.each(data.rows, function(index, value){
+                $.each(data.post1.rows, function(index, value){
                     var post = template($('#postTemplate').html(), value).appendTo(posts);
                     post.hover(
                         function(){
@@ -135,9 +203,11 @@
                             bind_action(post.find('a.un'+value), 'un'+value);
                         }
                     );
+                    load_sub_posts(data,value);
+                    
                 });
                 do_syntax();
-                create_pagination('#paginate', data.total, {{=settings.get_var('PARA/FORUM_PAGE_NUMS')}}, page, load_posts);
+                create_pagination('#paginate', data.post1.total, {{=settings.get_var('PARA/FORUM_PAGE_NUMS')}}, page, load_posts);
                 $('.post_body img').imgZoom({loadingImg:"{{=url_for_static('jqimgzoom/css/imgzoom-loading.gif')}}"});
                 {{if not has_email:}}
                     //设置poshytip关闭图片

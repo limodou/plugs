@@ -1,6 +1,6 @@
 #coding=utf-8
 import os
-from uliweb import expose, decorators
+from uliweb import expose, decorators, functions
 from uliweb.orm import get_model, do_
 from datetime import timedelta
 from uliweb.utils.common import safe_str
@@ -360,15 +360,14 @@ class ForumView(object):
     def _clear_files(self, slug, text):
         import re
         import itertools
-        from uliweb.contrib.upload import get_filename, get_url
         from uliweb.utils.image import fix_filename
         File = get_model('forumattachment')
         
         r_links = re.compile(r'<a.*?href=\"([^"]+)\"|<img.*?src=\"([^"]+)\"|<embed.*?src=\"([^"]+)\"', re.DOTALL)
         files = filter(None, itertools.chain(*re.findall(r_links, text)))
         for row in File.filter(File.c.slug==slug):
-            _f = get_filename(row.file_name)
-            url = get_url(row.file_name)
+            _f = functions.get_filename(row.file_name)
+            url = functions.get_href(row.file_name)
             if url in files:
                 row.enabled = True
                 row.save()
@@ -398,6 +397,8 @@ class ForumView(object):
         Forum = get_model('forum')
         forum = Forum.get(int(forum_id))
         condition = Post.c.topic == int(topic_id)
+        condition1 = (Post.c.parent == None) & condition
+        condition2 = (Post.c.parent != None) & condition
         order_by = [Post.c.floor]
         
         def created_on(value, obj):
@@ -423,7 +424,7 @@ class ForumView(object):
             
             a = []
             is_manager = forum.managers.has(request.user)
-            if obj.floor == 1:
+            if obj.floor == 1 and obj.parent == None:
                 #第一楼为主贴，可以允许关闭，顶置等操作
                 if is_manager:
                     a.append('<a href="#" rel="%d" class="close">%s</a>' % (obj.id, self.status['close'][obj.topic.closed]))
@@ -443,6 +444,7 @@ class ForumView(object):
                     a.append('<a href="#" rel="%d" class="delete">%s</a>' % (obj.id, self.status['delete'][obj.deleted]))
             if obj.posted_by.id == request.user.id:    
                 a.append('<a href="#" rel="%d" class="email">%s</a>' % (obj.id, self.status['email'][obj.reply_email]))
+            a.append('<a href="/forum/%d/%d/%d/new_reply">回复该作者</a>' % (forum_id, topic_id, obj.id))
             return ' | '.join(a)
         
         def updated(value, obj):
@@ -450,16 +452,21 @@ class ForumView(object):
                 return u'<div class="updated">由 %s 于 %s 更新</div>' % (obj.topic.modified_user.username, timesince(obj.topic.updated_on))
         
         fields = ['topic', 'id', 'username', 'userimage', 'posted_by', 'content',
-            'created_on', 'actions', 'floor', 'updated',
+            'created_on', 'actions', 'floor', 'updated', 'parent',
             ]
         fields_convert_map = {'created_on':created_on, 'content':content,
             'username':username, 'userimage':userimage, 'actions':actions,
             'updated':updated}
-        view = ListView(Post, fields=fields, condition=condition, order_by=order_by,
+        #view1 为生成一级回复，即回复主题
+        view1 = ListView(Post, fields=fields, condition=condition1, order_by=order_by,
             rows_per_page=rows_per_page, pageno=pageno,
             fields_convert_map=fields_convert_map)
+        #view2 为生成二级乃至多级回复
+        view2 = ListView(Post, fields=fields, condition=condition2, order_by=order_by,
+            pagination=False,
+            fields_convert_map=fields_convert_map)
         if 'data' in request.values:
-            return json(view.json())
+            return json({'post1':view1.json(),'post2':view2.json()})
         else:
 #            key = '__topicvisited__:forumtopic:%d:%s:%s' % (request.user.id, forum_id, topic_id)
             key = '__topicvisited__:forumtopic:%s:%s:%s' % (request.remote_addr, forum_id, topic_id)
@@ -538,6 +545,92 @@ class ForumView(object):
             pre_save=pre_save, get_form_field=get_form_field, post_save=post_save)
         return view.run()
     
+    @expose('<forum_id>/<topic_id>/<parent_id>/new_reply')
+    @decorators.check_role('trusted')
+    def new_reply(self, forum_id, topic_id, parent_id):
+        """
+        发表新回复
+        """
+        from uliweb.utils.generic import AddView
+        import uuid
+        
+        Forum = get_model('forum')
+        forum = Forum.get(int(forum_id))
+        Topic = get_model('forumtopic')
+        topic = Topic.get(int(topic_id))
+        Post = get_model('forumpost')
+        post = Post.get(int(parent_id))
+        User = get_model('user')
+    
+        def pre_save(data):
+            from sqlalchemy.sql import select, func
+    
+            data['topic'] = int(topic_id)
+            data['parent'] = int(parent_id)
+            data['floor'] = post.floor
+            
+#            post1 = post
+#            #floor重新定义为层级，可用来缩进
+#            floor = -1
+#            while post1.parent:
+#                post1 = Post.get(Post.c.id == post1.parent)
+#                floor -= 1
+#            data['floor'] = floor
+#            data['floor'] = (do_(select([func.min(Post.c.floor)], Post.c.parent==int(parent_id))).scalar() or 0)-1
+            
+        def post_save(obj, data):
+            from uliweb import functions
+            from uliweb.utils.common import Serial
+            from uliweb.mail import Mail
+            
+            Post.filter(Post.c.id==int(parent_id)).update(num_replies=Post.c.num_replies+1, last_post_user=request.user.id, last_reply_on=date.now())            
+            self._clear_files(obj.slug, data['content'])
+            
+            #増加发送邮件的处理
+            emails = []
+            for u_id in Post.filter((Post.c.topic==int(topic_id)) & (Post.c.reply_email==True) & (Post.c.id==parent_id)).values(Post.c.posted_by):
+                user = User.get(u_id[0])
+                if user and user.email and (user.email not in emails) and (user.email!=request.user.email):
+                    emails.append(user.email)
+            
+            if not emails:
+                return
+            
+            _type = settings.get_var('PARA/FORUM_REPLY_PROCESS', 'print')
+            url = '%s/forum/%s/%s' % (settings.get_var('PARA/DOMAIN'), forum_id, topic_id)
+            d = {'url':str(url)}
+            mail = {'from_':settings.get_var('PARA/EMAIL_SENDER'), 'to_':emails,
+                'subject':settings.get_var('FORUM_EMAIL/FORUM_EMAIL_TITLE'),
+                'message':settings.get_var('FORUM_EMAIL/FORUM_EMAIL_TEXT') % d,
+                'html':True}
+            
+            if _type == 'mail':
+                Mail().send_mail(**mail)
+            elif _type == 'print':
+                print mail
+            elif _type == 'redis':
+                redis = functions.get_redis()
+                _t = Serial.dump(mail)
+                redis.lpush('send_mails', _t)
+            
+        def get_form_field(name):
+            from uliweb.form import TextField
+            if name == 'content':
+                return TextField('内容',required=True, convert_html=True, default='')
+
+        slug = uuid.uuid1().hex
+        data = {'slug':slug, 'reply_email':True, 'content':''}
+        has_email = bool(request.user and request.user.email)
+        view = AddView('forumpost', 
+            url_for(ForumView.topic_view, forum_id=int(forum_id), topic_id=int(topic_id)),
+#            default_data={'last_post_user':request.user.id, 'last_reply_on':date.now()}, 
+            hidden_fields=['slug'], data=data,
+            pre_save=pre_save, 
+            get_form_field=get_form_field, 
+            post_save=post_save,
+            template_data={'forum':forum, 'topic':topic, 'has_email':has_email, 'slug':slug})
+        return view.run()
+
     @expose('<forum_id>/<topic_id>/edit_topic')
     @decorators.check_role('trusted')
     def edit_topic(self, forum_id, topic_id):
@@ -584,7 +677,7 @@ class ForumView(object):
         return view.run()
     
     def upload_file(self):
-        return self._upload_file(image=False, show_filename=False)
+        return self._upload_file(image=False, show_filename=True)
     
     def upload_image(self):
         return self._upload_file(image=True)
@@ -592,12 +685,12 @@ class ForumView(object):
     def _upload_file(self, image=False, show_filename=True):
         import os
         import Image
-        from uliweb.contrib.upload import get_url, save_file, get_filename
         if image:
             from forms import ImageUploadForm as Form
         else:
             from forms import FileUploadForm as Form
         from uliweb.utils.image import thumbnail_image, fix_filename
+        from uliweb import json_dumps
         
         File = get_model('forumattachment')
         
@@ -616,24 +709,25 @@ class ForumView(object):
                 #文件格式为forum/<forum_id>/<filename_yyyy_mm_dd>
                 filename = fix_filename('forum/%s/%s' % (forum_id, _f), suffix)
                 if image:
-                    filename = save_file(filename, f['file'])
+                    filename = functions.save_file(filename, f['file'])
                     if form.data['is_thumbnail']:
                         #process thumbnail
-                        rfilename, thumbnail = thumbnail_image(get_filename(filename, filesystem=True), filename, settings.get_var('PARA/FORUM_THUMBNAIL_SIZE'))
-                        _file = get_url(thumbnail)
+                        rfilename, thumbnail = thumbnail_image(functions.get_filename(filename, filesystem=True), filename, settings.get_var('PARA/FORUM_THUMBNAIL_SIZE'))
+                        _file = functions.get_href(thumbnail)
                     else:
-                        _file = get_url(filename)
-                    name = get_url(filename)
+                        _file = functions.get_href(filename)
+                    name = functions.get_href(filename)
                 else:
-                    filename = save_file(filename, f['file'])
-                    _file = get_url(filename)
+                    filename = functions.save_file(filename, f['file'])
+                    _file = functions.get_href(filename)
                     name = form.data['title']
                     if not name:
                         name = _f
                 ff = File(slug=slug, file_name=filename, name=name)
                 ff.save()
+                name = json_dumps(name, unicode=True)
                 if show_filename:
-                    fargs = '||%s' % name
+                    fargs = '||%s' % name[1:-1]
                 else:
                     fargs = ''
                 return '''<script type="text/javascript">
@@ -647,7 +741,6 @@ setTimeout(function(){callback(url);},100);
     @expose('<forum_id>/<topic_id>/remove_topic')
     @decorators.check_role('trusted')
     def remove_topic(self, forum_id, topic_id):
-        from uliweb.contrib.upload import get_filename
         from sqlalchemy.sql import select
         
         Forum = get_model('forum')
@@ -666,9 +759,7 @@ setTimeout(function(){callback(url);},100);
             query = FA.filter(FA.c.slug==Post.c.slug).filter(Post.c.topic==int(topic_id))
             #删除相应附件
             for a in query:
-                f = get_filename(a.file_name)
-                if os.path.exists(f):
-                    os.unlink(f)
+                functions.delete_filename(a.file_name)
             #删除FA记录
             FA.filter(FA.c.slug.in_(select([Post.c.slug], Post.c.topic==int(topic_id)))).remove()
             #删除所有POST

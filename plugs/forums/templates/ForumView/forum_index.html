@@ -1,14 +1,18 @@
 {{extend "forums_layout.html"}}
 
 {{block forum_nav}}
-    <div class="nav">
-        <a href="{{=url_for('plugs.forums.views.ForumView.list')}}" class="home" title="首页">论坛首页</a>
-        <em>»</em>
-        <span><a href="{{=url_for('plugs.forums.views.ForumView.forum_index', id=forum.id)}}">{{=forum.name}}</a></span>
-    </div>
-    <div class="tool">
+    <ul class="breadcrumb">
+      <li>
+        <a href="{{=url_for('plugs.forums.views.ForumView.list')}}" class="home" title="首页">论坛首页</a> <span class="divider">/</span>
+      </li>
+      <li class="active">
+        <a href="{{=url_for('plugs.forums.views.ForumView.forum_index', id=forum.id)}}">{{=forum.name}}</a>
+      </li>
+    </ul>
+    
+    <div class="pull-right" style="margin-bottom:16px;">
         {{if request.user:}}
-        <a class="btn btn-green" href="{{=url_for('plugs.forums.views.ForumView.new_topic', id=forum.id)}}">新主题</a>
+        <a class="btn btn-success" href="{{=url_for('plugs.forums.views.ForumView.new_topic', id=forum.id)}}">新主题</a>
         {{else:}}
         <font color="red">你还没有登录，无法发表新主题！</font>
         {{pass}}

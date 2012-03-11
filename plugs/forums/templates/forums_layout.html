@@ -8,18 +8,14 @@
 {{use "jquery"}}
 {{link "forums/forums.css"}}
 <div id="forum" class="container">
-    {{block forum_nav}}
-    <div class="nav">
-        <a href="" class="home" title="首页">论坛首页</a>
-    </div>
-    <div class="tool">
-        {{if has_role(request.user, 'superuser'):}}
-        <a class="btn btn-green" href="{{=url_for('plugs.forums.views.ForumView.admin')}}">管理</a>
-        {{pass}}
-    </div>
-    {{end}}
-    <div class="clear"></div>
     <div class="content content-outter">
+    {{block forum_nav}}
+    <ul class="breadcrumb">
+      <li>
+        <a href="{{=url_for('plugs.forums.views.ForumView.list')}}" class="home" title="首页">论坛首页</a>
+      </li>
+    </ul>
+    {{end}}
     {{block content_main}}
     {{end}}
     </div>

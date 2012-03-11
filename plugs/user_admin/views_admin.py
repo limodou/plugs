@@ -1,7 +1,7 @@
 #coding=utf-8
 from __future__ import with_statement
 
-from uliweb import expose, decorators
+from uliweb import expose, decorators, functions
 import plugs.generic.views as g_views
 
 get_url = g_views.get_url('/users')
@@ -31,7 +31,6 @@ class UserView(object):
     def edit_image(self):
         from forms import UploadImageForm
         from uliweb.utils.generic import EditView
-        from uliweb.contrib.upload import get_url, get_filename
         import os
         import Image
         
@@ -40,9 +39,9 @@ class UserView(object):
                 data['image'].filename = _get_portrait_image_filename(request.user.id)
                 
         image = _get_portrait_image_filename(request.user.id)
-        f = get_filename(image)
+        f = functions.get_filename(image)
         if os.path.exists(f):
-            url = get_url(image)
+            url = functions.get_href(image)
             img = Image.open(f)
             template_data = {'image_url':url, 'size':img.size}
         else:
@@ -236,7 +235,7 @@ class UsersManageView(object):
             
         image = get_filename(_get_portrait_image_thumbnail(user.id))
         if os.path.exists(image):
-            image_url = get_url(_get_portrait_image_thumbnail(user.id))
+            image_url = functions.get_href(_get_portrait_image_thumbnail(user.id))
         else:
             image_url = user.get_image_url()
         can_modify = user.id == request.user.id
@@ -280,3 +279,8 @@ class UsersManageView(object):
             flash(_('You have no previlege to reset user password.'), 'error')
             return redirect(url_for(users_view, id=id))
             
+@expose('/resign')
+def resign():
+    from uliweb.contrib.auth import logout
+    logout()
+    return redirect(url_for('login', next=request.referrer or '/'))

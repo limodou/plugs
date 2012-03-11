@@ -5,8 +5,9 @@
 {{end}}
 
 {{block content}}
+{{use "jquery"}}
 {{link "forums/forums.css"}}
-<div id="forum" class="col_16">
+<div id="forum" class="container">
     {{block forum_nav}}
     <div class="nav">
         <a href="" class="home" title="首页">论坛首页</a>
@@ -18,7 +19,9 @@
     </div>
     {{end}}
     <div class="clear"></div>
+    <div class="content content-outter">
     {{block content_main}}
     {{end}}
+    </div>
 </div>
 {{end}}

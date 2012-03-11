@@ -233,7 +233,7 @@ class UsersManageView(object):
         if not user:
             error(_('User is not exists!'))
             
-        image = get_filename(_get_portrait_image_thumbnail(user.id))
+        image = functions.get_filename(_get_portrait_image_thumbnail(user.id))
         if os.path.exists(image):
             image_url = functions.get_href(_get_portrait_image_thumbnail(user.id))
         else:

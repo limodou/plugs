@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <title>{{=settings.LAYOUT.TITLE}}</title>
+  <!--[if lt IE 9]>
+  <script src="{{=url_for_static('js/html5.js')}}"></script>
+  <![endif]-->
+  <link rel="stylesheet" type="text/css" href="{{=url_for_static('site.css')}}" media="screen" />
+  <link rel="stylesheet" type="text/css" href="{{=url_for_static('forms.css')}}" media="screen" />
+<!-- toplinks -->
+</head>
+<body>
+    {{include "menu.html"}}
+    {{include "inc_show_flashes.html"}}
+    <div class="container">
+    <div class="top_header">
+        {{block userinfo}}
+            <div class="align_right">
+                {{if hasattr(request, 'user') and request.user:}}
+                    {{=_('Welcome')}} {{=request.user.username}} | <a href="/logout">{{=_('Logout')}}</a>
+                {{else:}}
+                    {{=_("You've not loginned yet!")}} <a href="/login">{{=_('Login')}}</a> | <a href="/register">{{=_('Register')}}</a>
+                </form>
+                {{pass}}
+            </div>
+            <div class="clear"></div>
+        {{end}}
+    </div>
+    {{block header}}
+    <header>
+    <div class="logo">{{=settings.LAYOUT.TITLE}}</div>
+    {{block nav}}
+    <nav>
+    	<ul>
+            {{block menu}}
+            {{menu('home')}}
+            {{end}}
+        </ul>
+    </nav>
+    {{end}}
+    </header>
+    {{end}}
+    {{block flash}}
+    {{if request.session.get('_flashed_messages'):}}
+        <div class="row align_center">
+            {{include "inc_show_flashes.html"}}
+        </div>
+    {{pass}}
+    {{end}}
+    {{block sidebar}}
+    {{end}}
+    {{block content}}
+    <div class="content">
+        <div class="content_body">
+            {{block content_container}}
+                <!-- Conent of group -->
+                <table border="0" cellspacing="10px" cellpadding="4px" style="width:100%">
+                    <tr>
+                        <td width="200px" valign="top" align="left">
+                            {{block content_sidebar}}
+    
+                            {{end}}
+                        </td>
+                        <td width="*" valign="top" align="left">
+                        <div class="content_tool">
+                            {{block content_tool}}
+                            {{end}}
+                        </div>
+                        <div class="clearfix" style="margin:5px;">
+                            {{block content_main}}
+                            {{end}}
+                        </div>
+                        </td>
+                        <td width="20px"></td>
+                    </tr>
+                </table>
+            {{end}}
+        </div>
+    </div>
+    {{end}}
+    </div>
+    {{block footer}}
+    <footer>
+        <div class="align_center">
+        {{<< settings.get_var('LAYOUT/COPYRIGHT')}}
+        </div>
+    </footer>
+    {{end}}
+</body>
+</html>

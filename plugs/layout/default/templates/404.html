@@ -1,0 +1,19 @@
+{{extend "layout.html"}}
+
+{{block userinfo}}
+{{end}}
+
+{{block flash}}
+{{end}}
+
+{{block content}}
+<div class="content">
+    <div class="box center col_10">
+        <h2>找不到你想要的!</h2>
+        <div class="box-body">
+            <p>不好意思！这个链接没找到：{{=url}}</p>
+            <p><a href="{{=request.referrer or '/'}}">点击这里返回</a></p>
+        </div>
+    </div>
+</div>
+{{end}}

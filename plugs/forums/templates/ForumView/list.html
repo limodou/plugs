@@ -25,8 +25,10 @@
         </tbody>
     </table>
     {{else:}}
-        {{include "inc_message.html"}}
-        {{message('还没有创建任何论坛，请由系统管理员来创建')}}
+        <div class="alert alert-error">
+          <a class="close" data-dismiss="alert">×</a>
+          还没有创建任何论坛，请由系统管理员来创建。
+        </div>
     {{pass}}
 </div>
 {{end}}

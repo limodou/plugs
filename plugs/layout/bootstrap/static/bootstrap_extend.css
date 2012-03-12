@@ -50,6 +50,7 @@ body, body.bootstrap-body {
 span.label {font-size:12px;}
 ul.unstyled li {*list-style-type:none;}
 .section {border-bottom:1px solid #ccc;margin-bottom:18px;}
+ul.breadcrumb li {*display:inline;*list-style-type:none;}
 
 .navbar-inner {
   background-color:#35597c;

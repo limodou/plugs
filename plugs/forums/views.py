@@ -528,6 +528,8 @@ class ForumView(object):
             
             if _type == 'mail':
                 Mail().send_mail(**mail)
+            elif _type == 'noprint':
+                pass
             elif _type == 'print':
                 print mail
             elif _type == 'redis':

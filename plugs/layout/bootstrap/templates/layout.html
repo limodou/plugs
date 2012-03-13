@@ -38,9 +38,9 @@
       {{block user_info}}
       <p class="pull-right user_info">
       {{if hasattr(request, 'user') and request.user:}}
-          欢迎！ {{=unicode(request.user)}} <img src="{{=functions.get_user_image(request.user, size=20)}}" align="top"/>| <a href="/static/help/index.html" target="_blank">帮助</a> | <a href="/logout">{{=_('Logout')}}</a> | <a href="/resign">更换用户</a>
+          {{=_('Welcome')}}! {{=unicode(request.user)}} <img src="{{=functions.get_user_image(request.user, size=20)}}" align="top"/>| <a href="/static/help/index.html" target="_blank">帮助</a> | <a href="/logout">{{=_('Logout')}}</a> | <a href="/resign">更换用户</a>
       {{else:}}
-          尚未登录！ <a href="/login">登录</a>
+          {{=_('Not signed in yet')}}! <a href="/login">{{=_('Login')}}</a> | <a href="/register">{{=_('Register')}}</a>
       {{pass}}
       </p>
       {{end user_info}}

@@ -49,7 +49,7 @@ class UserView(object):
             template_data = {'image_url':url, 'size':(0, 0)}
             
         view = EditView('user', condition=request.user.id, ok_url=url_for(UserView.edit_image),
-            pre_save=pre_save, fields=['image'], template_data=template_data)
+            pre_save=pre_save, fields=['image'], template_data=template_data, file_convert=False)
         
         return view.run()
     

@@ -5,7 +5,7 @@ def call(app, var, env, plugins=None, js=True, responsive=False, use_less=False,
     a = []
     version = version or settings.UI_CONFIG.bootstrap_version
     a.append('<!--[if lt IE 9]>')
-    a.append('bootstrap/%s/asset/html5.js' % version)
+    a.append('bootstrap/asset/html5.js')
     a.append('<![endif]-->')
     if use_less:
         a.append('bootstrap/%s/lib/bootstrap.less' % version)

@@ -5,14 +5,14 @@
 {{end}}
 
 {{block forum_nav}}
-    <div class="nav">
-        <a href="/forum" class="home" title="首页">论坛首页</a>
-        <em>»</em>
-        <span><a href="/forum/{{=forum.id}}">{{=forum.name}}</a></span>
-    </div>
-    <div class="tool">
-        <a class="btn btn-green" href="/forum/{{=forum.id}}/new_topic">新主题</a>
-    </div>
+    <ul class="breadcrumb">
+      <li>
+        <a href="{{=url_for('plugs.forums.views.ForumView.list')}}" class="home" title="首页">论坛首页</a> <span class="divider">/</span>
+      </li>
+      <li class="active">
+        <a href="/forum/{{=forum.id}}">{{=forum.name}}</a>
+      </li>
+    </ul>
 {{end}}
 
 {{block content_main}}

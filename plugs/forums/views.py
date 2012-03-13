@@ -347,7 +347,7 @@ class ForumView(object):
                 return BooleanField('有回复时邮件通知我')
             
         slug = uuid.uuid1().hex
-        data = {'slug':slug, 'reply_email':True}
+        data = {'slug':slug, 'reply_email':False}
         
         has_email = bool(request.user and request.user.email)
         
@@ -621,7 +621,7 @@ class ForumView(object):
                 return TextField('内容',required=True, convert_html=True, default='')
 
         slug = uuid.uuid1().hex
-        data = {'slug':slug, 'reply_email':True, 'content':''}
+        data = {'slug':slug, 'reply_email':False, 'content':''}
         has_email = bool(request.user and request.user.email)
         view = AddView('forumpost', 
             url_for(ForumView.topic_view, forum_id=int(forum_id), topic_id=int(topic_id)),

@@ -29,6 +29,7 @@
     this.options = options;
     this.$element = $(content).addClass('pagination').empty();
     var list = $('<ul/>').appendTo(this.$element);
+    if (this.options.totalMessage) list.append($('<li class="disabled"><a href="#"></a></li>'));
     var btnPrev = this.btnPrev = $('<li class="prev"><a href="#">' + this.options.prev + '</a></li>');
     var btnNext = this.btnNext = $('<li class="next"><a href="#">'+this.options.next+'</a></li>');
     list.append(btnPrev).append(btnNext);
@@ -57,6 +58,11 @@
         this.currentPage = this.options.start - 1;
         this.totalPages = parseInt(this.options.total / this.options.pageRows);
         if (this.options.total % this.options.pageRows > 0) this.totalPages++;
+        if (this.options.totalMessage){
+            var msg = this.options.totalMessage.replace('$pages', this.totalPages);
+            msg = msg.replace('$records', this.options.total);
+            this.$element.find('ul > li:first > a').text(msg);
+        }
         navigate.call(this, this.currentPage);
         if (this.options.initLoad){
             this.load(this.currentPage);
@@ -77,7 +83,7 @@
       var s = this.options;
       var self = this;
       var list = this.$element.find('ul');
-      if (s.total <= s.pageRows) return;
+//      if (s.total <= s.pageRows) return;
       var target = list.find('li:last');
       for (var i = startPage; i < startPage + s.length; i++) {
           if (i == this.totalPages) break;
@@ -92,7 +98,9 @@
   function navigate(topage) {
       var s = this.options;
       var list = this.$element.find('ul');
-      for(var i=list.find('li').size()-2; i>0; i--){
+      var start = 0;
+      if(this.options.totalMessage) start = 1;
+      for(var i=list.find('li').size()-2; i>start; i--){
           list.find('li').eq(i).remove();
       }
       var index = topage;
@@ -157,6 +165,7 @@
       first: 'First',
       last: 'Last',
       start: 1,
+      totalMessage: 'Total $pages pages / $records records', //if not then doesn't display at all
       initLoad: false,
       onChange: null
   }

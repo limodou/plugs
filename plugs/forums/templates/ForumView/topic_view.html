@@ -240,6 +240,10 @@
             upImgUrl:"!/forum/upload_image?forum_id={{=forum.id}}&slug={{=slug}}",
             plugins:plugins
         });
+        //初始化SyntaxHighlighter
+        //SyntaxHighlighter.defaults['highlight'] = [5, 10, 15];
+        SyntaxHighlighter.defaults['toolbar'] = true;
+        SyntaxHighlighter.config.strings.print = '打印';
         load_posts();
     });
 </script>

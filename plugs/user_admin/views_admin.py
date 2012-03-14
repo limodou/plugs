@@ -284,3 +284,23 @@ def resign():
     from uliweb.contrib.auth import logout
     logout()
     return redirect(url_for('login', next=request.referrer or '/'))
+
+@expose('/users/search')
+def users_search():
+    from uliweb.orm import get_model
+    
+    User = get_model('user')
+    
+    if request.values.get('term'):
+        result = []
+        name = request.values.get('term')
+        for x in User.filter(User.c.username.like('%'+name+'%') | User.c.nickname.like('%'+name+'%')):
+            if x.nickname:
+                title = x.nickname+'('+x.username+')'
+            else:
+                title = x.username
+            result.append({'id':x.id, 'title':title})
+        return json(result)
+    else:
+        return json([])
+            

@@ -153,7 +153,7 @@ class ForumView(object):
         obj = forum.get(int(id))
         
         def post_created_form(fcls, model, obj):
-            fcls.managers.html_attrs['url'] = '/config/users/search'
+            fcls.managers.html_attrs['url'] = '/users/search'
             fcls.managers.query = obj.managers.all()
         
         view = EditView('forum', url_for(ForumView.admin_forum), obj=obj,

@@ -9,6 +9,7 @@
                 , prev: '{{=_('Prev')}}'
                 , first: '{{=_('First')}}'
                 , last: '{{=_('Last')}}'
+                , totalMessage: '{{=_("Total $pages pages / $records records")}}'
                 };
             $(el).pagination(options);
             $(el).pagination('show', total, start);

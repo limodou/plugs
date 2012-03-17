@@ -264,7 +264,7 @@ fieldset.normal {border:1px solid #ccc;padding:5px 10px;}
 .content-container .datagrid-header td{background:transparent;border-bottom:1px solid #ccc;border-right:1px solid #ccc}
 .content-container .datagrid-header .datagrid-cell{padding:5px 4px 5px 4px;background-color:transparent}
 .content-container .datagrid-body .datagrid-cell,
-.content-container .datagrid-footer .datagrid-cell{padding:5px 4px 5px 4px}
+.content-container .datagrid-footer .datagrid-cell{padding:0px 4px 0px 4px}
 
 .content-container .datagrid-body{padding:0px;margin:0px}
 .content-container .datagrid-body td, .content-container .datagrid-footer td{border-bottom:1px solid #ccc;border-right:1px solid #ccc}

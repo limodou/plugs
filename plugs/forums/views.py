@@ -264,7 +264,7 @@ class ForumView(object):
         Forum = get_model('forum')
         forum = Forum.get(int(id))
         condition = Topic.c.forum == int(id)
-        order_by = [Topic.c.sticky.desc(), Topic.c.updated_on.desc()]
+        order_by = [Topic.c.sticky.desc(), Topic.c.last_reply_on.desc()]
         if not forum.managers.has(request.user):
             condition = (Topic.c.hidden==False) & condition
         

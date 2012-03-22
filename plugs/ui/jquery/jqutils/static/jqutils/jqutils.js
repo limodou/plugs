@@ -350,11 +350,17 @@ $.fn.bind_select_remote = function(target, url){
 var create_result_process = function(target, opt){
     return function(r){
         var t = $(target);
+        opt = opt || {};
         t.find('input').poshytip('hide');
         show_simple_message(r.message);
         //show_message(r.message);
         if (r.success){
-            opt.success(r.data);
+            if (opt.success){
+                opt.success(r.data);
+            }else{
+                show_simple_message(r.message);
+                //show_message(r.message);
+            }
         } else if (!r.success){
             $.each(r.data, function(key, value){
                 var el = t.find('input[name='+key+'],select[name='+key+'],textarea[name='+key+']');

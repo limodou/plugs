@@ -33,8 +33,9 @@
     var btnPrev = this.btnPrev = $('<li class="prev"><a href="#">' + this.options.prev + '</a></li>');
     var btnNext = this.btnNext = $('<li class="next"><a href="#">'+this.options.next+'</a></li>');
     list.append(btnPrev).append(btnNext);
-    this.$element.delegate('li:enabled, li', 'click.pagination', function(e){
+    this.$element.delegate('li', 'click.pagination', function(e){
         e.preventDefault();
+        if ($.is(':disabled')) return;
         var $this = $(this);
         var list = that.$element.find('ul');
         if ($this.hasClass('prev')){

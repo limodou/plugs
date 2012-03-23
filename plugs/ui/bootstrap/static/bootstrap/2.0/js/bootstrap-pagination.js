@@ -35,8 +35,8 @@
     list.append(btnPrev).append(btnNext);
     this.$element.delegate('li', 'click.pagination', function(e){
         e.preventDefault();
-        if ($.is(':disabled')) return;
         var $this = $(this);
+        if ($this.is(':disabled')) return;
         var list = that.$element.find('ul');
         if ($this.hasClass('prev')){
             that.currentPage = parseInt(list.find('li.active a').text()) - 1; 

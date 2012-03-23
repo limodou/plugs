@@ -41,11 +41,11 @@
             </div>
             <div class="body">
             ${content}
+            ${updated}
             <ul id="sub_posts_${id}">
                 <li class="sub_post">
                 </li>
             </ul>
-            ${updated}
             </div>
             <div class="footer">
                 <span class="actions" style="display:none">
@@ -62,10 +62,6 @@
     <div class="box">
     <li class="post" id="post_${id}">
         <div class="post_body">
-            <ul id="sub_posts_${id}">
-                <li class="sub_post">
-                </li>
-            </ul>        
             <div class="body">
             <div class="header">
                 由 <span class="user">${posted_by}</span> 回复于 
@@ -73,6 +69,10 @@
             </div>
             ${content}
             ${updated}
+            <ul id="sub_posts_${id}">
+                <li class="sub_post">
+                </li>
+            </ul>        
             </div>
             <div class="footer">           
                 <span class="actions" style="display:none">

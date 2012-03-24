@@ -1,0 +1,226 @@
+<!DOCTYPE HTML>
+{{if request.method=='GET':}}
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>在线画图html5;支持firefox,opera,chrome浏览器--CLKG</title>
+{{use "jquery"}}
+{{use "colorpicker"}}
+{{use "bootstrap"}}
+</head>
+
+<style type="text/css">
+div.controlset {display: block; float:left; width: 100%; padding: 0.25em 0;}
+div.colorPicker-picker {
+  height: 16px;
+  width: 16px;
+  padding: 0 !important;
+  border: 1px solid #ccc;
+  background: url(arrow.gif) no-repeat top right;
+  cursor: pointer;
+  line-height: 16px;
+}
+
+div.colorPicker-palette {
+  width: 110px;
+  position: absolute;
+  border: 1px solid #598FEF;
+  background-color: #EFEFEF;
+  padding: 2px;
+}
+  div.colorPicker_hexWrap {width: 100%; float:left }
+  div.colorPicker_hexWrap label {font-size: 95%; color: #2F2F2F; margin: 5px 2px; width: 25%}
+  div.colorPicker_hexWrap input {margin: 5px 2px; padding: 0; font-size: 95%; border: 1px solid #000; width: 65%; }
+
+div.colorPicker-swatch {
+  height: 12px;
+  width: 12px;
+  border: 1px solid #000;
+  margin: 2px;
+  float: left;
+  cursor: pointer;
+  line-height: 12px;
+}
+
+div.undo{
+	background-color:#cccccc;	
+	border:1px solid #aaaaaa;
+  	width: 70px;
+}
+
+</style>
+
+<body onload="init();" onmouseup="mup();" > 
+
+<h3>在线涂鸦</h3> 
+<div class="controlset">
+   <label for="color1">选择颜色：</label>
+  <form name="color">
+     <input id="color1" name="color1" type="text" value="#333399" />
+      <label for="text1">输入文字，点击画板后显示：</label></p>
+     <textarea id="text1" name="text1" value="" > </textarea>
+   </form>
+</div>		
+
+<div id='controlsContainer' style='padding-top: 5px'>			 
+ <input type='button' onClick='undo();' id='btnUndo' value='撤销' class="btn btn-warning" />
+</div>
+
+<br/>
+<div id='controlsContainer' style='padding-top: 5px'>
+ <form name="file" action="" method="POST">
+      <input type="submit" name="submit" value="保存图片" onmousemove="file_save();" class="btn btn-primary"/>
+      <textarea id="text1" name="text1" style="visibility:hidden;" value="" ></textarea>	    
+ </form>
+</div>
+
+
+
+<div style="position: absolute;top:20px;left:240px;">
+
+ <canvas id="myCanvas"  width=400 height=300 style=" border:4px solid #CCC;" onmousemove="mmove(event);"  
+	onmousedown="mdown(event);" onmouseup="mup();">
+              你使用的浏览器不支持html5? 请升级到IE9。</p>
+	      或者使用Firefox,opera,chrome浏览器。
+ </canvas>
+</div>
+<script type="text/javascript"> 
+
+parent.pic_addr = null;
+
+var ctx,c;
+var started = false;
+var uped=false;
+var color_val= 0;
+var restorePoints = [];
+
+function init(){
+ if (started==false){
+	c=document.getElementById("myCanvas");
+	ctx = c.getContext('2d');
+	ctx.beginPath();
+	ctx.strokeStyle="rgba(255,165,0,1)";
+	started = true;
+	ctx.fillStyle = '#fff';
+	ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+	
+	//color
+	$('#color1').colorPicker();
+  }
+}
+
+if (started == false)
+{
+ 	init ();
+
+}
+
+function mmove(e)
+{
+	if (e.offsetX || e.offsetX == 0) { // Opera
+       x = e.offsetX;
+       y = e.offsetY;
+    }
+    else if (e.layerX || e.layerX == 0) { // Firefox
+        x = e.layerX;
+        y = e.layerY;
+    }
+ 	
+	if (uped==true){
+   		ctx.lineTo(x,y);
+  		ctx.stroke();
+ 	}
+	
+}
+ 
+function mdown(e){
+    if (e.offsetX || e.offsetX == 0) { // Opera
+          x = e.offsetX;
+          y = e.offsetY;
+       }
+    else if (e.layerX || e.layerX == 0) { // Firefox
+        x = e.layerX;
+        y = e.layerY;
+    }
+	saveRestorePoint();
+
+	ctx.beginPath();
+	ctx.moveTo(x, y);
+ 	uped=true;
+	color_val = document.color.color1.value;
+	ctx.strokeStyle=color_val;
+	
+	var text_val=document.color.text1.value;
+       
+	if(text_val !="")
+	{
+		ctx.shadowOffsetX = 1;  
+        ctx.shadowOffsetY = 1;  
+		ctx.shadowBlur = 1;  
+ 		ctx.shadowColor = "rgba(0, 0, 0, 0.3)";  
+   
+  		ctx.font = "14pt Song";
+  		ctx.fillStyle = color_val;  
+  		ctx.fillText(text_val, x, y);
+		document.color.text1.value="";
+ 		ctx.shadowColor = "rgba(0, 0, 0, 0)";  
+	}	
+	
+	
+}
+
+function mup(){
+    uped=false; //ctx.endFill();
+}
+
+//save
+ function file_save() {
+    var img_data = c.toDataURL();
+    document.file.text1.value=img_data.replace(/^.*,/,'');
+
+}
+
+
+function saveRestorePoint() {
+ 	
+	var imgSrc = c.toDataURL("image/png");
+	// and store this value as a 'restoration point', to which we can later revert
+	restorePoints.push(imgSrc);
+}
+
+
+function undo(){
+	if (restorePoints.length > 0) {
+		// Create a new Image object
+		var oImg = new Image();
+		// When the image object is fully loaded in the memory...
+		oImg.onload = function() {
+			ctx.drawImage(oImg, 0, 0);
+		}
+		// The source of the image, is the last restoration point
+		oImg.src = restorePoints.pop();
+		
+	}
+	 
+}
+  
+</script>
+ 
+</body>
+
+</html>
+{{else:}}
+<body>
+	<div id='controlsinsert' style='padding-top: 5px'>                       
+	   已经上传到服务器
+	 </div>
+	 <script type="text/javascript"> 
+         var url = "{{=url_name}}";
+		 function set_addr(){
+			parent.pic_addr = url;
+			parent.jQuery.fancybox.close();
+		 }
+        setTimeout(function(){set_addr();},100);
+	 </script>
+ </body>
+{{pass}}

@@ -855,3 +855,20 @@ setTimeout(function(){callback(url);},100);
         else:
             return json({'msg':'命令未识别或无权限, 未做修改'})
         
+    def draw(self, forum_id, slug):
+        import base64
+        from StringIO import StringIO
+
+        File = get_model('forumattachment')
+        
+        filename='forum/%s/%s.png' % (forum_id, slug)
+        if request.method == 'POST':
+            fobj = StringIO(base64.b64decode(request.params.get('text1')))
+            nname=functions.save_file(filename, fobj)
+            url_name=functions.get_href(nname)
+            ff = File(slug=slug, file_name=nname, name=nname)
+            ff.save()
+            return {'url_name':url_name} 
+        if request.method == 'GET':
+            return {'forum_id':forum_id,'slug':slug}
+    

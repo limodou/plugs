@@ -36,7 +36,7 @@
     this.$element.delegate('li', 'click.pagination', function(e){
         e.preventDefault();
         var $this = $(this);
-        if ($this.is(':disabled')) return;
+        if ($this.hasClass('disabled')) return;
         var list = that.$element.find('ul');
         if ($this.hasClass('prev')){
             that.currentPage = parseInt(list.find('li.active a').text()) - 1; 

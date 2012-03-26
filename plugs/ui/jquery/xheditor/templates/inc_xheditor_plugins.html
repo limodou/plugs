@@ -9,10 +9,6 @@
     background:transparent url(/static/xheditor/xheditor_plugins/quote.gif) no-repeat 20px 20px;  
     background-position:3px 3px;  
 }
-.btnDraw {  
-    background:transparent url(/static/forums/draw.png) no-repeat 20px 20px;  
-    background-position:3px 3px;  
-}  
 -->  
 </style>  
 <script type="text/javascript">
@@ -66,37 +62,6 @@
                 });  
                 _this.showDialog(jCode);  
             }  
-        },
-        Draw:{  
-            c:'btnDraw',t:'在线涂鸦',h:1,e:function(){  
-                var _this=this; 
-                /*  
-                var htmlCode=('<div>'+
-                '<iframe src="/forum/draw/{{=forum.id}}/{{=slug}}" style="width:700;height:400;"></iframe>'+
-                '</div>');  
-                var jCode=$(htmlCode);  
-                jSave.click(function(){  
-                    _this.loadBookmark();  
-                    var txt = $('<div/>').text(jValue.val()).html();
-                    _this.pasteHTML('<pre class="brush: '+jType.val()+';">\r\n'+txt+'\r\n</pre><p>&nbsp;</p>');  
-                    _this.hidePanel();
-                    return false;     
-                });
-                _this.showDialog(jCode);  */
-                $('<a href="/forum/draw/{{=forum.id}}/{{=slug}}"></a>').fancybox( {
-                    type : 'iframe',
-                    autoSize : false,
-                    width : 700,
-                    height: 350,
-                    afterClose:function(){
-                        if(pic_addr){
-                            _this.pasteHTML("<img src="+pic_addr+"></img>");
-                        }
-                     } 
-                 }).click();
-                
-            }  
         }
-        
     }
 </script>

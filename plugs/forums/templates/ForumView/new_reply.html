@@ -33,6 +33,7 @@
 </div>
 
 {{include "inc_xheditor_plugins.html"}}
+{{include "inc_xheditor_draw_plugins.html"}}
 {{use "poshytip"}}
 <script type="text/javascript">
     $(function(){
@@ -41,7 +42,7 @@
             skin:'vista',
             upLinkUrl:"!/forum/upload_file?forum_id={{=forum.id}}&slug={{=slug}}",
             upImgUrl:"!/forum/upload_image?forum_id={{=forum.id}}&slug={{=slug}}",
-            plugins:plugins
+            plugins:$.extend(plugins, draw_plugins)
         });
 
         {{if not has_email:}}

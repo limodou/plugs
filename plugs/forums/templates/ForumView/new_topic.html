@@ -29,6 +29,7 @@
     </div>
 </div>
 {{include "inc_xheditor_plugins.html"}}
+{{include "inc_xheditor_draw_plugins.html"}}
 {{use "poshytip"}}
 <script type="text/javascript">
     $(function(){
@@ -39,7 +40,7 @@
             upFlashUrl:"!/forum/upload_file?forum_id={{=forum.id}}&slug={{=form.data['slug']}}",
             upFlashExt:"swf",
             upImgUrl:"!/forum/upload_image?forum_id={{=forum.id}}&slug={{=form.data['slug']}}",
-            plugins:plugins,
+            plugins:$.extend(plugins, draw_plugins),
             height:300
         });
         {{if not has_email:}}

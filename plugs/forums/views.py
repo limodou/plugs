@@ -354,7 +354,7 @@ class ForumView(object):
         view = AddView('forumtopic', url_for(ForumView.forum_index, id=int(id)),
             default_data={'forum':int(id), 'last_post_user':request.user.id, 'last_reply_on':date.now()}, 
             hidden_fields=['slug'], data=data,
-            post_save=post_save, get_form_field=get_form_field, template_data={'forum':forum, 'has_email':has_email})
+            post_save=post_save, get_form_field=get_form_field, template_data={'forum':forum, 'has_email':has_email, 'slug':slug})
         return view.run()
         
     def _clear_files(self, slug, text):
@@ -487,6 +487,7 @@ class ForumView(object):
         发表新回复
         """
         from uliweb.utils.generic import AddView
+        import uuid
         
         Post = get_model('forumpost')
         Topic = get_model('forumtopic')
@@ -542,8 +543,11 @@ class ForumView(object):
             if name == 'content':
                 return TextField('内容', required=True, convert_html=True, rows=20)
         
+        slug = uuid.uuid1().hex
+        data = {'slug':slug, 'reply_email':False, 'content':''}
+
         view = AddView('forumpost', url_for(ForumView.topic_view, forum_id=int(forum_id), topic_id=int(topic_id)),
-            hidden_fields=['slug'], 
+            hidden_fields=['slug'], template_data={'slug':slug}, data=data,
             pre_save=pre_save, get_form_field=get_form_field, post_save=post_save)
         return view.run()
     

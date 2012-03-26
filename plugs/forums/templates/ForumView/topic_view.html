@@ -136,6 +136,7 @@
     </div>
 {{pass}}
 {{include "inc_xheditor_plugins.html"}}
+{{include "inc_xheditor_draw_plugins.html"}}
 {{include "inc_paginate.html"}}
 {{use "poshytip"}}
 {{use "fancybox"}}
@@ -240,7 +241,7 @@
             skin:'vista',
             upLinkUrl:"!/forum/upload_file?forum_id={{=forum.id}}&slug={{=slug}}",
             upImgUrl:"!/forum/upload_image?forum_id={{=forum.id}}&slug={{=slug}}",
-            plugins:plugins
+            plugins:$.extend(plugins, draw_plugins)
         });
         //初始化SyntaxHighlighter
         //SyntaxHighlighter.defaults['highlight'] = [5, 10, 15];

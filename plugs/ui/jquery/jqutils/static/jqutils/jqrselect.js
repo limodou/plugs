@@ -58,6 +58,9 @@
                     select: function( event, ui ) {
                         self.element.val(ui.item.id);
                         input.val(ui.item.title);
+                        if (self.options.onSelect){
+                            self.options.onSelect.call(self.element);
+                        }
                         return false;
                     }
                 }).keydown(function(event){

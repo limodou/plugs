@@ -1,3 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {{block meta}}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    {{end}}
+    <title>{{block title}}Untitled{{end}}</title>
+    <!-- toplinks -->
+    {{use "bootstrap"}}
+    {{link "bootstrap_extend.css"}}
+    {{block _css}}{{end}}
+  </head>
+
+  <body class="bootstrap-body">
+
+{{block before_header}}{{end}}
+
 {{block header}}
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
@@ -22,3 +41,25 @@
   </div>
 </div>
 {{end}}
+    
+{{block content}}
+<div class="container">
+    <div class="content-outter">
+        {{block content_main}}
+        {{end}}
+    </div>    
+</div>
+{{end content}}
+
+{{block footer_container}}
+<footer class="container">
+  {{block footer}}
+    uliweb & plugs
+  {{end}}
+</footer>
+{{end footer_container}}      
+
+{{block after_footer}}{{end}}
+
+  </body>
+</html>

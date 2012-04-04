@@ -8,7 +8,7 @@
 #forum-body {background: white;}
 #forum-body th {height:25px;padding:2px;background: #E5EDF2 url("titlebg.png") repeat-x 0 0;border:1px solid #ccc;}
 #forum-body td {height:25px;padding:2px;border:1px solid #ccc;}
-#forum-body .title h3 {font-size:16px;height:1em;margin:10px 0 0 20px;}
+#forum-body .title h3 {font-size:16px;height:1em;margin:10px 0 4px 20px;}
 #forum-body .title p {height:1em;margin:0 0 10px 20px;}
 
 table.forum tr.head {border: 1px solid #CDCDCD;}

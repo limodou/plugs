@@ -12,7 +12,7 @@
     
     <div class="pull-right" style="margin-bottom:16px;">
         {{if request.user:}}
-        <a class="btn btn-success" href="{{=url_for('plugs.forums.views.ForumView.new_topic', id=forum.id)}}">新主题</a>
+        <a class="btn btn-success btn-mini" href="{{=url_for('plugs.forums.views.ForumView.new_topic', id=forum.id)}}">新主题</a>
         {{else:}}
         <font color="red">你还没有登录，无法发表新主题！</font>
         {{pass}}

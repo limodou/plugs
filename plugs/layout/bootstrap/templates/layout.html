@@ -1,90 +1,33 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    {{block meta}}
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="description" content="">
-    <meta name="author" content="">
+{{extend "bootstrap/container_fluid_layout.html"}}
+
+{{block title}}{{=settings.LAYOUT.TITLE}}{{end}}</title>
+
+{{block project}}{{=settings.LAYOUT.TITLE}}{{end}}
+
+{{block nav}}
+<ul class="nav">
+    {{block menu}}
+    {{menu('home')}}
     {{end}}
-    <title>{{block title}}{{=settings.LAYOUT.TITLE}}{{end}}</title>
-    <!-- toplinks -->
-    {{use "bootstrap"}}
-    {{link "bootstrap_extend.css"}}
-    {{block _css}}{{end}}
-  </head>
-
-  <body class="bootstrap-body">
-    {{include "menu.html"}}
-    {{include "inc_show_flashes.html"}}
-
-{{block header}}
-<div class="navbar navbar-fixed-top">
-  <div class="navbar-inner">
-    <div class="container-fluid">
-      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
-      <a class="brand" href="/">{{=settings.LAYOUT.TITLE}}</a>
-      <div class="nav-collapse">
-        {{block nav}}
-        <ul class="nav">
-            {{block menu}}
-            {{menu('home')}}
-            {{end}}
-        </ul>
-        {{end}}
-      {{block user_info}}
-      <p class="pull-right user_info">
-      {{if hasattr(request, 'user') and request.user:}}
-          {{=_('Welcome')}}! {{=unicode(request.user)}} <img src="{{=functions.get_user_image(request.user, size=20)}}" align="top"/>| <a href="/static/help/index.html" target="_blank">帮助</a> | <a href="/logout">{{=_('Logout')}}</a> | <a href="/resign">更换用户</a>
-      {{else:}}
-          {{=_('Not signed in yet')}}! <a href="/login">{{=_('Login')}}</a> | <a href="/register">{{=_('Register')}}</a>
-      {{pass}}
-      </p>
-      {{end user_info}}
-      </div><!--/.nav-collapse -->
-    </div>
-  </div>
-</div>
+</ul>
 {{end}}
-    
-{{block content}}
-<div class="container-fluid">
-  <div class="row-fluid">
-    <div class="span2">
-      <div class="sidebar-nav">
-        {{block content_sidebar}}
 
-        {{end content_sidebar}}         
-      </div><!--/.well -->
+{{block before_header}}
+{{include "menu.html"}}
+{{include "inc_show_flashes.html"}}
+{{end}}
 
-    </div><!--/span-->
-    <div class="span10 content-container">
-        <div class="content_tool">
-            {{block content_tool}}
-            {{end}}
-        </div>
-        <div class="clearfix content-outter">
-            {{block content_main}}
-            {{end}}
-        </div>    
-    </div><!--/span-->
-    
+{{block user_info}}
+<p class="pull-right user_info">
+{{if hasattr(request, 'user') and request.user:}}
+    {{=_('Welcome')}}! {{=unicode(request.user)}} <img src="{{=functions.get_user_image(request.user, size=20)}}" align="top"/>| <a href="/static/help/index.html" target="_blank">帮助</a> | <a href="/logout">{{=_('Logout')}}</a> | <a href="/resign">更换用户</a>
+{{else:}}
+    {{=_('Not signed in yet')}}! <a href="/login">{{=_('Login')}}</a> | <a href="/register">{{=_('Register')}}</a>
+{{pass}}
+</p>
+{{end user_info}}
 
-    
-  </div><!--/row-->
-</div>
-{{end content}}
+{{block footer}}
+{{<< settings.get_var('LAYOUT/COPYRIGHT')}}
+{{end}}
 
-{{block footer_container}}
-<footer class="container">
-  {{block footer}}
-  {{<< settings.get_var('LAYOUT/COPYRIGHT')}}
-  {{end}}
-</footer>
-{{end footer_container}}      
-
-  </body>
-</html>

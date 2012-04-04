@@ -17,7 +17,7 @@
     </ul>
     <div class="pull-right" style="margin-bottom:16px;">
         {{if has_role(request.user, 'superuser'):}}
-        <a class="btn btn-green" href="{{=url_for('plugs.forums.views.ForumView.admin')}}">管理</a>
+        <a class="btn btn-green btn-mini" href="{{=url_for('plugs.forums.views.ForumView.admin')}}">管理</a>
         {{pass}}
     </div>
     <div class="clearfix"></div>

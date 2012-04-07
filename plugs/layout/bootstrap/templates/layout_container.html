@@ -1,0 +1,33 @@
+{{extend "bootstrap/container_layout.html"}}
+
+{{block title}}{{=settings.LAYOUT.TITLE}}{{end}}</title>
+
+{{block project}}{{=settings.LAYOUT.TITLE}}{{end}}
+
+{{block nav}}
+<ul class="nav">
+    {{block menu}}
+    {{menu('home')}}
+    {{end}}
+</ul>
+{{end}}
+
+{{block before_header}}
+{{include "menu.html"}}
+{{include "inc_show_flashes.html"}}
+{{end}}
+
+{{block user_info}}
+<p class="pull-right user_info">
+{{if hasattr(request, 'user') and request.user:}}
+    {{=_('Welcome')}}! {{=unicode(request.user)}} <img src="{{=functions.get_user_image(request.user, size=20)}}" align="top"/>| <a href="/static/help/index.html" target="_blank">帮助</a> | <a href="/logout">{{=_('Logout')}}</a> | <a href="/resign">更换用户</a>
+{{else:}}
+    {{=_('Not signed in yet')}}! <a href="/login">{{=_('Login')}}</a> | <a href="/register">{{=_('Register')}}</a>
+{{pass}}
+</p>
+{{end user_info}}
+
+{{block footer}}
+{{<< settings.get_var('LAYOUT/COPYRIGHT')}}
+{{end}}
+

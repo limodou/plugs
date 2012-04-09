@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-  <title>{{=settings.LAYOUT.TITLE}}</title>
+  <title>{{block title}}{{=settings.LAYOUT.TITLE}}{{end}}</title>
   <!--[if lt IE 9]>
   <script src="{{=url_for_static('js/html5.js')}}"></script>
   <![endif]-->
@@ -11,6 +11,9 @@
 <!-- toplinks -->
 </head>
 <body>
+
+{{block before_header}}{{end}}
+
     {{include "menu.html"}}
     {{include "inc_show_flashes.html"}}
     <div class="container">
@@ -87,5 +90,8 @@
         </div>
     </footer>
     {{end}}
+    
+{{block after_footer}}{{end}}
+
 </body>
 </html>

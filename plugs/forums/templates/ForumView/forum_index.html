@@ -21,7 +21,8 @@
 
 {{block content_main}}
 {{use "jquery"}}
-{{use "jqutils"}}
+{{use "jqutils", hoverIntent=True}}
+
 <script type="text/html" id="topicTemplate">
     <tr>
         <td align="left" class="first">${subject}</td>
@@ -33,10 +34,20 @@
 <table border="0" width="100%" class="forum">
     <thead>
         <tr class="head">
-            <td align="left" class="first">筛选：{{if filter=='all':}}<span class="current rounded">全部主题</span>{{else:}}<a href="?filter=all">全部主题</a>{{pass}} | {{if filter=='essence':}}<span class="current rounded">精华</span>{{else:}}<a href="?filter=essence">精华</a>{{pass}}</th>
-            <td width="100px">作者</th>
-            <td width="100px" align="center">文章/浏览</th>
-            <td width="150px">最后回复</th>
+            <td align="left" class="first">
+            <span>筛选：</span>
+                <div class="hover-menu">
+                <cite>{{=filter_name}}<b class="caret"></b></cite>
+                <ul class="items">
+                    <li><a href="?filter=all">全部主题</a></li>
+                    <li><a href="?filter=essence">精华</a></li>
+                    <li><a href="?filter=sticky">顶置</a></li>
+                </ul>
+                </div>
+            </td>
+            <td width="100px">作者</td>
+            <td width="100px" align="center">文章/浏览</td>
+            <td width="150px">最后回复</td>
         </tr>
     </thead>
     <tbody id="forum_table">
@@ -64,6 +75,7 @@
     }
     $(function(){
         load_topics();
+        $('.hover-menu').hover_menu();
     });
 </script>
 {{end}}

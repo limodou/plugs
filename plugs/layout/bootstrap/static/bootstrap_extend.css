@@ -558,7 +558,7 @@ margin-top:50px;
 #login-container .box h2{background-image:none;background-color:#ccc;color:#000;border-bottom:0;font-size:20px;text-align:center;padding:10px 0px;margin:-10px -10px 40px -10px;filter:none;}
 #login-container .form-horizontal .control-group{margin-bottom:8px}
 #login-container .form-horizontal .control-group > label {width:100px}
-#login-container .form-horizontal .controls {margin-left:120px}
+#login-container .form-horizontal .controls {margin-left:120px, *+margin-left:0px; *+display:block;}
 #login-container .form-actions {background-color:transparent;border:0;text-align:right;padding-right:40px;margin:-10px 0px -12px 0}
 #login-container .form-horizontal input[type="submit"]{
     border-radius: 5px 5px 5px 5px;

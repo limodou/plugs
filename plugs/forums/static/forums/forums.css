@@ -11,7 +11,7 @@
 #forum-body .title h3 {font-size:16px;height:1em;margin:10px 0 4px 20px;}
 #forum-body .title p {height:1em;margin:0 0 10px 20px;}
 
-table.forum tr.head {border: 1px solid #CDCDCD;}
+table.forum tr.head {border: 1px solid #CDCDCD;vertical-align:middle;}
 table.forum tr.head .current{background-color:#f4e91a;padding:2px;}
 table.forum tr.head td{height:30px;background-color:#f2f2f2;}
 table.forum tr.head td.first{padding-left:8px;}
@@ -41,3 +41,6 @@ box-shadow: 2px 2px 3px #ccc;
 #posts .footer a{color:#668db6;}
 #posts .header {height:22px;margin-bottom:5px;color:#999;}
 #forum textarea {width:100%;}
+
+.hover-menu {display:inline-block;zoom: 1;*display: inline;}
+#forum .hover-menu cite{display:inline-block;zoom: 1;*display: inline;}

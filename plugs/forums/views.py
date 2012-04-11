@@ -271,6 +271,8 @@ class ForumView(object):
         filter = request.GET.get('filter', 'all')
         if filter == 'essence':
             condition = (Topic.c.essence==True) & condition
+        elif filter == 'sticky':
+            condition = (Topic.c.sticky==True) & condition
             
         def created_on(value, obj):
             return value.strftime('%Y-%m-%d')
@@ -304,7 +306,7 @@ class ForumView(object):
         if 'data' in request.values:
             return json(view.json())
         else:
-            return {'forum':forum, 'filter':filter}
+            return {'forum':forum, 'filter':filter, 'filter_name':dict(settings.get_var('PARA/FILTERS')).get(filter)}
     
     @expose('<int:id>/new_topic')
     @decorators.check_role('trusted')

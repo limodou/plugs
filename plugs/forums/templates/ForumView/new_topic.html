@@ -30,11 +30,12 @@
 </div>
 {{include "inc_xheditor_plugins.html"}}
 {{include "inc_xheditor_draw_plugins.html"}}
+{{use "fancybox"}}
 {{use "poshytip"}}
 <script type="text/javascript">
     $(function(){
         $('textarea').xheditor({
-            tools:'Cut,Copy,Paste,Pastetext,|,Blocktag,Fontface,FontSize,Bold,Italic,Underline,Strikethrough,FontColor,BackColor,SelectAll,Removeformat,|,Align,List,Outdent,Indent,|,Link,Unlink,Anchor,Img,Flash,Hr,Emot,Table,Code,Quote,|,About',
+            tools:'Cut,Copy,Paste,Pastetext,|,Blocktag,Fontface,FontSize,Bold,Italic,Underline,Strikethrough,FontColor,BackColor,SelectAll,Removeformat,|,Align,List,Outdent,Indent,|,Link,Unlink,Anchor,Img,Flash,Hr,Emot,Table,Code,Quote,Draw,|,About',
             skin:'vista',
             upLinkUrl:"!/forum/upload_file?forum_id={{=forum.id}}&slug={{=form.data['slug']}}",
             upFlashUrl:"!/forum/upload_file?forum_id={{=forum.id}}&slug={{=form.data['slug']}}",

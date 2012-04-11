@@ -256,12 +256,14 @@ class ForumView(object):
         显示某论坛页面
         """
         from uliweb.utils.generic import ListView
+        from sqlalchemy.sql import and_
         
         pageno = int(request.values.get('page', 1)) - 1
         rows_per_page=int(request.values.get('rows', settings.get_var('PARA/FORUM_INDEX_NUMS')))
         
         Topic = get_model('forumtopic')
         Forum = get_model('forum')
+        User = get_model('user')
         forum = Forum.get(int(id))
         condition = Topic.c.forum == int(id)
         order_by = [Topic.c.sticky.desc(), Topic.c.last_reply_on.desc()]
@@ -273,6 +275,15 @@ class ForumView(object):
             condition = (Topic.c.essence==True) & condition
         elif filter == 'sticky':
             condition = (Topic.c.sticky==True) & condition
+        term = request.GET.get('term', '')
+        type = request.GET.get('type', '1')
+        if term:
+            if type == '1':     #查找主题
+                condition = (Topic.c.subject.like('%'+term+'%')) & condition
+            elif type == '2':   #查找用户名
+                condition = and_(Topic.c.posted_by == User.c.id,
+                    User.c.username.like('%' + term + '%') | User.c.nickname.like('%' + term + '%'),
+                    ) & condition
             
         def created_on(value, obj):
             return value.strftime('%Y-%m-%d')
@@ -306,7 +317,8 @@ class ForumView(object):
         if 'data' in request.values:
             return json(view.json())
         else:
-            return {'forum':forum, 'filter':filter, 'filter_name':dict(settings.get_var('PARA/FILTERS')).get(filter)}
+            return {'forum':forum, 'filter':filter, 'term':term, 'type':type,
+                'filter_name':dict(settings.get_var('PARA/FILTERS')).get(filter)}
     
     @expose('<int:id>/new_topic')
     @decorators.check_role('trusted')

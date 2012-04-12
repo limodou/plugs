@@ -5,16 +5,17 @@
 {{end}}
 
 {{block forum_nav}}
-    <div class="nav">
-        <a href="/forum" class="home" title="首页">论坛首页</a>
-        <em>»</em>
-        <span><a href="/forum/{{=forum.id}}">{{=forum.name}}</a></span>
-        <em>»</em>
-        <span><a href="/forum/{{=forum.id}}/{{=topic.id}}">{{=topic.subject}}</a></span>
-    </div>
-    <div class="tool">
-        <a class="btn btn-green" href="/forum/{{=forum.id}}/new_topic">新主题</a>
-    </div>
+    <ul class="breadcrumb">
+      <li>
+        <a href="{{=url_for('plugs.forums.views.ForumView.list')}}" class="home" title="首页">论坛首页</a> <span class="divider">/</span>
+      </li>
+      <li>
+        <a href="/forum/{{=forum.id}}">{{=forum.name}}</a> <span class="divider">/</span>
+      </li>
+      <li class="active">
+        <a href="/forum/{{=forum.id}}/{{=topic.id}}">{{=topic.subject}}</a>
+      </li>
+    </ul>
 {{end}}
 
 {{block content_main}}
@@ -24,23 +25,25 @@
 {{use "xheditor"}}
 <div class="content">
     <div class="box center">
-        <h2>修改主题：{{=object.subject}}</h2>
+        <h2 class="section">修改主题：{{=object.subject}}</h2>
         <div class="box-body">
             {{<< form}}
         </div>
     </div>
 </div>
 {{include "inc_xheditor_plugins.html"}}
+{{include "inc_xheditor_draw_plugins.html"}}
+{{use "fancybox"}}
 <script type="text/javascript">
     $(function(){
         $('textarea').xheditor({
-            tools:'Cut,Copy,Paste,Pastetext,|,Blocktag,Fontface,FontSize,Bold,Italic,Underline,Strikethrough,FontColor,BackColor,SelectAll,Removeformat,|,Align,List,Outdent,Indent,|,Link,Unlink,Anchor,Img,Flash,Hr,Emot,Table,Code,Quote,|,About',
+            tools:'Cut,Copy,Paste,Pastetext,|,Blocktag,Fontface,FontSize,Bold,Italic,Underline,Strikethrough,FontColor,BackColor,SelectAll,Removeformat,|,Align,List,Outdent,Indent,|,Link,Unlink,Anchor,Img,Flash,Hr,Emot,Table,Code,Quote,Draw,|,About',
             skin:'vista',
             upLinkUrl:"!/forum/upload_file?forum_id={{=forum.id}}&slug={{=topic.slug}}",
             upFlashUrl:"!/forum/upload_file?forum_id={{=forum.id}}&slug={{=topic.slug}}",
             upFlashExt:"swf",
             upImgUrl:"!/forum/upload_image?forum_id={{=forum.id}}&slug={{=topic.slug}}",
-            plugins:plugins
+            plugins:$.extend(plugins, draw_plugins)
         });
     });
 </script>

@@ -336,7 +336,7 @@ class ForumView(object):
             from sqlalchemy.sql import select, func
             Post = get_model('forumpost')
             
-            p = Post(topic=obj.id, posted_by=request.user,
+            p = Post(topic=obj.id, posted_by=request.user, slug=obj.slug,
                 content=data['content'], floor=1, reply_email=data['reply_email'])
             p.save()
             
@@ -666,6 +666,11 @@ class ForumView(object):
         Post = get_model('forumpost')
         post = Post.get((Post.c.topic==int(topic_id)) & (Post.c.floor==1))
         
+        #compatiable not saving the first post slug bug
+        if not post.slug:
+            post.slug = uuid.uuid1().hex
+            post.save()
+        
         def post_save(obj, data):
             #更新Post表
             post.content = data['content']
@@ -693,7 +698,7 @@ class ForumView(object):
         data = {'content':post.content}
         view = EditView('forumtopic', url_for(ForumView.topic_view, forum_id=forum_id, topic_id=topic_id),
             obj=topic, data=data, pre_save=pre_save, hidden_fields=['slug'],
-            post_save=post_save, get_form_field=get_form_field, template_data={'forum':forum, 'topic':topic})
+            post_save=post_save, get_form_field=get_form_field, template_data={'forum':forum, 'topic':topic, 'slug':post.slug})
         return view.run()
     
     def upload_file(self):

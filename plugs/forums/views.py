@@ -6,6 +6,7 @@ from datetime import timedelta
 from uliweb.utils.common import safe_str
 from uliweb.utils import date
 from uliweb.utils.timesince import timesince
+import uuid
 
 #def __begin__():
 #   from uliweb import function
@@ -327,7 +328,6 @@ class ForumView(object):
         发表新主题
         """
         from uliweb.utils.generic import AddView
-        import uuid
         
         Forum = get_model('forum')
         forum = Forum.get(int(id))
@@ -400,7 +400,6 @@ class ForumView(object):
         显示某主题页面
         """
         from uliweb.utils.generic import ListView
-        import uuid
         from uliweb import settings
         
         pageno = int(request.values.get('page', 1)) - 1
@@ -501,7 +500,6 @@ class ForumView(object):
         发表新回复
         """
         from uliweb.utils.generic import AddView
-        import uuid
         
         Post = get_model('forumpost')
         Topic = get_model('forumtopic')
@@ -572,7 +570,6 @@ class ForumView(object):
         发表新回复
         """
         from uliweb.utils.generic import AddView
-        import uuid
         
         Forum = get_model('forum')
         forum = Forum.get(int(forum_id))

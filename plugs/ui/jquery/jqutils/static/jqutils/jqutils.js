@@ -9,7 +9,7 @@ QueryString
     QueryString.prototype = {
         load: function(param){
             this.urlParams = {}
-            var e,k,v,
+            var e,k,v,i,
                 a = /\+/g,  // Regex for replacing addition symbol with a space
                 r = /([^&=]+)=?([^&]*)/g,
                 d = function (s) { return decodeURIComponent(s.replace(a, " ")); }
@@ -18,6 +18,11 @@ QueryString
             }
             if (param.charAt(0) == '?'){
                 param = param.substring(1);
+            }else{
+                i = param.indexOf('?');
+                if (i>-1){
+                    param = param.substring(i+1);
+                }
             }
             while (e = r.exec(param)){
                 k = d(e[1]);

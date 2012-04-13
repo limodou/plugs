@@ -35,6 +35,7 @@
 {{block content_main}}
 {{use "jquery"}}
 {{use "jqutils", hoverIntent=True}}
+{{use "history"}}
 
 <script type="text/html" id="topicTemplate">
     <tr>
@@ -69,8 +70,15 @@
 <div id="paginate"></div>
 {{include "inc_paginate.html"}}
 <script type="text/javascript">
+    
     var load_topics = function(page){
         page = page || 1;
+        
+        var History = window.History;
+
+        //remember history
+        History.pushState('', '', '?page='+page);
+        
         $.ajax({
             type: "POST",
             dataType: 'json',
@@ -86,9 +94,23 @@
             }
         });
     }
+    
     $(function(){
         load_topics();
         $('.hover-menu').hover_menu();
+        
+        var History = window.History;
+
+        //bind statechange event
+        $(window).bind('statechange',function(){
+            var
+                State = History.getState(),
+                url = State.url;
+            var page = $.query_string.load(url).get('page');
+            load_topics(page);
+        });
+        
+        
     });
 </script>
 {{end}}

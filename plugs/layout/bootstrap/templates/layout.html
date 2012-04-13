@@ -2,7 +2,7 @@
 
 {{block title}}{{=settings.LAYOUT.TITLE}}{{end}}</title>
 
-{{block project}}{{=settings.LAYOUT.TITLE}}{{end}}
+{{block project}}{{=settings.LAYOUT.PROJECT}}{{end}}
 
 {{block nav}}
 <ul class="nav">
@@ -20,7 +20,7 @@
 {{block user_info}}
 <p class="pull-right user_info">
 {{if hasattr(request, 'user') and request.user:}}
-    {{=_('Welcome')}}! {{=unicode(request.user)}} <img src="{{=functions.get_user_image(request.user, size=20)}}" align="top"/>| <a href="/static/help/index.html" target="_blank">帮助</a> | <a href="/logout">{{=_('Logout')}}</a> | <a href="/resign">更换用户</a>
+    <img src="{{=functions.get_user_image(request.user, size=20)}}" align="top"/> {{=unicode(request.user)}} | <a href="/user/view">{{=_('Account Setting')}}</a> | <a href="/logout">{{=_('Logout')}}</a> 
 {{else:}}
     {{=_('Not signed in yet')}}! <a href="/login">{{=_('Login')}}</a> | <a href="/register">{{=_('Register')}}</a>
 {{pass}}
@@ -28,6 +28,8 @@
 {{end user_info}}
 
 {{block footer}}
+<p>
 {{<< settings.get_var('LAYOUT/COPYRIGHT')}}
+</p>
 {{end}}
 

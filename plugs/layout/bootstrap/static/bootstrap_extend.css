@@ -82,6 +82,7 @@ ul.breadcrumb li {*display:inline;*list-style-type:none;}
 .user_info img {vertical-align:middle;}
 
 footer, #footer{
+margin-top: 30px;
 margin-bottom: 17px;
 border-top: 1px solid #EEE;
 text-align:center;
@@ -505,9 +506,6 @@ table.table thead:first-child tr th, table.table thead:first-child tr td {border
 
 /*forum*/
 #forum.container {background-color:#EEEEEE;width:940px;margin-top:0px;}
-#forum .content-outter {
-    margin-bottom:30px;
-}
 #forum .clear{clear:both;}
 .bootstrap-body #forum .nav{display:block;float:none;height:30px;background-color:#fff;margin:0 0 -10px -20px;padding:10px 0px 0px 20px;}
 .bootstrap-body #forum .tool{margin-top:-20px;margin-bottom:-20px;}

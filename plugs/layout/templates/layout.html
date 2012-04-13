@@ -21,7 +21,7 @@
         {{block userinfo}}
             <div class="align_right">
                 {{if hasattr(request, 'user') and request.user:}}
-                    {{=_('Welcome')}} {{=request.user.username}} | <a href="/logout">{{=_('Logout')}}</a>
+                    {{=request.user.username}} | <a href="/user/view">{{=_('Account Setting')}}</a> | <a href="/logout">{{=_('Logout')}}</a>
                 {{else:}}
                     {{=_("You've not loginned yet!")}} <a href="/login">{{=_('Login')}}</a> | <a href="/register">{{=_('Register')}}</a>
                 </form>

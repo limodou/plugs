@@ -75,9 +75,10 @@
         page = page || 1;
         
         var History = window.History;
-
-        //remember history
-        History.pushState('', '', $.query_string.set('page', page, true).toString());
+        if ($.browser.msie && $.browser.version>'7.0'){
+            //remember history
+            History.pushState('', '', $.query_string.set('page', page, true).toString());
+        }
         
         $.ajax({
             type: "POST",

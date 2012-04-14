@@ -404,7 +404,6 @@
 					currentStateHash = null,
 					currentStateHashExits = null,
 					discardObject;
-
 				// Check if we are the same state
 				if ( History.isLastHash(currentHash) ) {
 					// There has been no change (just the page's hash has finally propagated)
@@ -418,7 +417,6 @@
 
 				// Store our location for use in detecting back/forward direction
 				History.saveHash(currentHash);
-
 				// Expand Hash
 				if ( currentHash && History.isTraditionalAnchor(currentHash) ) {
 					//History.debug('History.onHashChange: traditional anchor', currentHash);
@@ -430,7 +428,6 @@
 
 				// Create State
 				currentState = History.extractState(History.getFullUrl(currentHash||document.location.href,false),true);
-
 				// Check if we are the same state
 				if ( History.isLastSavedState(currentState) ) {
 					//History.debug('History.onHashChange: no change');

@@ -439,10 +439,12 @@
 		 */
 		History.getBasePageUrl = function(){
 			// Create
-			var basePageUrl = document.location.href.replace(/[#\?].*/,'').replace(/[^\/]+$/,function(part,index,string){
-				return (/[^\/]$/).test(part) ? '' : part;
-			}).replace(/\/+$/,'')+'/';
-
+            
+			//var basePageUrl = document.location.href.replace(/[#\?].*/,'').replace(/[^\/]+$/,function(part,index,string){
+			//	return (/[^\/]$/).test(part) ? '' : part;
+			//}).replace(/\/+$/,'')+'/';
+            
+            var basePageUrl = document.location.href.replace(/[#\?].*/,'');
 			// Return
 			return basePageUrl;
 		};
@@ -1725,7 +1727,6 @@
 
 				// Create the newState
 				var newState = History.createStateObject(data,title,url);
-
 				// Check it
 				if ( History.isLastSavedState(newState) ) {
 					// Won't be a change
@@ -1845,6 +1846,7 @@
 		/**
 		 * Bind for Saving Store
 		 */
+        /*
 		if ( sessionStorage ) {
 			// When the page is closed
 			History.onUnload = function(){
@@ -1901,7 +1903,8 @@
 			
 			// Both are enabled for consistency
 		}
-
+        */
+        
 		// Non-Native pushState Implementation
 		if ( !History.emulated.pushState ) {
 			// Be aware, the following is only for native pushState implementations

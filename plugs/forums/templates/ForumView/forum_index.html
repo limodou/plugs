@@ -75,7 +75,7 @@
         page = page || 1;
         
         var History = window.History;
-        if ($.browser.msie && $.browser.version>'7.0'){
+        if (!$.browser.msie || ($.browser.msie && $.browser.version>'7.0')){
             //remember history
             History.pushState('', '', $.query_string.set('page', page, true).toString());
         }

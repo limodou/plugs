@@ -35,7 +35,6 @@
 {{block content_main}}
 {{use "jquery"}}
 {{use "jqutils", hoverIntent=True}}
-{{use "history"}}
 
 <script type="text/html" id="topicTemplate">
     <tr>
@@ -69,6 +68,7 @@
 </table>
 <div id="paginate"></div>
 {{include "inc_paginate.html"}}
+{{use "history"}}
 <script type="text/javascript">
     
     var load_topics = function(page){
@@ -77,7 +77,7 @@
         var History = window.History;
 
         //remember history
-        History.pushState('', '', '?page='+page);
+        History.pushState('', '', $.query_string.set('page', page, true).toString());
         
         $.ajax({
             type: "POST",
@@ -96,7 +96,7 @@
     }
     
     $(function(){
-        load_topics();
+        load_topics({{=page}});
         $('.hover-menu').hover_menu();
         
         var History = window.History;
@@ -107,6 +107,7 @@
                 State = History.getState(),
                 url = State.url;
             var page = $.query_string.load(url).get('page');
+            console.log(url);
             load_topics(page);
         });
         

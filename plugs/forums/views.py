@@ -318,7 +318,7 @@ class ForumView(object):
         if 'data' in request.values:
             return json(view.json())
         else:
-            return {'forum':forum, 'filter':filter, 'term':term, 'type':type,
+            return {'forum':forum, 'filter':filter, 'term':term, 'type':type, 'page':pageno+1,
                 'filter_name':dict(settings.get_var('PARA/FILTERS')).get(filter)}
     
     @expose('<int:id>/new_topic')

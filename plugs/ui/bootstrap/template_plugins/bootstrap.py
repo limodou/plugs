@@ -12,7 +12,7 @@ def call(app, var, env, plugins=None, js=True, responsive=False, use_less=False,
     else:
         a.append('bootstrap/%s/bootstrap.min.css' % version)
     if responsive:
-        a.append('bootstrap/%s/bootstrap-responsive.min.css')
+        a.append('bootstrap/%s/bootstrap-responsive.min.css' % version)
     
     jquery = False
     jquery_ui = False

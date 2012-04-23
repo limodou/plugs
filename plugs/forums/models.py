@@ -45,6 +45,7 @@ class Forum(Model):#论坛
 
     last_reply_on = Field(datetime.datetime, verbose_name='最新回复时间')
     last_post_user = Reference('user', verbose_name='最后回复人', collection_name="last_post_user_forums")
+    last_post = Field(int, verbose_name='最后发贴id')
     managers = ManyToMany('user', verbose_name='管理员')
     
     def __unicode__(self):
@@ -102,6 +103,7 @@ class ForumTopic(Model):#主题
     updated_on = Field(datetime.datetime, verbose_name='修改时间')
     last_reply_on = Field(datetime.datetime, verbose_name='最新回复时间')
     last_post_user = Reference('user', verbose_name='最后回复人', collection_name="last_post_user_topics")
+    last_post = Field(int, verbose_name='最后发贴id')
     modified_user = Reference('user', verbose_name='最后修改人', default=get_modified_user, auto=True, collection_name="last_modified_user_topics")
     slug = Field(CHAR, max_length=32, verbose_name='唯一识别串')
     
@@ -130,7 +132,7 @@ class ForumPost(Model):#can't edit...回复
     topic = Reference('forumtopic', verbose_name='所属主题', collection_name='topic_posts')
     posted_by = Reference('user', verbose_name='回复人', default=get_modified_user, auto_add=True, collection_name='user_posts')
     created_on = Field(datetime.datetime, verbose_name='创建时间', auto_now_add=True)
-    content = Field(TEXT, verbose_name='文章信息')
+    content = Field(TEXT, verbose_name='文章信息', required=True)
     updated_on = Field(datetime.datetime, verbose_name='修改时间')
     floor = Field(int, verbose_name='楼层', required=True)
     deleted = Field(bool, verbose_name='删除标志', default=False)

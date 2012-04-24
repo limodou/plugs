@@ -1,4 +1,4 @@
-def call(app, var, env, plugins=None, js=True, responsive=False, use_less=False, version=None):
+def call(app, var, env, plugins=None, js=True, responsive=False, version=None):
     from uliweb import settings
     
     plugins = plugins or []
@@ -7,10 +7,7 @@ def call(app, var, env, plugins=None, js=True, responsive=False, use_less=False,
     a.append('<!--[if lt IE 9]>')
     a.append('bootstrap/asset/html5.js')
     a.append('<![endif]-->')
-    if use_less:
-        a.append('bootstrap/%s/lib/bootstrap.less' % version)
-    else:
-        a.append('bootstrap/%s/bootstrap.min.css' % version)
+    a.append('bootstrap/%s/bootstrap.min.css' % version)
     if responsive:
         a.append('bootstrap/%s/bootstrap-responsive.min.css' % version)
     
@@ -29,7 +26,4 @@ def call(app, var, env, plugins=None, js=True, responsive=False, use_less=False,
     d = {'toplinks':a, 'depends':[]}
     if jquery:
         d['depends'] = [('jquery', {'ui':jquery_ui})]
-    if use_less:
-        d['depends_after'] = ['less']
-        
     return d

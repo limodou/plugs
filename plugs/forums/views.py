@@ -569,7 +569,7 @@ class ForumView(object):
         def success_data(obj, data):
             import math
             
-            return {'page':int(math.ceil(0.1*obj.floor/settings.get_var('PARA/FORUM_PAGE_NUMS')))+1}
+            return {'page':int(math.ceil(1.0*obj.floor/settings.get_var('PARA/FORUM_PAGE_NUMS')))}
         
         view = AddView('forumpost', url_for(ForumView.topic_view, forum_id=int(forum_id), topic_id=int(topic_id)),
             hidden_fields=['slug'], template_data={'slug':slug}, data=data,
@@ -914,6 +914,6 @@ setTimeout(function(){callback(url);},100);
         
         Post = get_model('forumpost')
         obj = Post.get_or_notfound(int(pid))
-        page = int(math.ceil(0.1*obj.floor/settings.get_var('PARA/FORUM_PAGE_NUMS'))) + 1
+        page = int(math.ceil(1.0*obj.floor/settings.get_var('PARA/FORUM_PAGE_NUMS')))
         url = '/forum/%d/%d?page=%d' % (obj.topic._forum_, obj._topic_, page)
         return redirect(url)

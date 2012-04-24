@@ -491,7 +491,7 @@ class ForumView(object):
 
             slug = uuid.uuid1().hex
             topic = Topic.get(int(topic_id))
-            return {'forum':forum, 'topic':topic, 'slug':slug, 'has_email':bool(request.user and request.user.email)}
+            return {'forum':forum, 'topic':topic, 'slug':slug, 'has_email':bool(request.user and request.user.email), 'page':pageno+1}
     
     @expose('<forum_id>/<topic_id>/new_post')
     @decorators.check_role('trusted')
@@ -517,8 +517,16 @@ class ForumView(object):
             from uliweb.utils.common import Serial
             from uliweb.mail import Mail
             
-            Topic.filter(Topic.c.id==int(topic_id)).update(num_replies=Topic.c.num_replies+1, last_post_user=request.user.id, last_reply_on=date.now())
-            Forum.filter(Forum.c.id==int(forum_id)).update(num_posts=Forum.c.num_posts+1, last_post_user=request.user.id, last_reply_on=date.now())
+            Topic.filter(Topic.c.id==int(topic_id)).update(
+                num_replies=Topic.c.num_replies+1, 
+                last_post_user=request.user.id, 
+                last_reply_on=date.now(),
+                last_post=obj.id)
+            Forum.filter(Forum.c.id==int(forum_id)).update(
+                num_posts=Forum.c.num_posts+1, 
+                last_post_user=request.user.id, 
+                last_reply_on=date.now(),
+                last_post=obj.id)
             self._clear_files(obj.slug, data['content'])
             
             #増加发送邮件的处理
@@ -558,10 +566,16 @@ class ForumView(object):
         slug = uuid.uuid1().hex
         data = {'slug':slug, 'reply_email':False, 'content':''}
 
+        def success_data(obj, data):
+            import math
+            
+            return {'page':int(math.ceil(0.1*obj.floor/settings.get_var('PARA/FORUM_PAGE_NUMS')))+1}
+        
         view = AddView('forumpost', url_for(ForumView.topic_view, forum_id=int(forum_id), topic_id=int(topic_id)),
             hidden_fields=['slug'], template_data={'slug':slug}, data=data,
+            success_data=success_data,
             pre_save=pre_save, get_form_field=get_form_field, post_save=post_save)
-        return view.run()
+        return view.run(json_result=True)
     
     @expose('<forum_id>/<topic_id>/<parent_id>/new_reply')
     @decorators.check_role('trusted')
@@ -892,3 +906,14 @@ setTimeout(function(){callback(url);},100);
         if request.method == 'GET':
             return {'forum_id':forum_id,'slug':slug}
     
+    def id(self, pid):
+        """
+        根据pid跳转到相应的贴子
+        """
+        import math
+        
+        Post = get_model('forumpost')
+        obj = Post.get_or_notfound(int(pid))
+        page = int(math.ceil(0.1*obj.floor/settings.get_var('PARA/FORUM_PAGE_NUMS'))) + 1
+        url = '/forum/%d/%d?page=%d' % (obj.topic._forum_, obj._topic_, page)
+        return redirect(url)

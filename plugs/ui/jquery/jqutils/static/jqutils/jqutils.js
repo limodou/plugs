@@ -352,6 +352,9 @@ var create_result_process = function(target, opt){
         } else if (!r.success){
             $.each(r.data, function(key, value){
                 var el = t.find('input[name='+key+'],select[name='+key+'],textarea[name='+key+']');
+                if (el.is(':hidden')){
+                    el = el.parent();
+                }
                 $(el).poshytip({
                     className: 'tip-yellowsimple',
                     content: value,

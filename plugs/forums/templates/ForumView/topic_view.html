@@ -25,7 +25,7 @@
 
 {{block content_main}}
 {{use "jquery"}}
-{{use "jqutils"}}
+{{use "jqutils", ajaxForm=True}}
 {{use "xheditor"}}
 {{use "jqimgzoom"}}
 <script type="text/html" id="postTemplate">
@@ -58,7 +58,7 @@
 </script>
 
 <script type="text/html" id="subPostTemplate">
-    <a name="${id}"></a>
+    <a name="post_${id}"></a>
     <div class="box">
     <li class="post" id="post_${id}">
         <div class="post_body">
@@ -103,7 +103,7 @@
     {{if not topic.closed:}}
         <div class="replay">
             <h3>发表评论</h3>
-            <form action="/forum/{{=forum.id}}/{{=topic.id}}/new_post" method="POST">
+            <form action="/forum/{{=forum.id}}/{{=topic.id}}/new_post" method="POST" id="postform">
                 <div class="type-text">
                     <textarea name="content" class="field" cols="75" rows="20"></textarea>
                 </div>
@@ -141,6 +141,7 @@
 {{use "poshytip"}}
 {{use "fancybox"}}
 {{use "colorpicker"}}
+{{use "history"}}
 <script type="text/javascript">
     var bind_action = function(el, action){
         el.click(function(event){
@@ -187,6 +188,13 @@
     
     var load_posts = function(page){
         page = page || 1;
+        
+        var History = window.History;
+        if (!$.browser.msie || ($.browser.msie && $.browser.version>'7.0')){
+            //remember history
+            History.pushState('', '', $.query_string.set('page', page, true).toString());
+        }
+
         $.ajax({
             type: "POST",
             dataType: 'json',
@@ -235,6 +243,11 @@
         });
         return true;
     }
+    
+    function success(data){
+        window.location.href = '{{=request.path}}'+'?page='+data.page;
+    }
+    
     $(function(){
         $('textarea').xheditor({
             tools:'Cut,Copy,Paste,Pastetext,|,Blocktag,Fontface,FontSize,Bold,Italic,Underline,Strikethrough,FontColor,BackColor,SelectAll,Removeformat,|,Align,List,Outdent,Indent,|,Link,Unlink,Img,Hr,Emot,Table,Code,Quote,Draw,|,About',
@@ -247,7 +260,33 @@
         //SyntaxHighlighter.defaults['highlight'] = [5, 10, 15];
         SyntaxHighlighter.defaults['toolbar'] = true;
         SyntaxHighlighter.config.strings.print = '打印';
-        load_posts();
+        
+        load_posts({{=page}});
+        
+        //处理history
+        var History = window.History;
+        
+        //bind statechange event
+        $(window).bind('statechange',function(){
+            var
+                State = History.getState(),
+                url = State.url;
+            var page = $.query_string.load(url).get('page');
+            load_posts(page);
+        });
+        
+        //处理回复表格提交
+        var el = $('#postform');
+        var result_process = create_result_process(el, 
+            {success:success});
+        
+        var options = { 
+            success: result_process,  // post-submit callback 
+            dataType: 'json'
+        }; 
+        
+        el.ajaxForm(options);
+        
     });
 </script>
 {{end}}

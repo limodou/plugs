@@ -340,6 +340,9 @@ class ForumView(object):
                 content=data['content'], floor=1, reply_email=data['reply_email'])
             p.save()
             
+            obj.last_post = p.id
+            obj.save()
+            
             Forum.filter(Forum.c.id==int(id)).update(num_posts=Forum.c.num_posts+1, 
                 num_topics=Forum.c.num_topics+1,
                 last_post_user=request.user.id, last_reply_on=date.now(), last_post=p.id)

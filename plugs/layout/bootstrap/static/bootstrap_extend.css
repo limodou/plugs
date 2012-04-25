@@ -88,13 +88,6 @@ border-top: 1px solid #EEE;
 text-align:center;
 }
 
-/* bootstrap fix */
-.thumbnails > li {
-float: left;
-margin: 0 0 18px 20px;
-}
-
-
 /* The white background content wrapper */
 .content-outter{
   background-color: #fff;

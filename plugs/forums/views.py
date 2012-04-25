@@ -342,7 +342,7 @@ class ForumView(object):
             
             Forum.filter(Forum.c.id==int(id)).update(num_posts=Forum.c.num_posts+1, 
                 num_topics=Forum.c.num_topics+1,
-                last_post_user=request.user.id, last_reply_on=date.now())
+                last_post_user=request.user.id, last_reply_on=date.now(), last_post=p.id)
             #根据slug的值清除附件中无效的文件
             self._clear_files(obj.slug, data['content'])
             
@@ -616,6 +616,17 @@ class ForumView(object):
             
             Post.filter(Post.c.id==int(parent_id)).update(num_replies=Post.c.num_replies+1, last_post_user=request.user.id, last_reply_on=date.now())            
             self._clear_files(obj.slug, data['content'])
+            
+            Topic.filter(Topic.c.id==int(topic_id)).update(
+                num_replies=Topic.c.num_replies+1, 
+                last_post_user=request.user.id, 
+                last_reply_on=date.now(),
+                last_post=obj.id)
+            Forum.filter(Forum.c.id==int(forum_id)).update(
+                num_posts=Forum.c.num_posts+1, 
+                last_post_user=request.user.id, 
+                last_reply_on=date.now(),
+                last_post=obj.id)
             
             #増加发送邮件的处理
             emails = []
@@ -914,6 +925,8 @@ setTimeout(function(){callback(url);},100);
         
         Post = get_model('forumpost')
         obj = Post.get_or_notfound(int(pid))
+        while obj.parent:
+            obj = obj.parent
         page = int(math.ceil(1.0*obj.floor/settings.get_var('PARA/FORUM_PAGE_NUMS')))
         url = '/forum/%d/%d?page=%d' % (obj.topic._forum_, obj._topic_, page)
         return redirect(url)

@@ -244,11 +244,12 @@ $.fn.hover_menu = function(){
     });
 };
 
-var show_simple_message = function(msg, target){
+var show_simple_message = function(msg, target, options){
     $('.simple_message').remove();
     if (!msg) {
         return;
     }
+    var setting = $.extend({trigger:'auto', delay:5000}, options||{});
     var t = target || '.message-conainter';
     var m = $('<div class="simple_message"><div class="mg">' + msg + '</div></div>');
     if ($(t).size()==0){
@@ -264,7 +265,9 @@ var show_simple_message = function(msg, target){
         m.find('.mg').addClass('rounded');
         $(t).html(m);
     }
-    setTimeout('show_simple_message("")', 5000);
+    if(setting.trigger == 'auto'){
+        setTimeout('show_simple_message("")', setting.delay);
+    }
 };
 
 /*

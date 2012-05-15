@@ -1,7 +1,8 @@
 {{use "jquery", css_only=True}}
 {{
-def menu(current='home'):
-    for id, caption, link in settings.LAYOUT.MENUS:
+def menu(current='home', menus=None):
+    menus = menus or settings.LAYOUT.MENUS
+    for id, caption, link in menus:
         if id == current:
             out.write('<li class="active"><a href="%s"><span>%s</span></a></li>' % (link, caption), escape=False)
         else:

@@ -59,7 +59,7 @@
                         self.element.val(ui.item.id);
                         input.val(ui.item.title);
                         if (self.options.onSelect){
-                            self.options.onSelect.call(self.element);
+                            self.options.onSelect.call(self);
                         }
                         return false;
                     }
@@ -119,6 +119,10 @@
                 input.val('');
                 self.element.val('');
             });
+            
+            if(!self.options.showRemoveable){
+            	this.clearBtn.css("display", "none");
+            }
         },
         
         getValue: function(){
@@ -133,7 +137,9 @@
             this.input.val('');
             this.element.val('');
         },
-        
+        options:{
+        	showRemoveable:true
+        },
         destroy: function() {
             this.input.remove();
             this.button.remove();

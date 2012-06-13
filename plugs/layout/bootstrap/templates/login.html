@@ -1,12 +1,23 @@
 {{extend "layout.html"}}
 {{block userinfo}}{{end}}
 {{block content}}
-<div id="login-container" class="content container">
-    <div class="box span5 box_shadow content-outter">
-        <h2>{{=_('Sign in')}}</h2>
-        <div class="box-body">
-            {{<< form}}
-        </div>
-    </div>
+{{include "inc_jquery_dialog2.html"}}
+<div id="login" style="display: none">
+	<h1>Sign In</h1>
+	<div>
+		{{<<form}}
+	</div>
 </div>
+<script type="text/javascript">
+	$(function() {
+		$("#login").dialog2({
+			showCloseHandle: false,
+			removeOnClose: false, 
+			autoOpen: true, 
+			closeOnEscape: false, 
+			closeOnOverlayClick: false
+		});
+
+	});
+</script>
 {{end}}

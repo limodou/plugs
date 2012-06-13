@@ -5,6 +5,6 @@
 
 __author__ = 'limodou'
 __author_email__ = 'limodou@gmail.com'
-__url__ = 'http://code.google.com/p/plugs'
+__url__ = 'https://github.com/limodou/plugs'
 __license__ = 'BSD'
-version = __version__ = '0.0.1b2'
+version = __version__ = '0.1.1'

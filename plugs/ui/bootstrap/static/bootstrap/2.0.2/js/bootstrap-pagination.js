@@ -56,7 +56,7 @@ function($) {
         } else if ($this.hasClass('first')) {
           that.currentPage = 1;
         } else if ($this.hasClass('last')) {
-          that.currentPage = (that.options.total);
+          that.currentPage = that.totalPages;
         } else {
           that.currentPage = parseInt($this.text());
         }

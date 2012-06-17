@@ -190,6 +190,7 @@ function($) {
     first: 'First',
     last: 'Last',
     start: 1,
+    totalMessage: 'Total $pages pages / $records records', //if not then doesn't display at all
     initLoad: false,
     onChange: null
   }

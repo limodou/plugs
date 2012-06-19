@@ -1,6 +1,6 @@
 {{use "bootstrap", plugins=['pagination']}}
 <script type="text/javascript">
-    var create_pagination = function (el, total, page_nums, start, callback){
+    var create_pagination = function (el, total, page_nums, start, callback, opts){
         if (total){
             var options = {
                 pageRows:page_nums 
@@ -11,7 +11,7 @@
                 , last: '{{=_('Last')}}'
                 , totalMessage: '{{=_("Total $pages pages / $records records")}}'
                 };
-            $(el).pagination(options);
+            $(el).pagination($.extend({}, options, opts||{}));
             $(el).pagination('show', total, start);
         }
     }

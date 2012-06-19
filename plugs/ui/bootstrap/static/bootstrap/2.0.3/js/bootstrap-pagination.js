@@ -32,15 +32,17 @@ function($) {
 
       this.$element = $(content).addClass('pagination').empty();
       var list = $('<ul/>').appendTo(this.$element);
+      this.totalMessage = this.options.totalMessage ? $('<li class="disabled total"><a href="#"></a></li>') : '';
+      this.btnFirst = this.options.first ? $('<li class="first"><a href="#">' + this.options.first + '</a></li>') : '';
+      this.btnPrev = this.options.prev ? $('<li class="prev"><a href="#">' + this.options.prev + '</a></li>') : '';
+      this.btnNext = this.options.next ? $('<li class="next"><a href="#">' + this.options.next + '</a></li>') : '';
+      this.btnLast = this.options.last ? $('<li class="last"><a href="#">' + this.options.last + '</a></li>') : '';
 
-      var btnFirst = this.btnFirst = $('<li class="first"><a href="#">' + this.options.first + '</a></li>');
-      var btnPrev = this.btnPrev = $('<li class="prev"><a href="#">' + this.options.prev + '</a></li>');
-      var btnNext = this.btnNext = $('<li class="next"><a href="#">' + this.options.next + '</a></li>');
-      var btnLast = this.btnLast = $('<li class="last"><a href="#">' + this.options.last + '</a></li>');
-
-      list.append(btnPrev).append(btnNext);
-      list.append(this.btnLast);
-      list.prepend(this.btnFirst);
+      if (this.totalMessage) list.append(this.totalMessage);
+      if (this.btnFirst) list.append(this.btnFirst);
+      if (this.btnPrev) list.append(this.btnPrev);
+      if (this.btnNext) list.append(this.btnNext);
+      if (this.btnLast) list.append(this.btnLast);
 
       this.$element.delegate('li:enabled, li', 'click.pagination', function(e) {
       
@@ -78,6 +80,11 @@ function($) {
       this.currentPage = this.options.start - 1;
       this.totalPages = parseInt(this.options.total / this.options.pageRows);
       if (this.options.total % this.options.pageRows > 0) this.totalPages++;
+      if (this.totalMessage){
+        var msg = this.options.totalMessage.replace('$pages', this.totalPages);
+        msg = msg.replace('$records', this.options.total);
+        this.totalMessage.html('<a href="#">'+msg+'</a>');
+      }
       navigate.call(this, this.currentPage);
       if (this.options.initLoad) {
         this.load(this.currentPage);
@@ -102,25 +109,20 @@ function($) {
 
     if (s.total <= s.pageRows) return;
 
-    var target = list.find('li:last').prev();
+    var target = list.find('li:last');
+    if (this.btnLast) target = target.prev();
 
     for (var i = startPage; i < startPage + s.length; i++) {
       if (i == this.totalPages) break;
-      var li = $('<li/>').insertBefore(target).append($('<a>').attr('rel', (i + 1)).attr('href', '#').text(i + 1));
+      var li = $('<li class="page"/>').insertBefore(target).append($('<a>').attr('rel', (i + 1)).attr('href', '#').text(i + 1));
     }
-
-    this.$element.find('ul').append(this.btnLast);
-    this.$element.find('ul').prepend(this.btnFirst);
-
   }
 
   function navigate(topage) {
 
     var s = this.options;
     var list = this.$element.find('ul');
-    for (var i = list.find('li').size() - 4; i > 0; i--) {
-      list.find('li').eq(i+1).remove();
-    }
+    list.find('li.page').remove();
     var index = topage;
     var mid = s.length / 2;
     if (s.length % 2 > 0) mid = (s.length + 1) / 2;
@@ -143,25 +145,25 @@ function($) {
     var s = this.options;
     if (this.totalPages > 1) {
       if (this.currentPage > 0) {
-        this.btnPrev.removeClass('disabled');
-        this.btnFirst.removeClass('disabled');
+        if (this.btnPrev) this.btnPrev.removeClass('disabled');
+        if (this.btnFirst) this.btnFirst.removeClass('disabled');
       } else {
-        this.btnPrev.addClass('disabled');
-        this.btnFirst.addClass('disabled');
+        if (this.btnPrev) this.btnPrev.addClass('disabled');
+        if (this.btnFirst) this.btnFirst.addClass('disabled');
       }
 
       if (this.currentPage == this.totalPages - 1) {
-        this.btnNext.addClass('disabled');
-        this.btnLast.addClass('disabled');
+        if (this.btnNext) this.btnNext.addClass('disabled');
+        if (this.btnLast) this.btnLast.addClass('disabled');
       } else {
-        this.btnNext.removeClass('disabled');
-        this.btnLast.removeClass('disabled');
+        if (this.btnNext) this.btnNext.removeClass('disabled');
+        if (this.btnLast) this.btnLast.removeClass('disabled');
       }
     } else {
-      this.btnPrev.addClass('disabled');
-      this.btnNext.addClass('disabled');
-      this.btnFirst.addClass('disabled');
-      this.btnLast.addClass('disabled');
+      if (this.btnPrev) this.btnPrev.addClass('disabled');
+      if (this.btnNext) this.btnNext.addClass('disabled');
+      if (this.btnFirst) this.btnFirst.addClass('disabled');
+      if (this.btnLast) this.btnLast.addClass('disabled');
     }
   }
 

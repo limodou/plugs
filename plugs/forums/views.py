@@ -380,7 +380,7 @@ class ForumView(object):
         from uliweb.utils.image import fix_filename
         File = get_model('forumattachment')
         
-        r_links = re.compile(r'<a.*?href=\"([^"]+)\"|<img.*?src=\"([^"]+)\"|<embed.*?src=\"([^"]+)\"', re.DOTALL)
+        r_links = re.compile(r'<a.*?href=\"([^"\?]+)(?:\"|\?)|<img.*?src=\"([^"]+)\"|<embed.*?src=\"([^"]+)\"', re.DOTALL)
         files = filter(None, itertools.chain(*re.findall(r_links, text)))
         for row in File.filter(File.c.slug==slug):
             _f = functions.get_filename(row.file_name)
@@ -769,10 +769,10 @@ class ForumView(object):
                     name = functions.get_href(filename)
                 else:
                     filename = functions.save_file(filename, f['file'])
-                    _file = functions.get_href(filename)
                     name = form.data['title']
                     if not name:
                         name = _f
+                    _file = functions.get_href(filename, alt=name)
                 ff = File(slug=slug, file_name=filename, name=name)
                 ff.save()
                 name = json_dumps(name, unicode=True)

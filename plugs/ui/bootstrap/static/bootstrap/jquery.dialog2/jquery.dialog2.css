@@ -1,7 +1,13 @@
 .modal {
-     display: none;
-     top: 20%;
-     margin: 0 0 0 -280px;
+    display: none;
+    top: 20%;
+    margin: 0 0 0 -280px;
+    overflow: hidden;
+}
+
+.wide-modal {
+    width: 800px;
+    margin: 0 0 0 -400px;
 }
 
 .modal .modal-header h3 {

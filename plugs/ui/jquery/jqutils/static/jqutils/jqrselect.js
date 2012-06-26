@@ -138,7 +138,8 @@
             this.element.val('');
         },
         options:{
-        	showRemoveable:true
+        	showRemoveable:true,
+            url:null
         },
         destroy: function() {
             this.input.remove();

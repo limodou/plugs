@@ -1,5 +1,70 @@
 {{use "jqdialog2"}}
+{{use "poshytip"}}
 <script>
+
+    common_ajaxForm_success = function(options){
+        return function(r){
+            var opts = {
+                success:null,
+                message: show_message,
+                done:null,
+                error:null,
+                message_type:'bootstrap'
+            };
+            if (typeof options === 'function'){
+                opts.success = options;
+            }else{
+                opts = $.extend(opts, options);
+            }
+            if (r.success){
+                opts.message(r.message||'');
+                if(opts.success) opts.success.call(this, r);
+                if(opts.done) opts.done.call(this, r);
+            }else{
+                if(opts.error) opts.error.call(this, r);
+                else{
+                    if(opts.message_type == 'bootstrap'){
+                        $('div.control-group').removeClass('error').find('.help-block.error').remove();
+                        opts.message(r.message, 'error');
+                        $.each(r.data, function(key, value){
+                            var f, t;
+                            f = '#div_field_' + key;
+                            t = $(f).addClass('error');
+                            t.find('.controls').append('<p class="help-block error">'+value+'</p>');
+                        });
+                    }else if(opts.message_type == 'tip'){
+                        var t = $(this);
+                        $('body').on('dialog2.beforeClose', t, function(e){
+                            t.find('input, select, textarea').poshytip('hide');
+                        });
+                        t.find('input, select, textarea').poshytip('hide');
+                        $.each(r.data, function(key, value){
+                            var el = t.find('input[name='+key+'],select[name='+key+'],textarea[name='+key+']');
+                            if (el.is(':hidden')){
+                                el = el.parent();
+                            }
+                            $(el).poshytip({
+                                className: 'tip-yellowsimple',
+                                content: value,
+                                showOn: 'none',
+                                alignTo: 'target',
+                                alignX: 'inner-left',
+                                offsetX: 0,
+                                offsetY: 5,
+                                closeButton: true
+                            });
+                            $(el).poshytip('show');
+                            $(el).focus(function(){
+                                $(this).poshytip('hide');
+                            });
+                        });
+                    }
+                }
+            }
+        };
+    }
+    
+    
     $(function(){
     
         $(document).controls();

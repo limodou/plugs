@@ -48,6 +48,15 @@
             this.trigger("dialog2.content-update");
         }, handle);
         
+        this.__ajaxFormSuccessTrigger = $.proxy(function(data) {
+            if(options.ajaxFormOptions.onSuccess){
+                options.ajaxFormOptions.onSuccess.call(element, data);
+            }
+            this.trigger("dialog2.ajax-complete", data);
+            if(options.ajaxFormOptions.dataType != 'json')
+                this.trigger("dialog2.content-update");
+        }, handle);
+
         this.__ajaxStartTrigger = $.proxy(function() {
             this.trigger("dialog2.ajax-start");
         }, handle);
@@ -67,12 +76,12 @@
         this.__removeDialog = $.proxy(this.__remove, this);
         
         handle.bind("dialog2.ajax-start", function() {
-            dialog.options({buttons: options.autoAddCancelButton ? localizedCancelButton() : {}});
+            dialog.options({buttons: options.autoAddCancelButton ? localizedCancelButton() : null});
             handle.parent().addClass("loading");
         });
         
         handle.bind("dialog2.content-update", function() {
-            dialog.__ajaxify();
+            dialog.__ajaxify(options);
             dialog.__updateMarkup();
             dialog.__focus();
         });
@@ -83,7 +92,12 @@
         
         // Apply options to make title and stuff shine
         this.options(options);
-
+        
+        //add load content process
+        if (options.url){
+            this.load(options.url);
+        }
+        
         // We will ajaxify its contents when its new
         // aka apply ajax styles in case this is a inpage dialog
         handle.trigger("dialog2.content-update");
@@ -166,6 +180,7 @@
             this.__overlay = handle.parent().prev(".modal-backdrop");
             
             this.__addFocusCatchers(parentHtml);
+            
         }, 
         
         __addFocusCatchers: function(parentHandle) {
@@ -179,7 +194,7 @@
         __updateMarkup: function() {
             var dialog = this;
             var e = dialog.__handle;
-            
+
             e.trigger("dialog2.before-update-markup");
             
             // New options for dialog
@@ -231,7 +246,7 @@
         /**
          * Apply ajax specific dialog behavior to the dialogs contents
          */
-        __ajaxify: function() {
+        __ajaxify: function(options) {
             var dialog = this;
             var e = this.__handle;
 
@@ -246,19 +261,19 @@
             // Make submitable for an ajax form 
             // if the jquery.form plugin is provided
             if ($.fn.ajaxForm) {
-				var options = {
+				var opts = $.extend({
                     target: e,
-                    success: dialog.__ajaxCompleteTrigger,
+                    success: dialog.__ajaxFormSuccessTrigger,
                     beforeSubmit: dialog.__ajaxStartTrigger, 
 					beforeSend: dialog.__ajaxBeforeSend, 
                     error: function() {
                         throw dialogError("Form submit failed: " + $.makeArray(arguments));
                     }
-                };
-				
+                }, options.ajaxFormOptions || {});
+                
                 $("form.ajax", e)
 					.removeClass("ajax")
-					.ajaxForm(options);
+					.ajaxForm(opts);
             }
             
             e.trigger("dialog2.after-ajaxify");
@@ -279,7 +294,9 @@
          * 
          * @param backwards whether to focus backwards or not
          */
-        __focus: function(backwards) {
+        __focus: function(backwards, focus) {
+            if (!(focus ||this.options.autoFocus)) return;
+            
             var dialog = this.__handle;
             
             // Focus first focusable element in dialog
@@ -310,7 +327,7 @@
          * focusable element in it (e.g. a link or a button on the button bar).
          */
         focus: function() {
-            return this.__focus();
+            return this.__focus('first', true);
         }, 
         
         /**
@@ -324,6 +341,7 @@
             overlay.hide();
             
             dialog
+                .trigger("dialog2.beforeClose")
                 .parent().hide().end()
                 .trigger("dialog2.closed")
                 .removeClass("opened");
@@ -389,7 +407,6 @@
          */
         removeButton: function(name) {
             var footer = this.__handle.siblings(".modal-footer");
-                
             footer
                 .find("a.btn")
                     .filter(function(i, e) {return $(e).text() == name;})
@@ -494,7 +511,7 @@
                 this.load(options.content);
             }
             
-            delete options.buttons;
+            //delete options.buttons;
             
             options = $.extend(true, {}, storedOptions, options);
             this.__handle.data("options", options);
@@ -657,7 +674,10 @@
         showCloseHandle: true, 
         initialLoadText: "", 
         closeOnEscape: true, 
-		beforeSend: null
+		beforeSend: null,
+        autoFocus: true,
+        url: null,
+        ajaxFormOptions: null
     };
     
     /***********************************************************************

@@ -1,6 +1,7 @@
 {{use "jquery"}}
 {{use "pnotify"}}
 <script type="text/javascript">
+$.extend($.pnotify.defaults, {{=json_dumps(settings.UI_CONFIG.pnotify_default)}});
 var show_message = function(message, category){
     $.pnotify({
         //pnotify_title: 'Regular Notice',

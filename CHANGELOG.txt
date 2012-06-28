@@ -1,0 +1,11 @@
+=====================
+Plugs Change Log
+=====================
+
+0.1.2 Version
+-----------------
+
+#. Improve forum upload filename convert process, add ``alt=`` to download href, so 
+   that the download filename will use alt value.
+#. Fix pnotify inc_show_message js bug, change ``top.$(window)`` to ``$(top.window)``
+#. Upgrade pnotify to 1.2.0

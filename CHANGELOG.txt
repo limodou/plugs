@@ -17,3 +17,6 @@ Plugs Change Log
 #. Add AngularJS in 'plugs.ui.angularjs', and you can use::
 
     {{use "angularjs"}}
+#. Add font-awesome support in 'plugs.ui.bootstrap', and you can use::
+
+    {{use "fontawesome"}}

@@ -9,3 +9,11 @@ Plugs Change Log
    that the download filename will use alt value.
 #. Fix pnotify inc_show_message js bug, change ``top.$(window)`` to ``$(top.window)``
 #. Upgrade pnotify to 1.2.0
+#. Add backbone and underscore to plugs.ui.js.jsutils, and you can use::
+
+    {{use "backbone""}}
+    
+   to use backbone.
+#. Add AngularJS in 'plugs.ui.angularjs', and you can use::
+
+    {{use "angularjs"}}

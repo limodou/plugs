@@ -20,3 +20,5 @@ Plugs Change Log
 #. Add font-awesome support in 'plugs.ui.bootstrap', and you can use::
 
     {{use "fontawesome"}}
+    
+#. Fix fontawesome confict with bootstrap icon class

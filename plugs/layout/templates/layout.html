@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+{{block html_tag}}<html>{{end}}
 <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
   <title>{{block title}}{{=settings.LAYOUT.TITLE}}{{end}}</title>
@@ -10,7 +10,7 @@
   <link rel="stylesheet" type="text/css" href="{{=url_for_static('forms.css')}}" media="screen" />
 <!-- toplinks -->
 </head>
-<body>
+{{block body_tag}}<body>{{end}}
 
 {{block before_header}}{{end}}
 

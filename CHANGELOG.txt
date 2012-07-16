@@ -22,3 +22,4 @@ Plugs Change Log
     {{use "fontawesome"}}
     
 #. Fix fontawesome confict with bootstrap icon class
+#. Upgrade bootstrap to 2.0.4

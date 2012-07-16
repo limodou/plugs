@@ -10,8 +10,16 @@
 
   line-height: 1.4em;
 }
+
+.btn [class^="icon-"], .btn [class*=" icon-"] {
+  line-height: 1em;
+}
+
 .icon-large {
+  line-height: 1em;
+  vertical-align:top;
   font-size: 1.3333em;
+  width: 1.1em;
 }
 .icon-glass {
   *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf000;&nbsp;');

@@ -23,3 +23,5 @@ Plugs Change Log
     
 #. Fix fontawesome confict with bootstrap icon class
 #. Upgrade bootstrap to 2.0.4
+#. Add slickgrid and jqevent plugin
+#. Fix userinfo block to user_info

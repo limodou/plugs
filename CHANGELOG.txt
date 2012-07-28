@@ -25,3 +25,18 @@ Plugs Change Log
 #. Upgrade bootstrap to 2.0.4
 #. Add slickgrid and jqevent plugin
 #. Fix userinfo block to user_info
+#. Add totop plugin
+#. Refactor forum to static creation
+#. Add bootstrap pagination function, you can call like:
+
+    ```
+    pagination = functions.create_pagination(url, total, page, rows, length=None)
+    return {'pagination':pagination}
+    ```
+    
+    and in template you can:
+    
+    ```
+    <div class="pagination">{{<< pagination}}</div>
+    ```
+    

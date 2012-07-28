@@ -28,62 +28,40 @@
 {{use "jqutils", ajaxForm=True}}
 {{use "xheditor"}}
 {{use "jqimgzoom"}}
-<script type="text/html" id="postTemplate">
-    <a name="${id}"></a>
-    <li class="post" id="post_${id}">
-        <div class="user_image">
-            <img title="${username}" src="${userimage}">
-        </div>
-        <div class="post_body">
-            <div class="header">
-                ${floor}楼 由 <span class="user">${posted_by}</span> 发表于 
-                <span class="date">${created_on}</span>
-            </div>
-            <div class="body">
-            ${content}
-            ${updated}
-            <ul id="sub_posts_${id}">
-                <li class="sub_post">
-                </li>
-            </ul>
-            </div>
-            <div class="footer">
-                <span class="actions" style="display:none">
-                    ${actions}
-                </span>
-            </div>
-        </div>
-        <div class="clear"></div>
-    </li>
-</script>
+{{use "totop"}}
 
-<script type="text/html" id="subPostTemplate">
-    <a name="post_${id}"></a>
-    <div class="box">
-    <li class="post" id="post_${id}">
-        <div class="post_body">
-            <div class="body">
-            <div class="header">
-                由 <span class="user">${posted_by}</span> 回复于 
-                <span class="date">${created_on}</span>
-            </div>
-            ${content}
-            ${updated}
-            <ul id="sub_posts_${id}">
-                <li class="sub_post">
+{{def make_sub_posts(parent):}}
+    {{if len(sub_posts.get(parent, [])) > 0:}}
+    <ul id="sub_posts_{{=parent}}">
+        {{for post in sub_posts[parent]:}}
+            <div class="box">
+                <li class="post" id="post_{{=post.id}}">
+                <a name="post_{{=post.id}}"></a>
+                <div class="post_body">
+                    <div class="body">
+                        <div class="header">
+                            由 <span class="user">{{<< post.posted_by}}</span> 回复于 
+                            <span class="date">{{= post.created_on}}</span>
+                        </div>
+                        {{<< post.content}}
+                        {{<< post.updated}}
+                        
+                        {{make_sub_posts(post.id)}}
+                        
+                    </div>
+                    <div class="footer">           
+                        <span class="actions" style="display:none">
+                            {{<< post.actions}}
+                        </span>
+                    </div>
+                </div>
+                <div class="clear"></div>
                 </li>
-            </ul>        
             </div>
-            <div class="footer">           
-                <span class="actions" style="display:none">
-                    ${actions}
-                </span>
-            </div>
-        </div>
-        <div class="clear"></div>
-    </li>
-    </div>
-</script>
+        {{pass}}
+    </ul><!-- ul -->
+    {{pass}}
+{{pass}}
 
 <a name="a_topic"></a>
 <div class="topic">
@@ -94,10 +72,35 @@
     </div>
 </div>
 <ul id="posts">
-    <li class="post">正在装入...
+    {{for post in posts:}}
+    <a name="{{=post.id}}"></a>
+    <li class="post" id="post_{{=post.id}}">
+        <div class="user_image">
+            <img title="{{=post.username}}" src="{{=post.userimage}}">
+        </div>
+        <div class="post_body">
+            <div class="header">
+                {{=post.floor}}楼 由 <span class="user">{{=post.posted_by}}</span> 发表于 
+                <span class="date">{{=post.created_on}}</span>
+            </div>
+            <div class="body">
+            {{<< post.content}}
+            {{<< post.updated}}
+            
+            {{make_sub_posts(post.id)}}
+            
+            </div>
+            <div class="footer">
+                <span class="actions" style="display:none">
+                    {{<<post.actions}}
+                </span>
+            </div>
+        </div>
+        <div class="clear"></div>
     </li>
+    {{pass}}
 </ul>
-<div id="paginate"></div>
+<div class="pagination">{{<<pagination}}</div>
 {{include "inc_syntaxhighlighter.html"}}
 {{if request.user:}}
     {{if not topic.closed:}}
@@ -115,24 +118,15 @@
                     <button type="submit" class="btn btn-primary">发表评论</button>
                 </div>
             </form>
-            <div>
-                <a href="#a_topic">回页面顶部</a> 
-            </div>
         </div>
     {{else:}}
         <div class="replay">
-            <b>此主题已经被关闭，无法继续评论！</b>
-            <div>
-                <a href="#a_topic">回页面顶部</a> 
-            </div>
+            <div class="alert alert-warn">此主题已经被关闭，无法继续评论！</div>
         </div>
     {{pass}}
 {{else:}}
     <div class="replay">
-        <b>你尚未登录，无法评论！</b>
-        <div>
-            <a href="#a_topic">回页面顶部</a> 
-        </div>
+        <div class="alert alert-warn">你尚未登录，无法评论！</div>
     </div>
 {{pass}}
 {{include "inc_xheditor_plugins.html"}}
@@ -161,89 +155,6 @@
         });
     }
     
-    var load_sub_posts = function(data,value){
-        var sub_posts = $("#sub_posts_"+value.id)
-        sub_posts.empty();
-        $.each(data.post2.rows, function(index, value1){
-            if(value1.floor == value.floor){
-                if(value1.parent == value.id){
-                    var post = template($('#subPostTemplate').html(), value1).appendTo(sub_posts);
-                    post.hover(
-                        function(){
-                            post.find('span.actions').slideDown();
-                        },
-                        function(){
-                            post.find('span.actions').slideUp();
-                        }
-                    );
-                    $.each(['close', 'hidden', 'delete', 'top', 'essence', 'homepage', 'email'], function(index, value){
-                            bind_action(post.find('a.'+value), value);
-                            bind_action(post.find('a.un'+value), 'un'+value);
-                        }); 
-                    load_sub_posts(data,value1);
-                }
-            }
-        });
-    }
-    
-    var load_posts = function(page){
-        page = page || 1;
-        
-        var History = window.History;
-        if (!$.browser.msie || ($.browser.msie && $.browser.version>'7.0')){
-            //remember history
-            History.pushState('', '', $.query_string.set('page', page, true).toString());
-        }
-
-        $.ajax({
-            type: "POST",
-            dataType: 'json',
-            data: {data:'', page:page},
-            url: "{{=url_for('plugs.forums.views.ForumView.topic_view', forum_id=forum.id, topic_id=topic.id)}}",
-            success: function(data){
-                var posts = $('#posts')
-                posts.empty();
-                $.each(data.post1.rows, function(index, value){
-                    var post = template($('#postTemplate').html(), value).appendTo(posts);
-                    post.hover(
-                        function(){
-                            post.find('span.actions').slideDown();
-                        },
-                        function(){
-                            post.find('span.actions').slideUp();
-                        }
-                    );
-                    $.each(['close', 'hidden', 'delete', 'top', 'essence', 'homepage', 'email'], function(index, value){
-                            bind_action(post.find('a.'+value), value);
-                            bind_action(post.find('a.un'+value), 'un'+value);
-                        }
-                    );
-                    load_sub_posts(data,value);
-                    
-                });
-                do_syntax();
-                create_pagination('#paginate', data.post1.total, {{=settings.get_var('PARA/FORUM_PAGE_NUMS')}}, page, load_posts);
-                $('.post_body img').imgZoom({loadingImg:"{{=url_for_static('jqimgzoom/css/imgzoom-loading.gif')}}"});
-                {{if not has_email:}}
-                    //设置poshytip关闭图片
-                    $.fn.poshytip.defaults.closeImage = '{{=url_for_static("jqutils/cross_grey_small.png")}}';
-                    var el = $('#field_reply_email').poshytip({
-                        className: 'tip-yellowsimple',
-                        content: '您尚未设置邮箱，将无法处理邮件',
-                        showOn: 'none',
-                        alignTo: 'target',
-                        alignX: 'inner-left',
-                        offsetX: 0,
-                        offsetY: 5,
-                        closeButton: true
-                    });
-                    el.poshytip('show');
-                {{pass}}
-            }
-        });
-        return true;
-    }
-    
     function success(data){
         window.location.href = '{{=request.path}}'+'?page='+data.page;
     }
@@ -260,20 +171,7 @@
         //SyntaxHighlighter.defaults['highlight'] = [5, 10, 15];
         SyntaxHighlighter.defaults['toolbar'] = true;
         SyntaxHighlighter.config.strings.print = '打印';
-        
-        load_posts({{=page}});
-        
-        //处理history
-        var History = window.History;
-        
-        //bind statechange event
-        $(window).bind('statechange',function(){
-            var
-                State = History.getState(),
-                url = State.url;
-            var page = $.query_string.load(url).get('page');
-            load_posts(page);
-        });
+        do_syntax();
         
         //处理回复表格提交
         var el = $('#postform');
@@ -286,6 +184,24 @@
         }; 
         
         el.ajaxForm(options);
+        
+        //处理贴子action
+        $('li.post').hover(
+            function(){
+                $(this).find('span.actions').slideDown();
+            },
+            function(){
+                $(this).find('span.actions').slideUp();
+            }
+        );
+        
+        $.each(['close', 'hidden', 'delete', 'top', 'essence', 'homepage', 'email'], function(index, value){
+                bind_action($('li.post').find('a.'+value), value);
+                bind_action($('li.post').find('a.un'+value), 'un'+value);
+            }); 
+        
+        //处理回到顶部显示
+        $('.content').UItoTop({ easingType: 'easeOutQuart', text:'<i class="icon-arrow-up"></i>回到顶部' });
         
     });
 </script>

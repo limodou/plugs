@@ -64,54 +64,20 @@
         </tr>
     </thead>
     <tbody id="forum_table">
+    {{for item in objects:}}
+        <tr>
+            <td align="left" class="first">{{<< item['subject']}}</td>
+            <td align="left"><cite>{{<< item['posted_by']}}</cite><em>{{<< item['created_on']}}</em></td>
+            <td align="center"><b>{{= item['num_replies']}}</b>/<b>{{= item['num_views']}}</b></td>
+            <td align="left"><cite>{{<< item['last_post_user']}} <a href="/forum/id/{{<< item['last_post']}}" title="跳转到最后回复">&raquo;</a></cite><em>{{<< item['last_reply_on']}}</em></td>
+        </tr>
+    {{pass}}
     </tbody>
 </table>
-<div id="paginate"></div>
-{{include "inc_paginate.html"}}
-{{use "history"}}
+<div class="pagination">{{<<pagination}}</div>
 <script type="text/javascript">
-    
-    var load_topics = function(page){
-        page = page || 1;
-        
-        var History = window.History;
-        if (!$.browser.msie || ($.browser.msie && $.browser.version>'7.0')){
-            //remember history
-            History.pushState('', '', $.query_string.set('page', page, true).toString());
-        }
-        
-        $.ajax({
-            type: "POST",
-            dataType: 'json',
-            data: {data:'', page:page},
-            url: "{{=request.path}}"+$.query_string.toString(),
-            success: function(data){
-                var forum = $('#forum_table')
-                forum.empty();
-                $.each(data.rows, function(index, value){
-                    var topic = template($('#topicTemplate').html(), value).appendTo(forum);
-                });
-                create_pagination('#paginate', data.total, {{=settings.get_var('PARA/FORUM_INDEX_NUMS')}}, page, load_topics);
-            }
-        });
-    }
-    
     $(function(){
-        load_topics({{=page}});
         $('.hover-menu').hover_menu();
-        
-        var History = window.History;
-
-        //bind statechange event
-        $(window).bind('statechange',function(){
-            var
-                State = History.getState(),
-                url = State.url;
-            var page = $.query_string.load(url).get('page');
-            load_topics(page);
-        });
-        
-        
     });
 </script>
 {{end}}

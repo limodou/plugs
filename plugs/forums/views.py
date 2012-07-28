@@ -258,6 +258,7 @@ class ForumView(object):
         """
         from uliweb.utils.generic import ListView
         from sqlalchemy.sql import and_
+        import math
         
         pageno = int(request.values.get('page', 1)) - 1
         rows_per_page=int(request.values.get('rows', settings.get_var('PARA/FORUM_INDEX_NUMS')))
@@ -315,11 +316,18 @@ class ForumView(object):
         view = ListView(Topic, condition=condition, order_by=order_by,
             rows_per_page=rows_per_page, pageno=pageno,
             fields_convert_map=fields_convert_map)
-        if 'data' in request.values:
-            return json(view.json())
-        else:
-            return {'forum':forum, 'filter':filter, 'term':term, 'type':type, 'page':pageno+1,
-                'filter_name':dict(settings.get_var('PARA/FILTERS')).get(filter)}
+        view.query()    #in order to get the total count
+        objects = view.objects()
+        pages = int(math.ceil(1.0*view.total/rows_per_page))
+        return {'forum':forum, 'objects':objects, 'filter':filter, 'term':term, 
+            'page':pageno+1, 'total':view.total, 'pages':pages,
+            'pagination':functions.create_pagination(request.url, view.total, pageno+1, rows_per_page),
+            'type':type, 'filter_name':dict(settings.get_var('PARA/FILTERS')).get(filter)}
+#        if 'data' in request.values:
+#            return json(view.json())
+#        else:
+#            return {'forum':forum, 'filter':filter, 'term':term, 'type':type, 'page':pageno+1,
+#                'filter_name':dict(settings.get_var('PARA/FILTERS')).get(filter)}
     
     @expose('<int:id>/new_topic')
     @decorators.check_role('trusted')
@@ -481,20 +489,57 @@ class ForumView(object):
         view2 = ListView(Post, fields=fields, condition=condition2, order_by=order_by,
             pagination=False,
             fields_convert_map=fields_convert_map)
-        if 'data' in request.values:
-            return json({'post1':view1.json(),'post2':view2.json()})
-        else:
-#            key = '__topicvisited__:forumtopic:%d:%s:%s' % (request.user.id, forum_id, topic_id)
-            key = '__topicvisited__:forumtopic:%s:%s:%s' % (request.remote_addr, forum_id, topic_id)
-            cache = function('get_cache')()
-            v = cache.get(key, None)
-            if not v:
-                Topic.filter(Topic.c.id==int(topic_id)).update(num_views=Topic.c.num_views+1)
-                cache.set(key, 1, settings.get_var('PARA/FORUM_USER_VISITED_TIMEOUT'))
-
-            slug = uuid.uuid1().hex
-            topic = Topic.get(int(topic_id))
-            return {'forum':forum, 'topic':topic, 'slug':slug, 'has_email':bool(request.user and request.user.email), 'page':pageno+1}
+        key = '__topicvisited__:forumtopic:%s:%s:%s' % (request.remote_addr, forum_id, topic_id)
+        cache = function('get_cache')()
+        v = cache.get(key, None)
+        if not v:
+            Topic.filter(Topic.c.id==int(topic_id)).update(num_views=Topic.c.num_views+1)
+            cache.set(key, 1, settings.get_var('PARA/FORUM_USER_VISITED_TIMEOUT'))
+        
+        slug = uuid.uuid1().hex
+        topic = Topic.get(int(topic_id))
+        
+        #处理posts和sub_posts
+        query = view1.query()
+        posts = []
+        sub_posts = {}
+        def process_sub(ids):
+            _ids = []
+            for x in Post.filter(Post.c.parent.in_(ids)).order_by(Post.c.floor):
+                obj = view2.object(x)
+                d = sub_posts.setdefault(str(x._parent_), [])
+                d.append(obj)
+                _ids.append(x.id)
+            if _ids:
+                process_sub(_ids)
+                
+        ids = []
+        for row in query:
+            posts.append(view1.object(row))
+            ids.append(row.id)
+            
+        process_sub(ids)
+           
+        pagination = functions.create_pagination(request.url, view1.total,
+            pageno+1, rows_per_page)
+        return {'forum':forum, 'topic':topic, 'slug':slug, 
+            'has_email':bool(request.user and request.user.email), 
+            'page':pageno+1, 'pagination':pagination,
+            'posts':posts, 'sub_posts':sub_posts}
+#        if 'data' in request.values:
+#            return json({'post1':view1.json(),'post2':view2.json()})
+#        else:
+##            key = '__topicvisited__:forumtopic:%d:%s:%s' % (request.user.id, forum_id, topic_id)
+#            key = '__topicvisited__:forumtopic:%s:%s:%s' % (request.remote_addr, forum_id, topic_id)
+#            cache = function('get_cache')()
+#            v = cache.get(key, None)
+#            if not v:
+#                Topic.filter(Topic.c.id==int(topic_id)).update(num_views=Topic.c.num_views+1)
+#                cache.set(key, 1, settings.get_var('PARA/FORUM_USER_VISITED_TIMEOUT'))
+#
+#            slug = uuid.uuid1().hex
+#            topic = Topic.get(int(topic_id))
+#            return {'forum':forum, 'topic':topic, 'slug':slug, 'has_email':bool(request.user and request.user.email), 'page':pageno+1}
     
     @expose('<forum_id>/<topic_id>/new_post')
     @decorators.check_role('trusted')
@@ -601,16 +646,7 @@ class ForumView(object):
     
             data['topic'] = int(topic_id)
             data['parent'] = int(parent_id)
-            data['floor'] = post.floor
-            
-#            post1 = post
-#            #floor重新定义为层级，可用来缩进
-#            floor = -1
-#            while post1.parent:
-#                post1 = Post.get(Post.c.id == post1.parent)
-#                floor -= 1
-#            data['floor'] = floor
-#            data['floor'] = (do_(select([func.min(Post.c.floor)], Post.c.parent==int(parent_id))).scalar() or 0)-1
+            data['floor'] = (do_(select([func.max(Post.c.floor)], Post.c.parent==post.id)).scalar() or 0) + 1
             
         def post_save(obj, data):
             from uliweb import functions

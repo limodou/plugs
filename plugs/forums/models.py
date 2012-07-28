@@ -148,7 +148,7 @@ class ForumPost(Model):#can't edit...回复
 
     @classmethod
     def OnInit(cls):
-        Index('fpost_indx', cls.c.topic, cls.c.parent, cls.c.floor, unique=True)
+        Index('fpost_indx', cls.c.topic, cls.c.parent, cls.c.floor)
     
     class AddForm:
         fields = ['content', 'slug', 'reply_email']

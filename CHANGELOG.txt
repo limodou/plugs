@@ -39,4 +39,5 @@ Plugs Change Log
     ```
     <div class="pagination">{{<< pagination}}</div>
     ```
-    
+#. Add jquery.cookie
+#. Fix bootstrap prettify theme = default bug

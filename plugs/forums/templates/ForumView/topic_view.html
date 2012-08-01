@@ -1,5 +1,6 @@
 {{extend "forums_layout.html"}}
 
+{{block title}}{{super}} - {{=forum.name}} - {{=topic.subject}}{{end}}
 {{block _css}}
 <style type="text/css">
 *{margin:0;padding:0;}

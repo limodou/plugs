@@ -1,5 +1,7 @@
 {{extend "forums_layout.html"}}
 
+{{block title}}{{super}} - {{=forum.name}}{{end}}
+
 {{block forum_nav}}
     <ul class="breadcrumb">
       <li>

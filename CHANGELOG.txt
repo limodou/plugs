@@ -41,3 +41,6 @@ Plugs Change Log
     ```
 #. Add jquery.cookie
 #. Fix bootstrap prettify theme = default bug
+#. Remove jqjson
+#. Add jqhotkeys (via jquery.hotkeys.js)
+#. Fix forum title display

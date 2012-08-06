@@ -1,8 +1,4 @@
-{{extend "user_admin_layout.html"}}
-
-{{block menu}}
-{{menu('admin')}}
-{{end}}
+{{extend layout_template}}
 
 {{block sub_menu}}
 {{sub_menu(menu_items, 'user_admin', 'users')}}
@@ -11,15 +7,15 @@
 
 {{block content_main}}
 {{use "jquery", css_only=True}}
-<div class="content">
-    <div class="col">
+<div class="row-fluid">
+    <div class="span2 well">
         {{if can_modify:}}
         <a href="{{=url_for('plugs.user_admin.views_admin.UserView.edit_image')}}" title="{{=_('Click to change portrait')}}"><img src="{{=image_url}}" class="portrait"/></a>
         {{else:}}
         <img src="{{=image_url}}" class="portrait"/>
         {{pass}}
     </div>
-    <div class="col">
+    <div class="span5">
         <h2>{{=_('User Information')}}</h2>
         <div class="box-body">
             {{embed view}}

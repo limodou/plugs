@@ -3,7 +3,7 @@ from uliweb.form import *
 from uliweb.i18n import ugettext as _
 
 class ChangeInfoForm(Form):
-    form_buttons = Submit(value=_('Save'), _class="submit")
+    form_buttons = Button(value=_('Save'), _class="btn btn-primary", type="submit")
     form_title = _('Change Basic Information')
 
     email = StringField(label=_('Email:'))
@@ -11,7 +11,7 @@ class ChangeInfoForm(Form):
     action = HiddenField(default='changeinfo')
     
 class ChangePasswordForm1(Form):
-    form_buttons = Submit(value=_('Save'), _class="button")
+    form_buttons = Button(value=_('Save'), _class="btn btn-primary", type="submit")
 
     oldpassword = PasswordField(label=_('Old Password:'), required=True)
     password = PasswordField(label=_('Password:'), required=True)
@@ -30,7 +30,7 @@ class ChangePasswordForm1(Form):
         return error
     
 class ChangePasswordForm2(Form):
-    form_buttons = Submit(value=_('Save'), _class="button")
+    form_buttons = Button(value=_('Save'), _class="btn btn-primary", type="submit")
 
     username = StringField(label=_('Username:'), required=True)
     oldpassword = PasswordField(label=_('Old Password:'), required=True)
@@ -68,7 +68,6 @@ class EditUserForm(Form):
         from uliweb.orm import get_model
                  
         User = get_model('user')
-        print 'xxxxx', self.object
         user = User.get((User.c.username == data) & (User.c.id != self.object.id))
         if user:
             return _('Username is already existed.')

@@ -2,6 +2,14 @@
 Plugs Change Log
 =====================
 
+0.1.3 Version
+-----------------
+
+#. Fix jqutils.js QueryString, you can pass url to `new QueryString(url)` now.
+#. Refactor createpaginatin with new query_string function.
+#. Refactor user_admin with: APP_LAYOUTS config
+#. Add alignTo=fixed support to poshytip
+
 0.1.2 Version
 -----------------
 

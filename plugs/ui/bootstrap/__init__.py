@@ -21,18 +21,9 @@ def create_pagination(url, total, page, rows, length=None,
     last = last or settings.BOOTSTRAP_PAGINATION.last
     
     def get_url(p):
-        import urlparse
-        import urllib
+        from uliweb.utils.common import query_string
         
-        scheme, netloc, script_root, qs, anchor = urlparse.urlsplit(url)
-        
-        if qs:
-            x = urlparse.parse_qs(qs, True)
-            x['page'] = p
-            qs = urllib.urlencode(x, True)
-        else:
-            qs = 'page=%d' % p
-        return urlparse.urlunsplit((scheme, netloc, script_root, qs, anchor))
+        return query_string(url, page=p)
     
     pages = int(math.ceil(total*1.0/rows))
     begin = max(1,  page-length/2+1)

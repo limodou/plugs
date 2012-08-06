@@ -111,7 +111,7 @@
 			this.eventY = e.pageY;
 			if (this.opts.followCursor && this.$tip.data('active')) {
 				this.calcPos();
-				this.$tip.css({left: this.pos.l, top: this.pos.t});
+                this.$tip.css({left: this.pos.l, top: this.pos.t});
 				if (this.pos.arrow)
 					this.$arrow[0].className = 'tip-arrow tip-arrow-' + this.pos.arrow;
 			}
@@ -254,6 +254,11 @@
 			} else {
 				this.$tip.css({left: this.pos.l, top: this.pos.t});
 			}
+            
+            //add target fix support
+            if(this.opts.alignTo == 'fixed')
+                this.$tip.css('position', 'fixed');
+                
 		},
 		display: function(hide) {
 			var active = this.$tip.data('active');
@@ -324,8 +329,11 @@
 				xL = xC = xR = this.eventX;
 				yT = yC = yB = this.eventY;
 			} else { // this.opts.alignTo == 'target'
-				var elmOffset = this.$elm.offset(),
-					elm = {
+                if (this.opts.alignTo == 'fixed')
+                    var elmOffset = this.$elm.position() //change to position, inorder to suit for fixed
+				else
+                    var elmOffset = this.$elm.offset()
+					var elm = {
 						l: elmOffset.left,
 						t: elmOffset.top,
 						w: this.$elm.outerWidth(),
@@ -429,7 +437,7 @@
 			'</style>'].join('')).appendTo('head');
     if (opts.closeButton && !$('#poshytip-css-close-button')[0]){
 			$(['<style id="poshytip-css-close-button" type="text/css">',
- 				'span.tip-close-button{cursor:pointer;width:7px;height:7px;position:absolute;right:4px;top:2px;margin:4px;font-size:120%;}',
+ 				'span.tip-close-button{cursor:pointer;width:7px;height:7px;position:absolute;right:8px;top:2px;font-size:120%;}',
  			'</style>'].join('\n')).appendTo('head');
  		}
 		// check if we need to hook live events
@@ -483,8 +491,7 @@
 		slideOffset: 		8,		// slide animation offset
 		showAniDuration: 	300,		// show animation duration - set to 0 if you don't want show animation
 		hideAniDuration: 	300,		// hide animation duration - set to 0 if you don't want hide animation
-        closeButton:        false,   //show close button
-        closeImage:        ''   //show close button
+        closeButton:        false   //show close button
 	};
 
 })(jQuery);

@@ -109,37 +109,46 @@ class UserView(object):
                 flash(message, 'error')
                 return {'form':form, 'ok':False}
     
-def get_users_list_view(c):
-    from uliweb.utils.generic import ListView
-    from uliweb.orm import get_model
-    from uliweb import request
-    from uliweb.core.html import Tag
-    from uliweb import orm
-    
-    def username(value, obj):
-        return str(Tag('a', value, href='/users/%d' % obj.id))
-    
-    def boolean_convert(b, obj):
-        if b:
-            return '<div class="ui-icon ui-icon-check"></div>'
-        else:
-            return '<div class="ui-icon ui-icon-closethick"></div>'
-    
-    pageno = int(request.GET.get('pageno', 0))
-    
-    User = get_model('user')
-    query = None
-    condition = None
-    if c.get('username'):
-        condition = (User.c.username.like(c['username'])) & condition
-    
-    fields_convert_map = {'username':username}
-    view =  ListView(User, condition=condition, query=query,
-        rows_per_page=settings.get_var('PARA/ROWS_PER_PAGE', 10), pageno=pageno, 
-        fields_convert_map=fields_convert_map, id='users_table')
-    view.types_convert_map = {orm.BooleanProperty:boolean_convert}
-    return view
-
+#def get_users_list_view(c):
+#    from uliweb.utils.generic import ListView
+#    from uliweb.orm import get_model
+#    from uliweb import request
+#    from uliweb.core.html import Tag
+#    from uliweb import orm
+#    
+#    def username(value, obj):
+#        return str(Tag('a', value, href='/users/%d' % obj.id))
+#    
+#    def boolean_convert(b, obj):
+#        if b:
+#            return '<div class="ui-icon ui-icon-check"></div>'
+#        else:
+#            return '<div class="ui-icon ui-icon-closethick"></div>'
+#    
+#    pageno = int(request.GET.get('pageno', 0))
+#    
+#    User = get_model('user')
+#    query = None
+#    condition = None
+#    if c.get('username'):
+#        condition = (User.c.username.like(c['username'])) & condition
+#    
+#    fields_convert_map = {'username':username}
+#    
+#    fields = [
+#        {'name':'username'},
+#        {'name':'email', 'width':120},
+#        {'name':'is_superuser', 'width':80},
+#        {'name':'date_join', 'width':'120'},
+#        {'name':'last_login', 'width':'120'},
+#    ]
+#    
+#    view =  ListView(User, condition=condition, query=query, fields=fields,
+#        rows_per_page=settings.get_var('PARA/ROWS_PER_PAGE', 10), pageno=pageno, 
+#        fields_convert_map=fields_convert_map, id='users_table')
+#    view.types_convert_map = {orm.BooleanProperty:boolean_convert}
+#    return view
+#
 @expose('/users')
 class UsersManageView(object):
     def __begin__(self):
@@ -171,8 +180,16 @@ class UsersManageView(object):
         if c.get('username'):
             condition = (User.c.username.like('%'+c['username']+'%')) & condition
         
+        fields = [
+            {'name':'username'},
+            {'name':'email', 'width':150},
+            {'name':'is_superuser', 'width':80},
+            {'name':'date_join', 'width':150},
+            {'name':'last_login', 'width':150},
+        ]
+        
         fields_convert_map = {'username':username}
-        view =  ListView(User, condition=condition, query=query,
+        view =  ListView(User, condition=condition, query=query, fields=fields,
             rows_per_page=rows_per_page, pageno=pageno, 
             fields_convert_map=fields_convert_map, id='users_table')
         view.types_convert_map = {orm.BooleanProperty:boolean_convert}
@@ -240,7 +257,7 @@ class UsersManageView(object):
             image_url = user.get_image_url()
         can_modify = user.id == request.user.id
         template_data = {'image_url':image_url, 'can_modify':can_modify}
-        view = DetailView('user', obj=user, template_data=template_data)
+        view = DetailView('user', obj=user, template_data=template_data, table_class_attr='table table-bordered')
         view.types_convert_map = {orm.BooleanProperty:boolean_convert}
         return view.run()
     
@@ -294,7 +311,7 @@ def users_search():
     if request.values.get('term'):
         result = []
         name = request.values.get('term')
-        for x in User.filter(User.c.username.like('%'+name+'%') | User.c.nickname.like('%'+name+'%')):
+        for x in User.filter(User.c.username.like('%'+name+'%') | User.c.nickname.like('%'+name+'%')).limit(functions.get_var('USER_ADMIN/SEARCH_USERS_LIMIT')):
             if x.nickname:
                 title = x.nickname+'('+x.username+')'
             else:

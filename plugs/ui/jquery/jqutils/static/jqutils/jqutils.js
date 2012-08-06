@@ -2,9 +2,9 @@
 QueryString
 ****************************/
 (function($){
-    QueryString = function(options){
+    QueryString = function(url){
         this.urlParams = {};
-        this.load();
+        this.load(url);
     }
     QueryString.prototype = {
         load: function(param){

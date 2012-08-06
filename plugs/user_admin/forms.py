@@ -53,20 +53,35 @@ class ChangePasswordForm2(Form):
             error['password1'] = _('Passwords are not the same between two types.')
             
         return error
-    
+import re
+
+r_username = re.compile(r'[a-zA-Z0-9\._/]')
+
 class AddUserForm(Form):
     def validate_username(self, data):
         from uliweb.orm import get_model
-                 
+        
+        if any((x in data for x in '<>& ')):
+            return _("Username can't include illegal characters, such as '<>&' and blank.")
+
+        if not r_username.match(data):
+            return _("Username can only include letter, number and '._/'.")
+
         User = get_model('user')
         user = User.get(User.c.username == data)
         if user:
-            return _('The username is already existed! Please change another one.')
+            return _('The username is already existed!')
     
 class EditUserForm(Form):
     def validate_username(self, data):
         from uliweb.orm import get_model
                  
+        if any((x in data for x in '<>& ')):
+            return _("Username can't include illegal characters, such as '<>&' and blank.")
+        
+        if not r_username.match(data):
+            return _("Username can only include letter, number and '._/'.")
+        
         User = get_model('user')
         user = User.get((User.c.username == data) & (User.c.id != self.object.id))
         if user:

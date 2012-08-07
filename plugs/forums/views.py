@@ -700,7 +700,7 @@ class ForumView(object):
                 return TextField('内容',required=True, convert_html=True, default='')
 
         slug = uuid.uuid1().hex
-        data = {'slug':slug, 'reply_email':False, 'content':''}
+        data = {'slug':slug, 'reply_email':False, 'content':_('RE')+ ' @'+unicode(post.posted_by)+': '}
         has_email = bool(request.user and request.user.email)
         view = AddView('forumpost', 
             url_for(ForumView.topic_view, forum_id=int(forum_id), topic_id=int(topic_id)),

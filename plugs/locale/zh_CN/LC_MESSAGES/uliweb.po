@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plugs 0.1\n"
 "POT-Creation-Date: Tue Jun 07 20:06:16 2011\n"
-"PO-Revision-Date: 2012-03-15 20:46+0800\n"
+"PO-Revision-Date: 2012-08-07 19:24+0800\n"
 "Last-Translator: limodou <limodou@gmail.com>\n"
 "Language-Team: limodou <limodou@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -58,16 +58,16 @@ msgstr "修改"
 
 #: plugs\audit\settings.ini:12
 #: plugs\generic\templates\generic_view.html:18
-#: plugs\user_admin\templates\UsersManageView\view.html:49
+#: plugs\user_admin\templates\UsersManageView\view.html:45
 msgid "Delete"
 msgstr "删除"
 
 #: plugs\generic\templates\generic_view.html:12
 #: plugs\generic\views.py:127
 #: plugs\generic\views.py:201
-#: plugs\user_admin\templates\UserView\view.html:33
+#: plugs\user_admin\templates\UserView\view.html:29
+#: plugs\user_admin\templates\UsersManageView\view.html:31
 #: plugs\user_admin\templates\UsersManageView\view.html:35
-#: plugs\user_admin\templates\UsersManageView\view.html:39
 msgid "Edit"
 msgstr "编辑"
 
@@ -93,14 +93,15 @@ msgstr "编辑 %s(#%d)"
 msgid "Welcome"
 msgstr "欢迎"
 
-#: plugs\layout\bootstrap\templates\layout.html:30
-#: plugs\layout\default\templates\layout.html:18
-#: plugs\layout\templates\layout.html:18
+#: plugs\layout\bootstrap\templates\layout.html:24
+#: plugs\layout\bootstrap\templates\layout_container.html:24
+#: plugs\layout\default\templates\layout.html:19
+#: plugs\layout\templates\layout.html:23
 msgid "Logout"
 msgstr "注销"
 
-#: plugs\layout\default\templates\layout.html:22
-#: plugs\layout\templates\layout.html:22
+#: plugs\layout\default\templates\layout.html:23
+#: plugs\layout\templates\layout.html:27
 msgid "You've not loginned yet!"
 msgstr "你尚未登录！"
 
@@ -116,7 +117,6 @@ msgstr "表名"
 #: plugs\rbac_man\views.py:218
 #: plugs\rbac_man\views.py:239
 #: plugs\rbac_man\views.py:266
-#: plugs\tables\models.py:10
 msgid "Description"
 msgstr "描述"
 
@@ -124,9 +124,10 @@ msgstr "描述"
 msgid "Download"
 msgstr "下载"
 
-#: plugs\layout\bootstrap\templates\layout.html:36
-#: plugs\layout\default\templates\layout.html:24
-#: plugs\layout\templates\layout.html:24
+#: plugs\layout\bootstrap\templates\layout.html:30
+#: plugs\layout\bootstrap\templates\layout_container.html:30
+#: plugs\layout\default\templates\layout.html:25
+#: plugs\layout\templates\layout.html:29
 msgid "Login"
 msgstr "登录"
 
@@ -193,16 +194,16 @@ msgstr "用户不存在。"
 msgid "The username is already existed! Please change another one."
 msgstr "用户名已经存在！请换一个。"
 
-#: plugs\user_admin\forms.py:74
+#: plugs\user_admin\forms.py:88
 msgid "Username is already existed."
 msgstr "用户名已经存在。"
 
-#: plugs\user_admin\templates\UserView\change_password.html:14
+#: plugs\user_admin\templates\UserView\change_password.html:10
 #: plugs\user_admin\templates\user_admin_layout.html:20
 msgid "Change Password"
 msgstr "修改口令"
 
-#: plugs\user_admin\templates\UserView\edit.html:14
+#: plugs\user_admin\templates\UserView\edit.html:10
 msgid "User Information Edit"
 msgstr "用户信息修改"
 
@@ -218,28 +219,28 @@ msgstr "头像图片还没有上传！"
 msgid "Upload"
 msgstr "上传"
 
-#: plugs\user_admin\templates\UserView\view.html:18
-#: plugs\user_admin\templates\UsersManageView\view.html:18
+#: plugs\user_admin\templates\UserView\view.html:14
+#: plugs\user_admin\templates\UsersManageView\view.html:14
 msgid "Click to change portrait"
 msgstr "点击修改头像"
 
-#: plugs\user_admin\templates\UsersManageView\view.html:28
+#: plugs\user_admin\templates\UsersManageView\view.html:24
 msgid "User Information"
 msgstr "用户信息"
 
-#: plugs\user_admin\templates\UsersManageView\add.html:14
+#: plugs\user_admin\templates\UsersManageView\add.html:10
 msgid "Create New User"
 msgstr "创建新用户"
 
-#: plugs\user_admin\templates\UsersManageView\edit.html:14
+#: plugs\user_admin\templates\UsersManageView\edit.html:10
 msgid "Change User"
 msgstr "修改用户"
 
-#: plugs\user_admin\templates\UsersManageView\list.html:14
+#: plugs\user_admin\templates\UsersManageView\list.html:10
 msgid "Click here to add new user."
 msgstr "点击添加新用户"
 
-#: plugs\user_admin\templates\UsersManageView\view.html:47
+#: plugs\user_admin\templates\UsersManageView\view.html:43
 msgid "Do you really wnat to delete the user?"
 msgstr "你真正想要删除这个用户吗？"
 
@@ -272,32 +273,31 @@ msgstr "口令保存成功。"
 msgid "There are something wrong, please fix them."
 msgstr "存在错误，请修复。"
 
-#: plugs\user_admin\views_admin.py:215
+#: plugs\user_admin\views_admin.py:232
 msgid "You have no previlege to create user."
 msgstr "你无权创建用户。"
 
-#: plugs\user_admin\views_admin.py:234
+#: plugs\user_admin\views_admin.py:251
 msgid "User is not exists!"
 msgstr "用户不存在。"
 
-#: plugs\user_admin\views_admin.py:256
+#: plugs\user_admin\views_admin.py:273
 msgid "You have no previlege to edit user."
 msgstr "你无权编辑用户。"
 
-#: plugs\user_admin\views_admin.py:266
+#: plugs\user_admin\views_admin.py:283
 msgid "You have no previlege to delete user."
 msgstr "你无权删除用户。"
 
-#: plugs\user_admin\views_admin.py:276
+#: plugs\user_admin\views_admin.py:293
 msgid "Password reset successfully."
 msgstr "口令重设成功。"
 
-#: plugs\user_admin\views_admin.py:279
+#: plugs\user_admin\views_admin.py:296
 msgid "You have no previlege to reset user password."
 msgstr "你无权重设用户口令。"
 
 #: plugs\layout\default\settings.ini:6
-#: plugs\layout\settings.ini:6
 msgid "Admin"
 msgstr "管理"
 
@@ -312,7 +312,7 @@ msgid "All rights reversed!"
 msgstr "所有权保留！"
 
 #: plugs\layout\default\settings.ini:5
-#: plugs\layout\settings.ini:5
+#: plugs\layout\settings.ini:6
 msgid "Home"
 msgstr "首页"
 
@@ -334,16 +334,19 @@ msgstr "用户"
 msgid "New"
 msgstr "新建"
 
+#: plugs\ui\bootstrap\settings.ini:6
 #: plugs\ui\bootstrap\templates\inc_paginate.html:4
 #: plugs\ui\jquery\smartpaginator\templates\inc_paginate.html:4
 msgid "Next"
 msgstr "下一页"
 
+#: plugs\ui\bootstrap\settings.ini:9
 #: plugs\ui\bootstrap\templates\inc_paginate.html:10
 #: plugs\ui\jquery\smartpaginator\templates\inc_paginate.html:10
 msgid "Last"
 msgstr "最后一页"
 
+#: plugs\ui\bootstrap\settings.ini:8
 #: plugs\ui\bootstrap\templates\inc_paginate.html:8
 #: plugs\ui\jquery\smartpaginator\templates\inc_paginate.html:8
 msgid "First"
@@ -358,7 +361,7 @@ msgstr "共 $pages 页 / $records 条记录"
 msgid "View"
 msgstr "视图"
 
-#: plugs\layout\bootstrap\templates\login.html:5
+#: plugs\layout\bootstrap\templates\login.bak.html:5
 msgid "Sign in"
 msgstr "登录"
 
@@ -370,7 +373,8 @@ msgstr "去"
 msgid "Role"
 msgstr "角色"
 
-#: plugs\layout\bootstrap\templates\layout.html:34
+#: plugs\layout\bootstrap\templates\layout.html:28
+#: plugs\layout\bootstrap\templates\layout_container.html:28
 msgid "Not signed in yet"
 msgstr "尚未登录"
 
@@ -389,10 +393,11 @@ msgstr "角色修改"
 msgid "Name"
 msgstr "姓名"
 
-#: plugs\layout\bootstrap\templates\layout.html:38
+#: plugs\layout\bootstrap\templates\layout.html:32
+#: plugs\layout\bootstrap\templates\layout_container.html:32
 #: plugs\layout\bootstrap\templates\register.html:5
-#: plugs\layout\default\templates\layout.html:26
-#: plugs\layout\templates\layout.html:26
+#: plugs\layout\default\templates\layout.html:27
+#: plugs\layout\templates\layout.html:31
 msgid "Register"
 msgstr "注册"
 
@@ -410,8 +415,74 @@ msgstr "保留"
 msgid "Permission Modify"
 msgstr "权限修改"
 
+#: plugs\ui\bootstrap\settings.ini:7
 #: plugs\ui\bootstrap\templates\inc_paginate.html:6
 #: plugs\ui\jquery\smartpaginator\templates\inc_paginate.html:6
 msgid "Prev"
 msgstr "上一页"
+
+#: plugs\user_admin\forms.py:73
+msgid "The username is already existed!"
+msgstr "用户名已经存在！"
+
+#: plugs\layout\bootstrap\templates\layout.html:22
+#: plugs\layout\bootstrap\templates\layout_container.html:22
+#: plugs\layout\default\templates\layout.html:17
+#: plugs\layout\templates\layout.html:21
+msgid "Account Setting"
+msgstr "帐户设置"
+
+#: plugs\admin\settings.ini:3
+msgid "Admin objects list"
+msgstr "对象列表"
+
+#: plugs\admin\settings.ini:6
+msgid "Admin object view"
+msgstr "对象视图"
+
+#: plugs\ui\bootstrap\settings.ini:5
+msgid "Total $pages pages / $total records"
+msgstr "共 $pages 页 / $total 条记录"
+
+#: plugs\user_admin\forms.py:68
+#: plugs\user_admin\forms.py:83
+msgid "Username can only include letter, number and '._/'."
+msgstr "用户名只能包含字母，数字和'._/'。"
+
+#: plugs\admin\settings.ini:5
+msgid "Admin object edit"
+msgstr "对象编辑"
+
+#: plugs\admin\settings.ini:4
+msgid "Admin object add"
+msgstr "对象添加"
+
+#: plugs\forums\views.py:703
+msgid "RE"
+msgstr "回复"
+
+#: plugs\user_admin\forms.py:65
+#: plugs\user_admin\forms.py:80
+msgid "Username can't include illegal characters, such as '<>&' and blank."
+msgstr "用户名不能包含非法字符，如：'<>&'和空白。"
+
+#: plugs\admin\settings.ini:2
+msgid "Admin objects manage"
+msgstr "对象管理"
+
+#: plugs\messages\forms.py:9
+msgid "Message"
+msgstr "消息"
+
+#: plugs\messages\forms.py:7
+msgid "Send"
+msgstr "发送"
+
+#: plugs\messages\forms.py:8
+msgid "Receiver"
+msgstr "接收者"
+
+#: plugs\admin\settings.ini:7
+msgid "Admin object delete"
+msgstr "对象删除"
 

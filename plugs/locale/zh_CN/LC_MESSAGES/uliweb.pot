@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-03-15 20:44\n"
+"POT-Creation-Date: 2012-08-07 19:21\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,6 +15,30 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Generated-By: pygettext.py 1.6\n"
 
+
+#: plugs\admin\settings.ini:2
+msgid "Admin objects manage"
+msgstr ""
+
+#: plugs\admin\settings.ini:3
+msgid "Admin objects list"
+msgstr ""
+
+#: plugs\admin\settings.ini:4
+msgid "Admin object add"
+msgstr ""
+
+#: plugs\admin\settings.ini:5
+msgid "Admin object edit"
+msgstr ""
+
+#: plugs\admin\settings.ini:6
+msgid "Admin object view"
+msgstr ""
+
+#: plugs\admin\settings.ini:7
+msgid "Admin object delete"
+msgstr ""
 
 #: plugs\audit\models.py:9
 msgid "OperationTable"
@@ -49,7 +73,7 @@ msgid "Change"
 msgstr ""
 
 #: plugs\audit\settings.ini:12 plugs\generic\templates\generic_view.html:18
-#: plugs\user_admin\templates\UsersManageView\view.html:49
+#: plugs\user_admin\templates\UsersManageView\view.html:45
 msgid "Delete"
 msgstr ""
 
@@ -59,10 +83,14 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
+#: plugs\forums\views.py:703
+msgid "RE"
+msgstr ""
+
 #: plugs\generic\templates\generic_view.html:12 plugs\generic\views.py:127
-#: plugs\generic\views.py:201 plugs\user_admin\templates\UserView\view.html:33
+#: plugs\generic\views.py:201 plugs\user_admin\templates\UserView\view.html:29
+#: plugs\user_admin\templates\UsersManageView\view.html:31
 #: plugs\user_admin\templates\UsersManageView\view.html:35
-#: plugs\user_admin\templates\UsersManageView\view.html:39
 msgid "Edit"
 msgstr ""
 
@@ -78,36 +106,41 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: plugs\layout\bootstrap\templates\layout.html:24
-#: plugs\layout\default\templates\layout.html:14
-#: plugs\layout\templates\layout.html:14
-msgid "Welcome"
+#: plugs\layout\bootstrap\templates\layout.html:22
+#: plugs\layout\bootstrap\templates\layout_container.html:22
+#: plugs\layout\default\templates\layout.html:17
+#: plugs\layout\templates\layout.html:21
+msgid "Account Setting"
 msgstr ""
 
-#: plugs\layout\bootstrap\templates\layout.html:30
-#: plugs\layout\default\templates\layout.html:18
-#: plugs\layout\templates\layout.html:18
+#: plugs\layout\bootstrap\templates\layout.html:24
+#: plugs\layout\bootstrap\templates\layout_container.html:24
+#: plugs\layout\default\templates\layout.html:19
+#: plugs\layout\templates\layout.html:23
 msgid "Logout"
 msgstr ""
 
-#: plugs\layout\bootstrap\templates\layout.html:34
+#: plugs\layout\bootstrap\templates\layout.html:28
+#: plugs\layout\bootstrap\templates\layout_container.html:28
 msgid "Not signed in yet"
 msgstr ""
 
-#: plugs\layout\bootstrap\templates\layout.html:36
-#: plugs\layout\default\templates\layout.html:24
-#: plugs\layout\templates\layout.html:24
+#: plugs\layout\bootstrap\templates\layout.html:30
+#: plugs\layout\bootstrap\templates\layout_container.html:30
+#: plugs\layout\default\templates\layout.html:25
+#: plugs\layout\templates\layout.html:29
 msgid "Login"
 msgstr ""
 
-#: plugs\layout\bootstrap\templates\layout.html:38
+#: plugs\layout\bootstrap\templates\layout.html:32
+#: plugs\layout\bootstrap\templates\layout_container.html:32
 #: plugs\layout\bootstrap\templates\register.html:5
-#: plugs\layout\default\templates\layout.html:26
-#: plugs\layout\templates\layout.html:26
+#: plugs\layout\default\templates\layout.html:27
+#: plugs\layout\templates\layout.html:31
 msgid "Register"
 msgstr ""
 
-#: plugs\layout\bootstrap\templates\login.html:5
+#: plugs\layout\bootstrap\templates\login.bak.html:5
 msgid "Sign in"
 msgstr ""
 
@@ -119,11 +152,11 @@ msgstr ""
 msgid "Uliweb Plugs Demo"
 msgstr ""
 
-#: plugs\layout\default\settings.ini:5 plugs\layout\settings.ini:5
+#: plugs\layout\default\settings.ini:5 plugs\layout\settings.ini:6
 msgid "Home"
 msgstr ""
 
-#: plugs\layout\default\settings.ini:6 plugs\layout\settings.ini:6
+#: plugs\layout\default\settings.ini:6
 msgid "Admin"
 msgstr ""
 
@@ -131,9 +164,21 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: plugs\layout\default\templates\layout.html:22
-#: plugs\layout\templates\layout.html:22
+#: plugs\layout\default\templates\layout.html:23
+#: plugs\layout\templates\layout.html:27
 msgid "You've not loginned yet!"
+msgstr ""
+
+#: plugs\messages\forms.py:7
+msgid "Send"
+msgstr ""
+
+#: plugs\messages\forms.py:8
+msgid "Receiver"
+msgstr ""
+
+#: plugs\messages\forms.py:9
+msgid "Message"
 msgstr ""
 
 #: plugs\rbac_man\templates\PermissionView\edit.html:14
@@ -171,7 +216,6 @@ msgstr ""
 #: plugs\rbac_man\views.py:71 plugs\rbac_man\views.py:89
 #: plugs\rbac_man\views.py:196 plugs\rbac_man\views.py:218
 #: plugs\rbac_man\views.py:239 plugs\rbac_man\views.py:266
-#: plugs\tables\models.py:10
 msgid "Description"
 msgstr ""
 
@@ -180,25 +224,29 @@ msgstr ""
 msgid "Is Reserved"
 msgstr ""
 
-#: plugs\tables\models.py:9
-msgid "TableName"
+#: plugs\ui\bootstrap\settings.ini:5
+msgid "Total $pages pages / $total records"
 msgstr ""
 
+#: plugs\ui\bootstrap\settings.ini:6
 #: plugs\ui\bootstrap\templates\inc_paginate.html:4
 #: plugs\ui\jquery\smartpaginator\templates\inc_paginate.html:4
 msgid "Next"
 msgstr ""
 
+#: plugs\ui\bootstrap\settings.ini:7
 #: plugs\ui\bootstrap\templates\inc_paginate.html:6
 #: plugs\ui\jquery\smartpaginator\templates\inc_paginate.html:6
 msgid "Prev"
 msgstr ""
 
+#: plugs\ui\bootstrap\settings.ini:8
 #: plugs\ui\bootstrap\templates\inc_paginate.html:8
 #: plugs\ui\jquery\smartpaginator\templates\inc_paginate.html:8
 msgid "First"
 msgstr ""
 
+#: plugs\ui\bootstrap\settings.ini:9
 #: plugs\ui\bootstrap\templates\inc_paginate.html:10
 #: plugs\ui\jquery\smartpaginator\templates\inc_paginate.html:10
 msgid "Last"
@@ -257,20 +305,28 @@ msgstr ""
 msgid "Username is not existed."
 msgstr ""
 
-#: plugs\user_admin\forms.py:64
-msgid "The username is already existed! Please change another one."
+#: plugs\user_admin\forms.py:65 plugs\user_admin\forms.py:80
+msgid "Username can't include illegal characters, such as '<>&' and blank."
 msgstr ""
 
-#: plugs\user_admin\forms.py:74
+#: plugs\user_admin\forms.py:68 plugs\user_admin\forms.py:83
+msgid "Username can only include letter, number and '._/'."
+msgstr ""
+
+#: plugs\user_admin\forms.py:73
+msgid "The username is already existed!"
+msgstr ""
+
+#: plugs\user_admin\forms.py:88
 msgid "Username is already existed."
 msgstr ""
 
-#: plugs\user_admin\templates\UserView\change_password.html:14
+#: plugs\user_admin\templates\UserView\change_password.html:10
 #: plugs\user_admin\templates\user_admin_layout.html:20
 msgid "Change Password"
 msgstr ""
 
-#: plugs\user_admin\templates\UserView\edit.html:14
+#: plugs\user_admin\templates\UserView\edit.html:10
 msgid "User Information Edit"
 msgstr ""
 
@@ -286,28 +342,28 @@ msgstr ""
 msgid "Upload"
 msgstr ""
 
-#: plugs\user_admin\templates\UserView\view.html:18
-#: plugs\user_admin\templates\UsersManageView\view.html:18
+#: plugs\user_admin\templates\UserView\view.html:14
+#: plugs\user_admin\templates\UsersManageView\view.html:14
 msgid "Click to change portrait"
 msgstr ""
 
-#: plugs\user_admin\templates\UsersManageView\add.html:14
+#: plugs\user_admin\templates\UsersManageView\add.html:10
 msgid "Create New User"
 msgstr ""
 
-#: plugs\user_admin\templates\UsersManageView\edit.html:14
+#: plugs\user_admin\templates\UsersManageView\edit.html:10
 msgid "Change User"
 msgstr ""
 
-#: plugs\user_admin\templates\UsersManageView\list.html:14
+#: plugs\user_admin\templates\UsersManageView\list.html:10
 msgid "Click here to add new user."
 msgstr ""
 
-#: plugs\user_admin\templates\UsersManageView\view.html:28
+#: plugs\user_admin\templates\UsersManageView\view.html:24
 msgid "User Information"
 msgstr ""
 
-#: plugs\user_admin\templates\UsersManageView\view.html:47
+#: plugs\user_admin\templates\UsersManageView\view.html:43
 msgid "Do you really wnat to delete the user?"
 msgstr ""
 
@@ -339,27 +395,27 @@ msgstr ""
 msgid "There are something wrong, please fix them."
 msgstr ""
 
-#: plugs\user_admin\views_admin.py:215
+#: plugs\user_admin\views_admin.py:232
 msgid "You have no previlege to create user."
 msgstr ""
 
-#: plugs\user_admin\views_admin.py:234
+#: plugs\user_admin\views_admin.py:251
 msgid "User is not exists!"
 msgstr ""
 
-#: plugs\user_admin\views_admin.py:256
+#: plugs\user_admin\views_admin.py:273
 msgid "You have no previlege to edit user."
 msgstr ""
 
-#: plugs\user_admin\views_admin.py:266
+#: plugs\user_admin\views_admin.py:283
 msgid "You have no previlege to delete user."
 msgstr ""
 
-#: plugs\user_admin\views_admin.py:276
+#: plugs\user_admin\views_admin.py:293
 msgid "Password reset successfully."
 msgstr ""
 
-#: plugs\user_admin\views_admin.py:279
+#: plugs\user_admin\views_admin.py:296
 msgid "You have no previlege to reset user password."
 msgstr ""
 

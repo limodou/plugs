@@ -101,6 +101,8 @@
     </li>
     {{pass}}
 </ul>
+{{<< functions.get_var('FORUM/post_footer')}}
+
 <div class="pagination">{{<<pagination}}</div>
 {{include "inc_syntaxhighlighter.html"}}
 {{if request.user:}}

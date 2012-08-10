@@ -9,6 +9,7 @@
                 message: show_message,
                 done:null,
                 error:null,
+                field_prefix:'div_field_',
                 message_type:'bootstrap'
             };
             if (typeof options === 'function'){
@@ -25,10 +26,9 @@
                 else{
                     if(opts.message_type == 'bootstrap'){
                         $('div.control-group').removeClass('error').find('.help-block.error').remove();
-                        opts.message(r.message, 'error');
                         $.each(r.data, function(key, value){
                             var f, t;
-                            f = '#div_field_' + key;
+                            f = '#' + opts.field_prefix + key;
                             t = $(f).addClass('error');
                             t.find('.controls').append('<p class="help-block error">'+value+'</p>');
                         });

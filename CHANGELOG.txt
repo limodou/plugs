@@ -10,6 +10,7 @@ Plugs Change Log
 #. Refactor user_admin with: APP_LAYOUTS config
 #. Add alignTo=fixed support to poshytip
 #. Update zh_CN translation
+#. Improve dialog2 plugin, add field_prefix option
 
 0.1.2 Version
 -----------------

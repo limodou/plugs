@@ -1,14 +1,6 @@
 {{extend "forums_layout.html"}}
 
 {{block title}}{{super}} - {{=forum.name}} - {{=topic.subject}}{{end}}
-{{block _css}}
-<style type="text/css">
-*{margin:0;padding:0;}
-.box{margin-bottom:12px;margin-left:1px;overflow-x:hidden;overflow-y:hidden;padding:1px;background:#FFFFEE;border:solid 1px #999;}
-#posts li.post {margin-top: 1px; margin-left: 1px;}
-#posts .post_body {margin-left: 1px; padding-left: 1px;}
-</style>
-{{end}}
 
 {{block forum_nav}}
     <ul class="breadcrumb">

@@ -507,6 +507,7 @@ table.table thead:first-child tr th, table.table thead:first-child tr td {border
 }
 
 /*forum*/
+/*
 #forum.container {background-color:#EEEEEE;width:940px;margin-top:0px;}
 #forum .clear{clear:both;}
 .bootstrap-body #forum .nav{display:block;float:none;height:30px;background-color:#fff;margin:0 0 -10px -20px;padding:10px 0px 0px 20px;}
@@ -530,7 +531,8 @@ table.table thead:first-child tr th, table.table thead:first-child tr td {border
 .bootstrap-body ul#posts .box li.post {border-bottom:0px;}
 .bootstrap-body ul#posts .box {margin-top:8px;margin-bottom:10px;margin-right:2px;padding:3px;border:1px solid #ccc;}
 .bootstrap-body ul#posts .box .post_body{width:100%;}
-
+*/
+/*
 .well {
 	min-height: 20px;
 	padding: 19px;
@@ -543,7 +545,7 @@ table.table thead:first-child tr th, table.table thead:first-child tr td {border
 	-moz-box-shadow: none;
 	box-shadow: none;
 }
-
+*/
 /*login*/
 #login-container.container{width:380px;}
 #login-container .content-outter{min-height:100px;padding:10px 10px 0px 10px;background-color:#fff;
@@ -616,3 +618,5 @@ span.l-btn-text {width:auto;}
 	-moz-box-shadow: 2px 2px 3px #ccc;
 	box-shadow: 2px 2px 3px #ccc;
 }
+
+table.query button {margin-bottom:9px;}

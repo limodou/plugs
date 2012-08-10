@@ -119,6 +119,9 @@ class ForumTopic(Model):#主题
         
     class EditForm:
         fields = ['topic_type', 'subject', 'content', 'slug']
+        
+    def __unicode__(self):
+        return self.subject
     
 class ForumAttachment(Model):
     slug = Field(CHAR, max_length=32, verbose_name='唯一识别串')

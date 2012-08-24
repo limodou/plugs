@@ -12,7 +12,7 @@ Plugs Change Log
 * Improve dialog2 plugin, add field_prefix option
 * Fix jqmultiselect container width bug
 * Add jquery 1.8.0
-* Add bootstrap 2.1.0 and remove bootstrap 2.0 and 2.0.1
+* Add bootstrap 2.1.0 and remove bootstrap 2.0 and 2.0.2
 
 0.1.2 Version
 -----------------

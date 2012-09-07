@@ -1,6 +1,11 @@
 Plugs Change Log
 =====================
 
+0.1.4 Version
+-----------------
+
+* Fix bootstrap_extend.css yform input.submit bug
+
 0.1.3 Version
 -----------------
 

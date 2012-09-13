@@ -21,7 +21,7 @@ var show_message = function(message, category){
 
 $(function(){
     {{for category, message in get_flashed_messages():}}
-        show_message('{{=message}}', '{{=category}}');
+        show_message('{{<<message}}', '{{=category}}');
     {{pass}}
 });
 </script>

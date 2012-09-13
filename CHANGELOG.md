@@ -5,6 +5,7 @@ Plugs Change Log
 -----------------
 
 * Fix bootstrap_extend.css yform input.submit bug
+* Fix flash message should not be escaped
 
 0.1.3 Version
 -----------------

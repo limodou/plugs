@@ -1,24 +1,370 @@
 {{extend "forums_admin_layout.html"}}
 
-{{block sub_menu}}
-{{sub_menu(menu_items, 'forum')}}
-{{end}}
-
-{{block content_tool}}
-    <a class="btn btn-blue" href="{{=url_for('plugs.forums.views.ForumView.forum_add')}}">增加新论坛</a>
-{{end}}
+{{block content_tool_container}}{{end}}
 
 {{block content_main}}
+{{use "angularjs"}}
 {{use "jquery"}}
+{{use "jqutils"}}
+{{use "fontawesome"}}
+{{use "jqrmselect", version2=True}}
 
-<div class="content">
-    {{table_id='forum_table'}}
-    {{include "inc_table.html"}}
-    <script>
-        $(function(){
-            create_table("{{=request.path}}");
-        });
-    </script>
+<div class="container-fluid" ng-app="ForumAdminApp" id="ng-app" ng-controller="adminCtrl">
+    <div class="row-fluid">
+        <div>
+            <ul class="breadcrumb">
+              <li><a href="{{=url_for('plugs.forums.views.ForumView.admin')}}">版块:{{=unicode(category)}}</a></li>
+                <span class="divider">/</span>
+              <li class="active">论坛管理</li>
+            </ul>
+        </div>
+        <div class="line">
+            <a class="btn btn-primary" ng-click="add_open()" >添加新论坛</a>
+        </div>
+        <div class="line">
+            <table class="table table-bordered table-header">
+                <colgroup>
+                    <col width="50px"></col>
+                    <col width="150px"></col>
+                    <col width="*"></col>
+                    <col width="200px"></col>
+                    <col width="200px"></col>
+                    <col width="70px"></col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>论坛名称</th>
+                        <th>论坛描述</th>
+                        <th>版主</th>
+                        <th>主题分类</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="f in forums | orderBy:ordering">
+                        <td>{%f.ordering%}</td>
+                        <td><a href="/forum/{%f.id%}">{%f.name%}</a></td>
+                        <td>{%f.description%}</td>
+                        <td>
+                            <span ng-repeat="u in f.managers">{% u %}&nbsp;</span>
+                        </td>
+                        <td>
+                            <span ng-repeat="u in f.topictype"><span class="label">{% u %}</span>&nbsp;</span>
+                        </td>
+                        <td><a href="#" ng-click="edit_open(f.id)"><i class="icon-edit" title="编辑"></i></a> 
+                        <a href="#" ng-click="remove(f.id)"><i class="icon-remove" title="删除"></i></a>
+                        <a href="#" ng-click="open_topictype(f.id)"><i class="icon-list-alt" title="分类管理"></i></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="modal hide" id="add_forum">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h3>新增论坛</h3>
+      </div>
+      <div class="modal-body">
+        <form class="form form-horizontal">
+        <div class="control-group ng-class:get_error('name')._class;">
+            <label class="control-label required">名称：</label>
+            <div class="controls">
+                <input type="text" ng-model="forum_name" class="span2"></input>
+                <p class="help-block">{%get_error('name').message%}</p>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">顺序号：</label>
+            <div class="controls">
+                <input type="number" ng-model="forum_ordering" class="span2"></input>
+                <p class="help-block"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">描述：</label>
+            <div class="controls">
+                <textarea ng-model="forum_desc" rows="4" cols="120"></textarea>
+                <p class="help-block"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">版主：</label>
+            <div class="controls">
+                <select class="field" id="field_managers" multiple url="/users/search">
+                </select>
+                <p class="help-block"></p>
+            </div>
+        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="add_save()">保存</button>
+      </div>
+    </div>
+    
+    <div class="modal hide" id="edit_forum">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h3>修改论坛</h3>
+      </div>
+      <div class="modal-body">
+        <form class="form form-horizontal">
+        <div class="control-group ng-class:get_error('name')._class;">
+            <label class="control-label required">名称：</label>
+            <div class="controls">
+                <input type="text" ng-model="forum_name" class="span2"></input>
+                <p class="help-block">{%get_error('name').message%}</p>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">顺序号：</label>
+            <div class="controls">
+                <input type="number" ng-model="forum_ordering" class="span2"></input>
+                <p class="help-block"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">描述：</label>
+            <div class="controls">
+                <textarea ng-model="forum_desc" rows="4" cols="120"></textarea>
+                <p class="help-block"></p>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">版主：</label>
+            <div class="controls">
+                <select class="field" id="field_managers2" multiple url="/users/search">
+                </select>
+                <p class="help-block"></p>
+            </div>
+        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="edit_save(forum_id)">保存</button>
+      </div>
+    </div>
+    
+    <div class="modal hide" id="topic_type">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h3>主题分类管理</h3>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered table-header">
+            <colgroup>
+                <col width="*"></col>
+                <col width="60px"></col>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="(id, name) in topictype">
+                    <td>{% name %}</td>
+                    <td>
+                        <a href="#" ng-click="edit_topictype(id)"><i class="icon-edit" title="编辑"></i></a> 
+                        <a href="#" ng-click="remove_topictype(id)"><i class="icon-remove" title="删除"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <form class="form-inline" style="margin-bottom:0px;">
+            <input class="field" ng-model="topictype_name" placeholder="新主题名称"></input>
+            <button class="btn btn-primary" type="button" ng-click="add_topictype(forum_id)">添加</button>
+        </form>
+      </div>
+    </div>
+    
 </div>
+
+<script>
+$(function(){
+    $('#field_managers, #field_managers2').remote_multiple_select2({width:300, height:100, label:''});
+});
+</script>
+
+<script>
+
+var app = angular.module('ForumAdminApp', []).config(function ($interpolateProvider) {
+    $interpolateProvider.startSymbol('{%');
+    $interpolateProvider.endSymbol('%}');
+}); 
+
+function adminCtrl($scope, $http) {
+    $scope.error = {};
+    $.get('/forum/admin/forums/query?category_id={{=category.id}}')
+        .success(function(data, status, headers, config){
+            $scope.forums = data.rows;
+            $scope.$apply();
+        });
+        
+    $scope.find_forum = function(id){
+        if (!$scope.forums) return -1;
+        for(var i=0; i<$scope.forums.length; i++){
+            if ($scope.forums[i].id == id){
+                return i;
+            }
+        }
+        return -1;
+    }
+    $scope.get_forum = function(id){
+        if (id)
+            return $scope.forums[$scope.find_forum(id)];
+        else
+            return {}
+    }
+    $scope.add_save = function(){
+        $.post('/forum/admin/forums/add', {'name':$scope.forum_name, 
+            'description':$scope.forum_desc, 'ordering':$scope.forum_ordering,
+            'managers':$('#field_managers').val() || [], 'category':{{=category.id}}})
+            .success(function(data, status, headers, config){
+                if (data.success){
+                    $scope.forums.push(data.data);
+                    $('#add_forum').modal('hide');
+                    $scope.error = {};
+                }else{
+                    $scope.error = data.data;
+                }
+                $scope.$apply();
+            });
+    }
+    $scope.edit_save = function(id){
+        $.post('/forum/admin/forums/edit/'+id, {'name':$scope.forum_name, 
+            'description':$scope.forum_desc, 'managers':$('#field_managers2').val() || [],
+            'ordering':$scope.forum_ordering})
+            .success(function(data, status, headers, config){
+                if (data.success){
+                    var index = $scope.find_forum(data.data.id);
+                    $scope.forums[index] = data.data;
+                    $('#edit_forum').modal('hide');
+                    $scope.error = {};
+                }else{
+                    $scope.error = data.data;
+                }
+                $scope.$apply();
+            });
+    }
+    
+    $scope.get_error = function(k){
+        var e = {};
+        if ($scope.error && k in $scope.error){
+            e._class = 'error';
+            e.message = $scope.error[k];
+        }else{
+            e._class = '';
+            e.message = '';
+        }
+        return e;
+    }
+    $scope.add_open = function(id){
+        $scope.forum_id = '';
+        $scope.forum_name = '';
+        $scope.forum_ordering = '';
+        $scope.forum_desc = '';
+        $('#field_managers').remote_multiple_select2('clear');
+        $('#add_forum').modal('show');
+    }
+    $scope.open_topictype = function(id){
+        $scope.forum_id = id;
+        var f = $scope.forums[$scope.find_forum(id)];
+        $scope.topictype = f.topictype;
+        $('#topic_type').modal('show');
+    }
+    $scope.edit_open = function(id){
+        for(var i=0; i<$scope.forums.length; i++){
+            if ($scope.forums[i].id == id){
+                var c = $scope.forums[i]
+                $scope.forum_id = c.id;
+                $scope.forum_name = c.name;
+                $scope.forum_ordering = c.ordering;
+                $scope.forum_desc = c.description;
+                $('#field_managers2').remote_multiple_select2('clear');
+                $.each($scope.forums[i].managers, function(k, v){
+                    $('#field_managers2').remote_multiple_select2('add_item', k, v);
+                });
+                $('#edit_forum').modal('show');
+                break;
+            }
+        }
+    }
+    $scope.remove = function(id){
+        $.post('/forum/admin/forums/delete/' + id).success(function(data){
+            if(data.success){
+                for(var i=0; i<$scope.forums.length; i++){
+                    if ($scope.forums[i].id == id){
+                        $scope.forums.splice(i, 1);
+                        show_message(data.message);
+                        $scope.$apply();
+                        return;
+                    }
+                }
+            }else{
+                show_message(data.message, 'error');
+            }
+        });
+    }
+    
+    $scope.add_topictype = function(forum_id){
+        if ($.isEmptyObject($scope.topictype_name)){
+            show_message('主题类型名称不能为空');
+        }else{
+            $.post('/forum/admin/forums/topictype/add', 
+                {forum_id:forum_id, name:$scope.topictype_name}).success(function(data){
+                if(data.success){
+                    $scope.topictype[data.data.id] = data.data.name;
+                    $scope.error = {};
+                    $scope.$apply();
+                }else{
+                    show_message(data.message, 'error');
+                }
+            });
+        }
+    }
+    $scope.edit_topictype = function(id){
+        var t = $scope.topictype[id];
+        var v = window.prompt('请输入新的主题类型名称');
+        if (v){
+            $scope.save_topictype(id, v);
+        }
+    }
+    $scope.save_topictype = function(id, v){
+        var t = $scope.topictype[id];
+        $.post('/forum/admin/forums/topictype/edit/'+id, 
+            {name:v}).success(function(data){
+            if(data.success){
+                $scope.topictype[data.data.id] = data.data.name;
+                $scope.error = {};
+                $scope.$apply();
+            }else{
+                show_message(data.message, 'error');
+            }
+        });
+    }
+    $scope.remove_topictype = function(id){
+        $.post('/forum/admin/forums/topictype/delete/'+id).success(function(data){
+            if(data.success){
+                delete $scope.topictype[id];
+                $scope.error = {};
+                $scope.$apply();
+            }else{
+                show_message(data.message, 'error');
+            }
+        });
+    }
+    $scope.ordering = 'ordering';
+}
+
+$(document).ajaxError(function(e, jqxhr, settings, exception){
+    show_message('请求处理失败', 'error');
+});
+</script>
 
 {{end}}

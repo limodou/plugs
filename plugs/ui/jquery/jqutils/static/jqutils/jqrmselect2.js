@@ -98,6 +98,10 @@
             };
             
         },
+        clear:function(){
+            this.select.empty();
+            this.container.empty();
+        },
         add_item: function(v, txt){
             var se = this.select.get(0);
             var flag = false;
@@ -123,7 +127,18 @@
             var self = this;
             var item = $(template('<li rel="${value}"><span class="rm-text">${text}</span><span class="rm-blank">&times;</span></li>', {'value':value, 'text':text}));
             this.container.append(item);
-        },
+            item.find('.rm-blank').click(function(){
+                item.remove();
+                var se = self.element.get(0);
+                for(var i=0; i<se.options.length; i++){
+                    if(se.options[i].value == value){
+                        se.remove(i);
+                    }
+                }
+            });
+
+        }
+,
         
         _remove_item: function(value){
             $('li[rel='+value+']', this.container).remove();

@@ -3,11 +3,17 @@
 {{block content_main}}
 <div id="forum-body">
     {{if count > 0:}}
-    <table border=0 width="100%">
+    <table class="table">
+        <colgroup>
+            <col width="*"></col>
+            <col width="60px"></col>
+            <col width="60px"></col>
+            <col width="200px"></col>
+        </colgroup>
         <tbody>
             {{for c in categories:}}
-                <tr>
-                    <th align="left">{{=c.name}}</th>
+                <tr class="linear-header">
+                    <th class="first">{{=c.name}}</th>
                     <th>主题</th>
                     <th>文章</th>
                     <th>最新文章</th>
@@ -15,10 +21,10 @@
                 {{from uliweb.utils.timesince import timesince
                 for f in c.forums.all().order_by('ordering'):}}
                     <tr>
-                        <td width="*"><div class="title"><h3><a href="/forum/{{=f.id}}">{{=f.name}}</a></h3><p>{{=f.description}}</p></div></td>
-                        <td align="center" width="60">{{=f.num_topics}}</td>
-                        <td align="center" width="60">{{=f.num_posts}}</td>
-                        <td align="center" width="200"><cite>{{=f.get_display_value('last_post_user', f.last_post_user)}} <a href="/forum/id/{{=f.last_post}}" title="跳转到最后回复">&raquo;</a></cite><em>{{=timesince(f.last_reply_on)}}</em></td>
+                        <td class="first"><div class="title"><h3><a href="/forum/{{=f.id}}">{{=f.name}}</a></h3><p>{{=f.description}}</p></div></td>
+                        <td>{{=f.num_topics}}</td>
+                        <td>{{=f.num_posts}}</td>
+                        <td><cite>{{=f.get_display_value('last_post_user', f.last_post_user)}} <a href="/forum/id/{{=f.last_post}}" title="跳转到最后回复">&raquo;</a></cite><em>{{=timesince(f.last_reply_on)}}</em></td>
                     </tr>
                 {{pass}}
             {{pass}}

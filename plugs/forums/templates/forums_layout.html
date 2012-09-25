@@ -12,18 +12,12 @@
 <div id="forum" class="container">
     <div class="content content-outter">
     {{block forum_nav}}
-    <ul class="breadcrumb">
+    {{##<ul class="breadcrumb">
       <li>
         <a href="{{=url_for('plugs.forums.views.ForumView.list')}}" class="home" title="首页">论坛首页</a>
       </li>
     </ul>
-    <div class="pull-right" style="margin-bottom:16px;">
-        {{if has_role(request.user, 'superuser'):}}
-        <a class="btn btn-green" href="{{=url_for('plugs.forums.views.ForumView.admin')}}">管理</a>
-        {{pass}}
-    </div>
-    <div class="clearfix"></div>
-
+    ##}}
     {{end}}
     {{block content_main}}
     {{end}}

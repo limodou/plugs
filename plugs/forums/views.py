@@ -124,7 +124,7 @@ class ForumView(object):
             return obj.ordering
         
         def topictype(value, obj):
-            return dict({x.id:unicode(x) for x in obj.forum_topictypes.all()})
+            return dict([(x.id,unicode(x)) for x in obj.forum_topictypes.all()])
         
         view = ListView(self.model, pagination=False, condition=condition,
             fields_convert_map={'managers':convert_managers, 

@@ -201,6 +201,8 @@
         //处理回到顶部显示
         $('.content').UItoTop({ easingType: 'easeOutQuart', text:'<i class="icon-arrow-up"></i>回到顶部' });
         
+        $('.post_body img').imgZoom({loadingImg:"{{=url_for_static('jqimgzoom/css/imgzoom-loading.gif')}}"});
+        
     });
 </script>
 {{end}}

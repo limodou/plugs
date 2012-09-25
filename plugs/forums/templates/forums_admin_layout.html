@@ -4,6 +4,11 @@
 {{menu('forums')}}
 {{end}}
 
+{{block _css}}
+{{super}}
+.line {margin-bottom:10px;}
+{{end}}
+
 {{block content_sidebar}}
 {{use "jquery", ui=True}}
 {{use "jsmenu"}}

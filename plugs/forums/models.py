@@ -9,7 +9,7 @@ def get_modified_user():
     return request.user.id
 
 class ForumCategory(Model):#板块
-    name = Field(str, verbose_name='板块名称', max_length=100)
+    name = Field(str, verbose_name='板块名称', max_length=100, required=True)
     description = Field(TEXT, verbose_name='板块描述')
     ordering = Field(int, verbose_name='排序',default = 1)
     created_on = Field(datetime.datetime, verbose_name='创建时间', auto_now_add=True)
@@ -19,16 +19,17 @@ class ForumCategory(Model):#板块
         return self.name
     
     class AddForm:
-        fields = ['name', 'ordering']
+        fields = ['name', 'description', 'ordering']
         
     class EditForm:
-        fields = ['name', 'ordering']
+        fields = ['name', 'description', 'ordering']
 
     class Table:
         fields = [
             {'name':'name', 'width':100},
+            {'name':'description', 'width':200},
             {'name':'ordering', 'width':40},
-            {'name':'action', 'verbose_name':'操作', 'width':100},
+#            {'name':'action', 'verbose_name':'操作', 'width':100},
         ]
 
 class Forum(Model):#论坛
@@ -55,7 +56,7 @@ class Forum(Model):#论坛
         fields = ['category', 'name', 'description', 'ordering', 'managers']
         
     class EditForm:
-        fields = ['category', 'name', 'description', 'ordering', 'managers']
+        fields = ['name', 'description', 'ordering', 'managers']
     
     class Table:
         fields = [
@@ -64,12 +65,17 @@ class Forum(Model):#论坛
             {'name':'category', 'width':100},
             {'name':'ordering', 'width':40},
             {'name':'managers', 'width':100},
-            {'name':'action', 'verbose_name':'操作', 'width':100},
+            {'name':'topictype'},
         ]
     
-
+class SubForum(Model):
+    forum = Reference('forum', verbose_name='所属论坛', collection_name='forum_subs', required=True)
+    name = Field(str, verbose_name="名称", max_length=100, required=True)
+    order = Field(int, verbose_name="顺序", default=999)
+    managers = ManyToMany('user', verbose_name='管理员')
+    
 class ForumTopicType(Model):
-    forum = Reference('forum', verbose_name='所属论坛', collection_name='forum_topictype', required=True)
+    forum = Reference('forum', verbose_name='所属论坛', collection_name='forum_topictypes', required=True)
     name = Field(str, verbose_name='主题分类名称', max_length=100, required=True)
 #    slug = models.SlugField(max_length = 100)#标签
     description = Field(TEXT, verbose_name='主题分类描述')
@@ -78,17 +84,14 @@ class ForumTopicType(Model):
         return self.name
     
     class AddForm:
-        fields = ['forum', 'name', 'description']
+        fields = ['name']
         
     class EditForm:
-        fields = ['forum', 'name', 'description']
+        fields = ['name']
     
     class Table:
         fields = [
             {'name':'name', 'width':100},
-            {'name':'description', 'width':200},
-            {'name':'forum', 'width':100},
-            {'name':'action', 'verbose_name':'操作', 'width':100},
         ]
 
 class ForumTopic(Model):#主题

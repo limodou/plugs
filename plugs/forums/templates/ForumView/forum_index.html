@@ -46,10 +46,16 @@
         <td align="left"><cite>${last_post_user} <a href="/forum/id/${last_post}" title="跳转到最后回复">&raquo;</a></cite><em>${last_reply_on}</em></td>
     </tr>
 </script>
-<table border="0" width="100%" class="forum">
-    <thead>
-        <tr class="head">
-            <td align="left" class="first">
+<table class="table" id="forum-table">
+    <colgroup>
+        <col width="*"></col>
+        <col width="100px"></col>
+        <col width="100px"></col>
+        <col width="150px"></col>
+    </colgroup>
+    <tbody>
+        <tr class="linear-header">
+            <th class="first">
             <span>筛选：</span>
                 <div class="hover-menu">
                 <cite>{{=filter_name}}<b class="caret"></b></cite>
@@ -59,19 +65,17 @@
                     <li><a href="?filter=sticky">顶置</a></li>
                 </ul>
                 </div>
-            </td>
-            <td width="100px">作者</td>
-            <td width="100px" align="center">文章/浏览</td>
-            <td width="150px">最后回复</td>
+            </th>
+            <th>作者</th>
+            <th>文章/浏览</th>
+            <th>最后回复</th>
         </tr>
-    </thead>
-    <tbody id="forum_table">
     {{for item in objects:}}
         <tr>
-            <td align="left" class="first">{{<< item['subject']}}</td>
-            <td align="left"><cite>{{<< item['posted_by']}}</cite><em>{{<< item['created_on']}}</em></td>
-            <td align="center"><b>{{= item['num_replies']}}</b>/<b>{{= item['num_views']}}</b></td>
-            <td align="left"><cite>{{<< item['last_post_user']}} <a href="/forum/id/{{<< item['last_post']}}" title="跳转到最后回复">&raquo;</a></cite><em>{{<< item['last_reply_on']}}</em></td>
+            <td class="first">{{<< item['subject']}}</td>
+            <td><cite>{{<< item['posted_by']}}</cite><em>{{<< item['created_on']}}</em></td>
+            <td><b>{{= item['num_replies']}}</b>/<b>{{= item['num_views']}}</b></td>
+            <td><cite>{{<< item['last_post_user']}} <a href="/forum/id/{{<< item['last_post']}}" title="跳转到最后回复">&raquo;</a></cite><em>{{<< item['last_reply_on']}}</em></td>
         </tr>
     {{pass}}
     </tbody>

@@ -12,6 +12,10 @@ import uuid
 #   from uliweb import function
 #   return function('require_login')()
 
+def convert_managers(value, obj):
+    r = dict({m.id:unicode(m) for m in obj.managers})
+    return r
+
 @expose('/forum')
 class ForumView(object):
     def __init__(self):
@@ -24,6 +28,7 @@ class ForumView(object):
             'email':{True:'取消邮件关注', False:'设置邮件关注'},
             'homepage':{True:'取消首页显示', False:'设置首页显示'},
         }
+        self.model = get_model('forum')
     
     @expose('')
     def list(self):
@@ -39,58 +44,44 @@ class ForumView(object):
         显示管理页面
         """
         return {}
-        
+    
+    @expose('admin/categories')
     @decorators.check_role('superuser')
-    def admin_category(self):
+    def admin_categories(self):
         """
-        显示管理板块页面
+        返回版块信息
         """
         from uliweb.utils.generic import ListView
         
-        category = get_model('forumcategory')
-        pageno = int(request.values.get('page', 1)) - 1
-        rows_per_page=int(request.values.get('rows', 10))
+        def ordering(value, obj):
+            return obj.ordering
         
-        def action(value, obj):
-            return '<a href="%s">%s</a> <a href="%s" onclick="return confirm(\'确定要删除当前板块吗？\');">%s</a>' % (url_for(ForumView.category_edit, id=obj.id), '编辑', url_for(ForumView.category_delete, id=obj.id), '删除')
-
-        view = ListView(category, rows_per_page=rows_per_page, pageno=pageno,
-            fields_convert_map={'action':action})
-        if 'data' in request.values:
-            return json(view.json())
-        else:
-            result = view.run(head=True, body=False)
-            result.update({'table':view})
-            return result
-        
-    @decorators.check_role('superuser')
-    def category_add(self):
-        """
-        添加新的板块
-        """
-        from uliweb.utils.generic import AddView
-        
-        view = AddView('forumcategory', url_for(ForumView.admin_category))
-        return view.run()
+        view = ListView('forumcategory', pagination=False, fields_convert_map={'ordering':ordering})
+        return json(view.json())
     
-    @expose('category_edit/<id>')
+    @expose('admin/categories/add')
     @decorators.check_role('superuser')
-    def category_edit(self, id):
+    def admin_categories_add(self):
+        from uliweb.utils.generic import AddView
+        view = AddView('forumcategory', success_data=True)
+        return view.run(json_result=True)
+        
+    @expose('admin/categories/edit/<id>')
+    @decorators.check_role('superuser')
+    def admin_categories_edit(self, id):
         """
         修改板块
         """
         from uliweb.utils.generic import EditView
         
         category = get_model('forumcategory')
-
         obj = category.get(int(id))
-        
-        view = EditView('forumcategory', url_for(ForumView.admin_category), obj=obj)
-        return view.run()
+        view = EditView(category, obj=obj, success_data=True)
+        return view.run(json_result=True)
     
-    @expose('category_delete/<id>')
+    @expose('admin/categories/delete/<id>')
     @decorators.check_role('superuser')
-    def category_delete(self, id):
+    def admin_categories_delete(self, id):
         """
         删除板块
         """
@@ -104,44 +95,60 @@ class ForumView(object):
             if obj.forums.all().count() > 0:
                 return u"[%s]板块下还存在论坛，请先将论坛删除或转移至其它的板块后再删除" % obj.name
         
-        view = DeleteView(category, url_for(ForumView.admin_category), 
-            url_for(ForumView.admin_category),
-            obj=obj, validator=validator)
-        return view.run()
-    
+        view = DeleteView(category, obj=obj, validator=validator)
+        return view.run(json_result=True)
+
+    @expose('admin/forums')
     @decorators.check_role('superuser')
     def admin_forum(self):
         """
         显示管理论坛页面
         """
+        cat = request.GET.get('category_id', 0)
+        Category = get_model('forumcategory')
+        obj = Category.get(int(cat))
+        return {'category':obj}
+        
+    @expose('admin/forums/query')
+    @decorators.check_role('superuser')
+    def admin_forum_query(self):
+        """
+        显示管理论坛页面
+        """
         from uliweb.utils.generic import ListView
         
-        pageno = int(request.values.get('page', 1)) - 1
-        rows_per_page=int(request.values.get('rows', 10))
+        cat = request.GET.get('category_id', 0)
+        condition = self.model.c.category == int(cat)
         
-        def action(value, obj):
-            return '<a href="%s">%s</a> <a href="%s" onclick="return confirm(\'确定要删除当前论坛吗？\');">%s</a>' % (url_for(ForumView.forum_edit, id=obj.id), '编辑', url_for(ForumView.forum_delete, id=obj.id), '删除')
+        def ordering(value, obj):
+            return obj.ordering
+        
+        def topictype(value, obj):
+            return dict({x.id:unicode(x) for x in obj.forum_topictypes.all()})
+        
+        view = ListView(self.model, pagination=False, condition=condition,
+            fields_convert_map={'managers':convert_managers, 
+                'ordering':ordering,
+                'topictype':topictype})
+        return json(view.json())
     
-        view = ListView('forum', rows_per_page=rows_per_page, pageno=pageno,
-            fields_convert_map={'action':action})
-        if 'data' in request.values:
-            return json(view.json())
-        else:
-            result = view.run(head=True, body=False)
-            result.update({'table':view})
-            return result
-    
+    @expose('admin/forums/add')
     @decorators.check_role('superuser')
-    def forum_add(self):
+    def admin_forum_add(self):
         """
         添加新的论坛
         """
-        from uliweb.utils.generic import AddView
+        from uliweb.utils.generic import AddView, get_field_display
         
-        view = AddView('forum', url_for(ForumView.admin_forum))
-        return view.run()
+        def success_data(obj, data):
+            d = obj.to_dict()
+            d['managers'] = convert_managers(None, obj)
+            return d
+        
+        view = AddView(self.model, url_for(ForumView.admin_forum), success_data=success_data)
+        return view.run(json_result=True)
     
-    @expose('forum_edit/<id>')
+    @expose('admin/forums/edit/<id>')
     @decorators.check_role('superuser')
     def forum_edit(self, id):
         """
@@ -153,15 +160,16 @@ class ForumView(object):
     
         obj = forum.get(int(id))
         
-        def post_created_form(fcls, model, obj):
-            fcls.managers.html_attrs['url'] = '/users/search'
-            fcls.managers.query = obj.managers.all()
+        def success_data(obj, data):
+            d = obj.to_dict()
+            d['managers'] = convert_managers(None, obj)
+            return d
         
-        view = EditView('forum', url_for(ForumView.admin_forum), obj=obj,
-            post_created_form=post_created_form)
-        return view.run()
+        view = EditView(self.model, obj=obj,
+            success_data=success_data)
+        return view.run(json_result=True)
     
-    @expose('forum_delete/<id>')
+    @expose('admin/forums/delete/<id>')
     @decorators.check_role('superuser')
     def forum_delete(self, id):
         """
@@ -180,30 +188,9 @@ class ForumView(object):
         view = DeleteView(forum, url_for(ForumView.admin_forum), 
             url_for(ForumView.admin_forum),
             obj=obj, validator=validator)
-        return view.run()
+        return view.run(json_result=True)
     
-    @decorators.check_role('superuser')
-    def admin_forumtopictype(self):
-        """
-        显示管理论坛主题类型页面
-        """
-        from uliweb.utils.generic import ListView
-        
-        pageno = int(request.values.get('page', 1)) - 1
-        rows_per_page=int(request.values.get('rows', 10))
-        
-        def action(value, obj):
-            return '<a href="%s">%s</a> <a href="%s" onclick="return confirm(\'确定要删除当前主题类型吗？\');">%s</a>' % (url_for(ForumView.forumtopictype_edit, id=obj.id), '编辑', url_for(ForumView.forumtopictype_delete, id=obj.id), '删除')
-    
-        view = ListView('forumtopictype', rows_per_page=rows_per_page, pageno=pageno,
-            fields_convert_map={'action':action})
-        if 'data' in request.values:
-            return json(view.json())
-        else:
-            result = view.run(head=True, body=False)
-            result.update({'table':view})
-            return result
-    
+    @expose('admin/forums/topictype/add')
     @decorators.check_role('superuser')
     def forumtopictype_add(self):
         """
@@ -211,10 +198,13 @@ class ForumView(object):
         """
         from uliweb.utils.generic import AddView
         
-        view = AddView('forumtopictype', url_for(ForumView.admin_forumtopictype))
-        return view.run()
+        forum_id = int(request.POST.get('forum_id'))
+
+        view = AddView('forumtopictype', success_data=True, 
+            default_data={'forum':forum_id})
+        return view.run(json_result=True)
     
-    @expose('forumtopictype_edit/<id>')
+    @expose('admin/forums/topictype/edit/<id>')
     @decorators.check_role('superuser')
     def forumtopictype_edit(self, id):
         """
@@ -226,10 +216,10 @@ class ForumView(object):
     
         obj = forumtopictype.get(int(id))
         
-        view = EditView('forumtopictype', url_for(ForumView.admin_forumtopictype), obj=obj)
-        return view.run()
+        view = EditView('forumtopictype', obj=obj, success_data=True)
+        return view.run(json_result=True)
     
-    @expose('forumtopictype_delete/<id>')
+    @expose('admin/forums/topictype/delete/<id>')
     @decorators.check_role('superuser')
     def forumtopictype_delete(self, id):
         """
@@ -244,12 +234,11 @@ class ForumView(object):
         def validator(obj):
             forumtopic = get_model('forumtopic')
             if forumtopic.filter(forumtopic.c.topic_type==int(id)).count() > 0:
-                return u"存在此主题类型的贴子，请先将此类型的贴子改为其它的类型后再删除" % obj.name
+                return u"存在此主题类型的贴子，请先将此类型的贴子改为其它的类型后再删除"
         
-        view = DeleteView(forumtopictype, url_for(ForumView.admin_forumtopictype), 
-            url_for(ForumView.admin_forumtopictype),
+        view = DeleteView(forumtopictype,
             obj=obj, validator=validator)
-        return view.run()
+        return view.run(json_result=True)
 
     @expose('<int:id>')
     def forum_index(self, id):
@@ -451,23 +440,23 @@ class ForumView(object):
             if obj.floor == 1 and obj.parent == None:
                 #第一楼为主贴，可以允许关闭，顶置等操作
                 if is_manager:
-                    a.append('<a href="#" rel="%d" class="close">%s</a>' % (obj.id, self.status['close'][obj.topic.closed]))
-                    a.append('<a href="#" rel="%d" class="hidden">%s</a>' % (obj.id, self.status['hidden'][obj.topic.hidden]))
-                    a.append('<a href="#" rel="%d" class="top">%s</a>' % (obj.id, self.status['sticky'][obj.topic.sticky]))
-                    a.append('<a href="#" rel="%d" class="essence">%s</a>' % (obj.id, self.status['essence'][obj.topic.essence]))
-                    a.append('<a href="#" rel="%d" class="homepage">%s</a>' % (obj.id, self.status['homepage'][obj.topic.homepage]))
+                    a.append('<a href="#" rel="%d">%s</a>' % (obj.id, self.status['close'][obj.topic.closed]))
+                    a.append('<a href="#" rel="%d">%s</a>' % (obj.id, self.status['hidden'][obj.topic.hidden]))
+                    a.append('<a href="#" rel="%d">%s</a>' % (obj.id, self.status['sticky'][obj.topic.sticky]))
+                    a.append('<a href="#" rel="%d">%s</a>' % (obj.id, self.status['essence'][obj.topic.essence]))
+                    a.append('<a href="#" rel="%d">%s</a>' % (obj.id, self.status['homepage'][obj.topic.homepage]))
                 if is_manager or (obj.posted_by.id == request.user.id and obj.created_on+timedelta(days=settings.get_var('PARA/FORUM_EDIT_DELAY'))>=date.now()):
                     #作者或管理员且在n天之内，则可以编辑
                     url = url_for(ForumView.edit_topic, forum_id=forum_id, topic_id=topic_id)
-                    a.append('<a href="%s" rel="%d" class="edit">编辑</a>' % (url, obj.id))
+                    a.append('<a href="%s" rel="%d">编辑</a>' % (url, obj.id))
                 if is_manager:
                     url = url_for(ForumView.remove_topic, forum_id=forum_id, topic_id=topic_id)
-                    a.append('<a href="%s" rel="%d" class="delete_topic">删除主题</a>' % (url, obj.id))
+                    a.append('<a href="%s" rel="%d">删除主题</a>' % (url, obj.id))
             if is_manager or (obj.posted_by.id == request.user.id):
                 if (obj.deleted and (obj.deleted_by.id == request.user.id or is_manager)) or not obj.deleted:
-                    a.append('<a href="#" rel="%d" class="delete">%s</a>' % (obj.id, self.status['delete'][obj.deleted]))
+                    a.append('<a href="#" rel="%d">%s</a>' % (obj.id, self.status['delete'][obj.deleted]))
             if obj.posted_by.id == request.user.id:    
-                a.append('<a href="#" rel="%d" class="email">%s</a>' % (obj.id, self.status['email'][obj.reply_email]))
+                a.append('<a href="#" rel="%d">%s</a>' % (obj.id, self.status['email'][obj.reply_email]))
             a.append('<a href="/forum/%d/%d/%d/new_reply">回复该作者</a>' % (forum_id, topic_id, obj.id))
             return ' | '.join(a)
         

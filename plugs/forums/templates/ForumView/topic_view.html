@@ -31,6 +31,9 @@
                 <li class="post" id="post_{{=post.id}}">
                 <a name="post_{{=post.id}}"></a>
                 <div class="post_body">
+                    <div class="user_image">
+                        <img title="{{=post.username}}" src="{{=post.userimage}}">
+                    </div>
                     <div class="body">
                         <div class="header">
                             由 <span class="user">{{<< post.posted_by}}</span> 回复于 
@@ -64,14 +67,14 @@
         分类: <span>{{=topic.get_display_value('topic_type')}}</span>
     </div>
 </div>
-<ul id="posts">
+<ul id="posts" class="unstyled">
     {{for post in posts:}}
     <a name="{{=post.id}}"></a>
     <li class="post" id="post_{{=post.id}}">
-        <div class="user_image">
-            <img title="{{=post.username}}" src="{{=post.userimage}}">
-        </div>
-        <div class="post_body">
+        <div class="post_body first">
+            <div class="user_image">
+                <img title="{{=post.username}}" src="{{=post.userimage}}">
+            </div>
             <div class="header">
                 {{=post.floor}}楼 由 <span class="user">{{=post.posted_by}}</span> 发表于 
                 <span class="date">{{=post.created_on}}</span>
@@ -103,7 +106,7 @@
             <h3>发表评论</h3>
             <form action="/forum/{{=forum.id}}/{{=topic.id}}/new_post" method="POST" id="postform">
                 <div class="type-text">
-                    <textarea name="content" class="field" cols="75" rows="20"></textarea>
+                    <textarea name="content" class="field" cols="75" rows="15"></textarea>
                 </div>
                 <input type="hidden" name="slug" value="{{=slug}}"></input>
                 <div class="line">

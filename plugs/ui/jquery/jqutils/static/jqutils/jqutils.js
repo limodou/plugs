@@ -542,4 +542,4 @@ $(function(){
 });
 
 /* ajaxSetup */
-$.ajaxSetup({cache:false});
+$.ajaxSetup({cache:false, traditional:true});

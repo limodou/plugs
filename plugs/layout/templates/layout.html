@@ -9,6 +9,7 @@
   <link rel="stylesheet" type="text/css" href="{{=url_for_static('site.css')}}" media="screen" />
   <link rel="stylesheet" type="text/css" href="{{=url_for_static('forms.css')}}" media="screen" />
 <!-- toplinks -->
+  {{block _css}}{{end}}
 </head>
 {{block body_tag}}<body>{{end}}
 
@@ -66,10 +67,12 @@
                             {{end}}
                         </td>
                         <td width="*" valign="top" align="left">
+                        {{block content_tool_container}}
                         <div class="content_tool">
                             {{block content_tool}}
                             {{end}}
                         </div>
+                        {{end}}
                         <div class="clearfix" style="margin:5px;">
                             {{block content_main}}
                             {{end}}

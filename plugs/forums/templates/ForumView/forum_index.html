@@ -12,7 +12,7 @@
       </li>
     </ul>
     
-    <form class="form-inline pull-left" action="" method="GET">
+    <form class="form-inline pull-right" action="" method="GET">
         <input type="text" class="input-large" name="term" value="{{=term}}">
         <label class="radio">
             <input type="radio" name="type" id="optionsRadios1" value="1" {{if type=="1":}}checked=""{{pass}}>
@@ -25,7 +25,7 @@
         <button type="submit" class="btn btn-primary">查找</button>
     </form>
     
-    <div class="pull-right" style="margin-bottom:16px;">
+    <div class="pull-left" style="margin-bottom:16px;">
         {{if request.user:}}
         <a class="btn btn-success" href="{{=url_for('plugs.forums.views.ForumView.new_topic', id=forum.id)}}">新主题</a>
         {{else:}}

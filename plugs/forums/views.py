@@ -13,7 +13,7 @@ import uuid
 #   return function('require_login')()
 
 def convert_managers(value, obj):
-    r = dict({m.id:unicode(m) for m in obj.managers})
+    r = dict([(m.id,unicode(m)) for m in obj.managers])
     return r
 
 @expose('/forum')

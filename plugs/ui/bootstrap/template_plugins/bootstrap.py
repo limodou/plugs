@@ -8,7 +8,7 @@ def call(app, var, env, plugins=None, js=True, responsive=False, version=None):
     a.append('bootstrap/asset/html5.js')
     a.append('<![endif]-->')
     a.append('bootstrap/%s/bootstrap.min.css' % version)
-    if responsive:
+    if responsive or settings.UI_CONFIG.bootstrap_responsive:
         a.append('bootstrap/%s/bootstrap-responsive.min.css' % version)
     
     jquery = False

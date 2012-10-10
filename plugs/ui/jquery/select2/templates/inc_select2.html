@@ -4,6 +4,7 @@ var simple_select2 = function(el, options){
     var opts = $.extend(true, {}, {
         minimumInputLength: 2,
         width: '80%',
+        allowClear:true,
         ajax: {
             data: function (term, page) {
                 return {

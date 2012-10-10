@@ -1671,7 +1671,8 @@
         setPlaceholder: function () {
             var placeholder = this.getPlaceholder();
 
-            if (this.opts.element.val() === "" && placeholder !== undefined) {
+            if (this.opts.element.val() === "") {
+                if (placeholder === undefined) placeholder = '';
 
                 // check for a first blank option if attached to a select
                 if (this.select && this.select.find("option:first").text() !== "") return;
@@ -1737,10 +1738,8 @@
             if (formatted !== undefined) {
                 container.append(this.opts.escapeMarkup(formatted));
             }
-
             this.selection.removeClass("select2-default");
-
-            if (this.opts.allowClear && this.getPlaceholder() !== undefined) {
+            if (this.opts.allowClear) {
                 this.selection.find("abbr").show();
             }
         },
@@ -2056,6 +2055,10 @@
             $(data).each(function () {
                 self.addSelectedChoice(this);
             });
+            if (this.opts.allowClear) {
+                this.selection.find("abbr").show();
+            }
+            
             self.postprocessResults();
         },
 

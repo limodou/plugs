@@ -25,7 +25,6 @@
                     {{=request.user.username}} | <a href="/user/view">{{=_('Account Setting')}}</a> | <a href="/logout">{{=_('Logout')}}</a>
                 {{else:}}
                     {{=_("You've not loginned yet!")}} <a href="/login">{{=_('Login')}}</a> | <a href="/register">{{=_('Register')}}</a>
-                </form>
                 {{pass}}
             </div>
             <div class="clear"></div>

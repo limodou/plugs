@@ -8,6 +8,7 @@ Plugs Change Log
 * Fix flash message should not be escaped
 * Improve Forum admin interface
 * Add traditional parameter to ajaxSetup
+* Remove 2.0.3 and add 2.1.1 of bootstrap
 
 0.1.3 Version
 -----------------

@@ -44,7 +44,7 @@
                 <tbody>
                     <tr ng-repeat="f in forums | orderBy:ordering">
                         <td>{%f.ordering%}</td>
-                        <td><a href="/forum/{%f.id%}">{%f.name%}</a></td>
+                        <td><a ng-href="/forum/{%f.id%}">{%f.name%}</a></td>
                         <td>{%f.description%}</td>
                         <td>
                             <span ng-repeat="u in f.managers">{% u %}&nbsp;</span>

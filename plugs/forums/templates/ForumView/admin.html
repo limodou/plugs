@@ -16,7 +16,7 @@
         </div>
          -->
         <div class="line">
-            <a class="btn btn-primary" ng-click="add_open()" >添加新版块</a>
+            <a class="btn btn-primary" ng-click="add_open()">添加新版块</a>
         </div>
         <div class="line">
             <table class="table table-bordered table-header" style="width:300px;">
@@ -35,7 +35,7 @@
                 <tbody>
                     <tr ng-repeat="cat in categories | orderBy:ordering">
                         <td>{%cat.ordering%}</td>
-                        <td><a href="{{=url_for('plugs.forums.views.ForumView.admin_forum')}}?category_id={%cat.id%}">{%cat.name%}</a></td>
+                        <td><a ng-href="{{=url_for('plugs.forums.views.ForumView.admin_forum')}}?category_id={%cat.id%}">{%cat.name%}</a></td>
                         <td><a href="#" ng-click="edit_open(cat.id)"><i class="icon-edit" title="编辑"></i></a> 
                         <a href="#" ng-click="remove(cat.id)"><i class="icon-remove" title="删除"></i></a></td>
                     </tr>

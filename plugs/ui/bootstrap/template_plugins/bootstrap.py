@@ -25,5 +25,5 @@ def call(app, var, env, plugins=None, js=True, responsive=False, version=None):
       
     d = {'toplinks':a, 'depends':[]}
     if jquery:
-        d['depends'] = [('jquery', {'ui':jquery_ui})]
+        d['depends'] = [('jquery', {'ui':jquery_ui}), 'json2']
     return d

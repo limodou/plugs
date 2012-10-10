@@ -14,6 +14,7 @@ Plugs Change Log
 * Add select2 3.2 jquery plugin, also include a `inc_select2.html` template, and provide
   a `simple_select2` function
 * Add sisyphus js plugin
+* Add bootheme app
 
 0.1.3 Version
 -----------------

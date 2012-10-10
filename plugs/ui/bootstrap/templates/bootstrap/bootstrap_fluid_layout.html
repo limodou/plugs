@@ -12,13 +12,14 @@
 
     </div><!--/span-->
     <div class="span10 content-container">
-        {{block content_tool_container}}
-        <div class="content_tool">
-            {{block content_tool}}
-            {{end}}
-        </div>
-        {{end}}
         <div class="clearfix content-outter">
+            {{block content_tool_container}}
+            <div class="content_tool">
+                {{block content_tool}}
+                {{end}}
+            </div>
+            {{end}}
+            
             {{block content_main}}
             {{end}}
         </div>    

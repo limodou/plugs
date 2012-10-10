@@ -19,10 +19,9 @@
             <a class="btn btn-primary" ng-click="add_open()" >添加新版块</a>
         </div>
         <div class="line">
-            <table class="table table-bordered table-header">
+            <table class="table table-bordered table-header" style="width:300px;">
                 <colgroup>
                     <col width="50px"></col>
-                    <col width="150px"></col>
                     <col width="*"></col>
                     <col width="50px"></col>
                 </colgroup>
@@ -30,7 +29,6 @@
                     <tr>
                         <th>序号</th>
                         <th>版块名称</th>
-                        <th>版块说明</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -38,7 +36,6 @@
                     <tr ng-repeat="cat in categories | orderBy:ordering">
                         <td>{%cat.ordering%}</td>
                         <td><a href="{{=url_for('plugs.forums.views.ForumView.admin_forum')}}?category_id={%cat.id%}">{%cat.name%}</a></td>
-                        <td>{%cat.description%}</td>
                         <td><a href="#" ng-click="edit_open(cat.id)"><i class="icon-edit" title="编辑"></i></a> 
                         <a href="#" ng-click="remove(cat.id)"><i class="icon-remove" title="删除"></i></a></td>
                     </tr>
@@ -98,13 +95,6 @@
                 <label class="control-label">顺序号：</label>
                 <div class="controls">
                     <input type="number" ng-model="cat_ordering" class="span2"></input>
-                    <p class="help-block"></p>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label">描述：</label>
-                <div class="controls">
-                    <textarea ng-model="cat_desc" rows="4" cols="120"></textarea>
                     <p class="help-block"></p>
                 </div>
             </div>

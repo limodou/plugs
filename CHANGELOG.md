@@ -9,6 +9,11 @@ Plugs Change Log
 * Improve Forum admin interface
 * Add traditional parameter to ajaxSetup
 * Remove 2.0.3 and add 2.1.1 of bootstrap
+* Add jqtimkepicker jquery plugin
+* Add uniform jquery plugin
+* Add select2 3.2 jquery plugin, also include a `inc_select2.html` template, and provide
+  a `simple_select2` function
+* Add sisyphus js plugin
 
 0.1.3 Version
 -----------------

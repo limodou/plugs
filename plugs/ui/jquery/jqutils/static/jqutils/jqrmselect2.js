@@ -82,7 +82,6 @@
                 minLength: self.options.minLength,
                 source: fetch_data,
                 select: function( event, ui ) {
-                console.log('xxxxxxxxxxx', ui);
                     self.add_item(ui.item.id, ui.item.title);
                     input.val('');
                     if (self.options.onSelect){
@@ -104,7 +103,6 @@
             this.container.empty();
         },
         add_item: function(v, txt){
-        console.log(v, txt);
             var se = this.select.get(0);
             var flag = false;
             if (v){

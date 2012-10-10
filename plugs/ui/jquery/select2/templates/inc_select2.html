@@ -1,0 +1,29 @@
+{{use "select2"}}
+<script>
+var simple_select2 = function(el, options){
+    var opts = $.extend(true, {}, {
+        minimumInputLength: 2,
+        width: '80%',
+        ajax: {
+            data: function (term, page) {
+                return {
+                    term: term,
+                    label: 'text'
+                };
+            },
+            dataType: 'json',
+            results: function (data, page) {
+                return {results: data};
+            }
+        },
+        formatNoMatches: function () { return "找不到对应值"; },
+        formatInputTooShort: function (input, min) { return "请输入至少 " + (min - input.length) + " 个字符"; },
+        formatSelectionTooBig: function (limit) { return "你只能选 " + limit + " 条数据"; },
+        formatLoadMore: function (pageNumber) { return "装入更多数据..."; },
+        formatSearching: function () { return "搜索..."; }
+        
+    }, options || {})
+
+    $(el).select2(opts);
+}
+</script>

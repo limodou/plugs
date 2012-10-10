@@ -307,7 +307,7 @@ def users_search():
     from uliweb.orm import get_model
     
     User = get_model('user')
-    
+    v_field = request.values.get('label', 'title')
     if request.values.get('term'):
         result = []
         name = request.values.get('term')
@@ -316,7 +316,7 @@ def users_search():
                 title = x.nickname+'('+x.username+')'
             else:
                 title = x.username
-            result.append({'id':x.id, 'title':title})
+            result.append({'id':x.id, v_field:title})
         return json(result)
     else:
         return json([])

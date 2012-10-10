@@ -7,7 +7,7 @@
 {{use "jquery"}}
 {{use "jqutils"}}
 {{use "fontawesome"}}
-{{use "jqrmselect", version2=True}}
+{{include "inc_select2.html"}}
 
 <div class="container-fluid" ng-app="ForumAdminApp" id="ng-app" ng-controller="adminCtrl">
     <div class="row-fluid">
@@ -136,6 +136,7 @@
             <label class="control-label">版主：</label>
             <div class="controls">
                 <select class="field" id="field_managers2" multiple url="/users/search">
+                    <option ng-repeat="(k, v) in form_managers" value="{%k%}" selected>{%v%}</option>
                 </select>
                 <p class="help-block"></p>
             </div>
@@ -187,7 +188,8 @@
 
 <script>
 $(function(){
-    $('#field_managers, #field_managers2').remote_multiple_select2({width:300, height:100, label:''});
+//    $('#field_managers, #field_managers2').remote_multiple_select2({width:300, height:100, label:''});
+    simple_select2('#field_managers', {ajax:{url:"/users/search"}});
 });
 </script>
 
@@ -198,7 +200,7 @@ var app = angular.module('ForumAdminApp', []).config(function ($interpolateProvi
     $interpolateProvider.endSymbol('%}');
 }); 
 
-function adminCtrl($scope, $http) {
+function adminCtrl($scope, $rootScope) {
     $scope.error = {};
     $.get('/forum/admin/forums/query?category_id={{=category.id}}')
         .success(function(data, status, headers, config){
@@ -243,7 +245,7 @@ function adminCtrl($scope, $http) {
             .success(function(data, status, headers, config){
                 if (data.success){
                     var index = $scope.find_forum(data.data.id);
-                    $scope.forums[index] = data.data;
+                    $scope.forums[index] = $.extend(true, $scope.forums[index], data.data);
                     $('#edit_forum').modal('hide');
                     $scope.error = {};
                 }else{
@@ -269,7 +271,7 @@ function adminCtrl($scope, $http) {
         $scope.forum_name = '';
         $scope.forum_ordering = '';
         $scope.forum_desc = '';
-        $('#field_managers').remote_multiple_select2('clear');
+//        $('#field_managers').remote_multiple_select2('clear');
         $('#add_forum').modal('show');
     }
     $scope.open_topictype = function(id){
@@ -286,11 +288,11 @@ function adminCtrl($scope, $http) {
                 $scope.forum_name = c.name;
                 $scope.forum_ordering = c.ordering;
                 $scope.forum_desc = c.description;
-                $('#field_managers2').remote_multiple_select2('clear');
-                $.each($scope.forums[i].managers, function(k, v){
-                    $('#field_managers2').remote_multiple_select2('add_item', k, v);
+                $scope.form_managers = c.managers
+                $scope.$apply(function(){
+                    simple_select2('#field_managers2', {ajax:{url:'/users/search'}});
+                    $('#edit_forum').modal('show');
                 });
-                $('#edit_forum').modal('show');
                 break;
             }
         }
@@ -360,6 +362,10 @@ function adminCtrl($scope, $http) {
         });
     }
     $scope.ordering = 'ordering';
+    $scope.$apply = function(callback) {
+        $rootScope.$digest();
+        if (callback) callback();
+    }
 }
 
 $(document).ajaxError(function(e, jqxhr, settings, exception){

@@ -19,15 +19,14 @@ class ForumCategory(Model):#板块
         return self.name
     
     class AddForm:
-        fields = ['name', 'description', 'ordering']
+        fields = ['name', 'ordering']
         
     class EditForm:
-        fields = ['name', 'description', 'ordering']
+        fields = ['name', 'ordering']
 
     class Table:
         fields = [
             {'name':'name', 'width':100},
-            {'name':'description', 'width':200},
             {'name':'ordering', 'width':40},
 #            {'name':'action', 'verbose_name':'操作', 'width':100},
         ]

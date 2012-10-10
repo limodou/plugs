@@ -274,7 +274,7 @@ function adminCtrl($scope, $http) {
     }
     $scope.open_topictype = function(id){
         $scope.forum_id = id;
-        var f = $scope.forums[$scope.find_forum(id)];
+        var f = $scope.forums[$scope.find_forum(id)] || {};
         $scope.topictype = f.topictype;
         $('#topic_type').modal('show');
     }

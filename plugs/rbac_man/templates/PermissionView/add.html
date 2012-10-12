@@ -1,20 +1,14 @@
-{{extend "req_layout.html"}}
-
-{{block menu}}
-{{menu('config')}}
-{{end}}
-
-{{block sub_menu}}
-{{sub_menu(menu_items, 'admin_config', 'permissions')}}
-{{end}}
+{{extend "rbac_man_permissions_layout.html"}}
 
 {{block content_main}}
 {{use "jqutils"}}
 <div class="content">
-    <div class="box col_12 center">
+    <div class="panel">
+        <div class="panel-header">
         <h2>Add New Permission</h2>
-        <div class="box-body">
-            {{embed form}}
+        </div>
+        <div class="panel-content">
+            {{<< form}}
         </div>
     </div>
 </div>

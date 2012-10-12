@@ -1,21 +1,11 @@
-{{extend "config_layout.html"}}
-
-{{block menu}}
-{{menu('config')}}
-{{end}}
-
-{{block sub_menu}}
-{{sub_menu(menu_items, 'admin_config', 'roles')}}
-{{end}}
-
-{{block content_tool}}
-{{if request.user.is_superuser:}}
-    <a class="btn btn-blue" href="/config/roles/add">点击这里增加新角色</a>
-{{pass}}
-{{end}}
+{{extend "rbac_man_roles_layout.html"}}
 
 {{block content_main}}
 {{use "jquery"}}
+
+{{if request.user.is_superuser:}}
+    <a class="btn btn-blue" href="/admin/roles/add">点击这里增加新角色</a>
+{{pass}}
 
 <div class="content">
     {{table_id='roles_table'}}

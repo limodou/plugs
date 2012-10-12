@@ -1,19 +1,13 @@
-{{extend "config_layout.html"}}
-
-{{block menu}}
-{{menu('config')}}
-{{end}}
-
-{{block sub_menu}}
-{{sub_menu(menu_items, 'admin_config', 'roles')}}
-{{end}}
+{{extend "rbac_man_roles_layout.html"}}
 
 {{block content_main}}
 {{use "jqrmselect"}}
 <div class="content">
-    <div class="box col_14">
-        <h2>{{=_('Role Modify')}}: {{=object.name}}</h2>
-        <div class="box-body">
+    <div class="panel">
+        <div class="panel-header">
+            <h2>{{=_('Role Modify')}}: {{=object.name}}</h2>
+        </div>
+        <div class="panel-content">
             {{<< form}}
         </div>
     </div>

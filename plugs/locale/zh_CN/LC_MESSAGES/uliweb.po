@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plugs 0.1\n"
 "POT-Creation-Date: Tue Jun 07 20:06:16 2011\n"
-"PO-Revision-Date: 2012-08-07 19:24+0800\n"
+"PO-Revision-Date: 2012-10-11 13:58+0800\n"
 "Last-Translator: limodou <limodou@gmail.com>\n"
 "Language-Team: limodou <limodou@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -47,8 +47,9 @@ msgstr "修改用户"
 #: plugs\audit\settings.ini:12
 #: plugs\generic\views.py:96
 #: plugs\generic\views.py:199
-#: plugs\rbac_man\templates\RoleView\view.html:44
-#: plugs\rbac_man\templates\RoleView\view.html:60
+#: plugs\rbac_man\templates\PermissionView\view.html:28
+#: plugs\rbac_man\templates\RoleView\view.html:40
+#: plugs\rbac_man\templates\RoleView\view.html:56
 msgid "Add"
 msgstr "添加"
 
@@ -95,13 +96,13 @@ msgstr "欢迎"
 
 #: plugs\layout\bootstrap\templates\layout.html:24
 #: plugs\layout\bootstrap\templates\layout_container.html:24
-#: plugs\layout\default\templates\layout.html:19
-#: plugs\layout\templates\layout.html:23
+#: plugs\layout\default\templates\layout.html:20
+#: plugs\layout\templates\layout.html:24
 msgid "Logout"
 msgstr "注销"
 
-#: plugs\layout\default\templates\layout.html:23
-#: plugs\layout\templates\layout.html:27
+#: plugs\layout\default\templates\layout.html:24
+#: plugs\layout\templates\layout.html:28
 msgid "You've not loginned yet!"
 msgstr "你尚未登录！"
 
@@ -109,14 +110,14 @@ msgstr "你尚未登录！"
 msgid "TableName"
 msgstr "表名"
 
-#: plugs\rbac_man\views.py:26
-#: plugs\rbac_man\views.py:49
-#: plugs\rbac_man\views.py:71
-#: plugs\rbac_man\views.py:89
-#: plugs\rbac_man\views.py:196
-#: plugs\rbac_man\views.py:218
-#: plugs\rbac_man\views.py:239
-#: plugs\rbac_man\views.py:266
+#: plugs\rbac_man\views.py:31
+#: plugs\rbac_man\views.py:54
+#: plugs\rbac_man\views.py:76
+#: plugs\rbac_man\views.py:94
+#: plugs\rbac_man\views.py:248
+#: plugs\rbac_man\views.py:270
+#: plugs\rbac_man\views.py:291
+#: plugs\rbac_man\views.py:318
 msgid "Description"
 msgstr "描述"
 
@@ -126,8 +127,9 @@ msgstr "下载"
 
 #: plugs\layout\bootstrap\templates\layout.html:30
 #: plugs\layout\bootstrap\templates\layout_container.html:30
-#: plugs\layout\default\templates\layout.html:25
-#: plugs\layout\templates\layout.html:29
+#: plugs\layout\bootstrap\templates\login.html:5
+#: plugs\layout\default\templates\layout.html:26
+#: plugs\layout\templates\layout.html:30
 msgid "Login"
 msgstr "登录"
 
@@ -321,7 +323,7 @@ msgstr "首页"
 msgid "About"
 msgstr "关于"
 
-#: plugs\rbac_man\templates\RoleView\view.html:46
+#: plugs\rbac_man\templates\RoleView\view.html:42
 msgid "Permissions"
 msgstr "权限"
 
@@ -369,7 +371,7 @@ msgstr "登录"
 msgid "Go"
 msgstr "去"
 
-#: plugs\rbac_man\templates\RoleView\view.html:18
+#: plugs\rbac_man\templates\RoleView\view.html:8
 msgid "Role"
 msgstr "角色"
 
@@ -378,40 +380,40 @@ msgstr "角色"
 msgid "Not signed in yet"
 msgstr "尚未登录"
 
-#: plugs\rbac_man\templates\RoleView\edit.html:14
+#: plugs\rbac_man\templates\RoleView\edit.html:6
 msgid "Role Modify"
 msgstr "角色修改"
 
-#: plugs\rbac_man\views.py:25
-#: plugs\rbac_man\views.py:48
-#: plugs\rbac_man\views.py:70
-#: plugs\rbac_man\views.py:88
-#: plugs\rbac_man\views.py:195
-#: plugs\rbac_man\views.py:217
-#: plugs\rbac_man\views.py:238
-#: plugs\rbac_man\views.py:265
+#: plugs\rbac_man\views.py:30
+#: plugs\rbac_man\views.py:53
+#: plugs\rbac_man\views.py:75
+#: plugs\rbac_man\views.py:93
+#: plugs\rbac_man\views.py:247
+#: plugs\rbac_man\views.py:269
+#: plugs\rbac_man\views.py:290
+#: plugs\rbac_man\views.py:317
 msgid "Name"
-msgstr "姓名"
+msgstr "名称"
 
 #: plugs\layout\bootstrap\templates\layout.html:32
 #: plugs\layout\bootstrap\templates\layout_container.html:32
 #: plugs\layout\bootstrap\templates\register.html:5
-#: plugs\layout\default\templates\layout.html:27
-#: plugs\layout\templates\layout.html:31
+#: plugs\layout\default\templates\layout.html:28
+#: plugs\layout\templates\layout.html:32
 msgid "Register"
 msgstr "注册"
 
-#: plugs\rbac_man\templates\PermissionView\view.html:12
+#: plugs\rbac_man\templates\PermissionView\view.html:6
 msgid "Permission"
 msgstr "权限"
 
-#: plugs\rbac_man\views.py:27
-#: plugs\rbac_man\views.py:50
-#: plugs\rbac_man\views.py:90
+#: plugs\rbac_man\views.py:32
+#: plugs\rbac_man\views.py:55
+#: plugs\rbac_man\views.py:95
 msgid "Is Reserved"
 msgstr "保留"
 
-#: plugs\rbac_man\templates\PermissionView\edit.html:14
+#: plugs\rbac_man\templates\PermissionView\edit.html:6
 msgid "Permission Modify"
 msgstr "权限修改"
 
@@ -427,8 +429,8 @@ msgstr "用户名已经存在！"
 
 #: plugs\layout\bootstrap\templates\layout.html:22
 #: plugs\layout\bootstrap\templates\layout_container.html:22
-#: plugs\layout\default\templates\layout.html:17
-#: plugs\layout\templates\layout.html:21
+#: plugs\layout\default\templates\layout.html:18
+#: plugs\layout\templates\layout.html:22
 msgid "Account Setting"
 msgstr "帐户设置"
 
@@ -457,7 +459,7 @@ msgstr "对象编辑"
 msgid "Admin object add"
 msgstr "对象添加"
 
-#: plugs\forums\views.py:703
+#: plugs\forums\views.py:692
 msgid "RE"
 msgstr "回复"
 
@@ -485,4 +487,12 @@ msgstr "接收者"
 #: plugs\admin\settings.ini:7
 msgid "Admin object delete"
 msgstr "对象删除"
+
+#: plugs\rbac_man\templates\RoleView\view.html:22
+msgid "Users List"
+msgstr "用户列表"
+
+#: plugs\rbac_man\templates\RoleView\add.html:4
+msgid "Add New Role"
+msgstr "添加新角色"
 

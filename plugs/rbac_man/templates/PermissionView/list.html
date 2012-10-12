@@ -1,21 +1,11 @@
-{{extend "config_layout.html"}}
-
-{{block menu}}
-{{menu('config')}}
-{{end}}
-
-{{block sub_menu}}
-{{sub_menu(menu_items, 'admin_config', 'permissions')}}
-{{end}}
-
-{{block content_tool}}
-{{if request.user.is_superuser:}}
-    <a class="btn btn-blue" href="/config/permissions/add">点击这里增加新权限</a>
-{{pass}}
-{{end}}
+{{extend "rbac_man_permissions_layout.html"}}
 
 {{block content_main}}
 {{use "jquery"}}
+
+{{if request.user.is_superuser:}}
+    <a class="btn btn-blue" href="/admin/permissions/add">点击这里增加新权限</a>
+{{pass}}
 
 <div class="content">
     {{table_id='permissions_table'}}

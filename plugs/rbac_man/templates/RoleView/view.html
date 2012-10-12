@@ -20,11 +20,11 @@
         <div class="panel-content">
             <h2>{{=_('Role')}}: {{=object.name}}</h2>
             <table class="table table-bordered">
-                {{<< view_obj.body}}
+                {{<< view.body}}
             </table>
             <a class="btn btn-primary" href="{{=url_for('plugs.rbac_man.views.RoleView.edit', id=object.id)}}">编辑</a>
             {{if not object.reserve:}}
-                <a class="btn btn-blue" href="/config/roles/delete/{{=object.id}}">删除</a>
+                <a class="btn btn-blue" href="/config/roles/delete/{{=object.id}}">{{=_('Delete')}}</a>
             {{pass}}
         </div>
         

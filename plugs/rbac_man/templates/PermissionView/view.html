@@ -15,13 +15,13 @@
         <div class="panel-content">
             <h2>{{=_('Permission')}}: {{=object.name}}</h2>
             <table class="table table-bordered">
-                {{<< view_obj.body}}
+                {{<< view.body}}
             </table>
-            <a class="btn btn-primary" href="/admin/permissions/edit/{{=object.id}}">编辑</a>
-            <a class="btn btn-blue" href="/admin/permissions/delete/{{=object.id}}">删除</a>
+            <a class="btn btn-primary" href="/admin/permissions/edit/{{=object.id}}">{{=_('Edit')}}</a>
+            <a class="btn btn-danger" href="/admin/permissions/delete/{{=object.id}}">{{=_('Delete')}}</a>
         </div>
         <div class="panel-content">
-            <h2 class="line">相关角色</h2>
+            <h2 class="line">{{=_('Roles')}}</h2>
             <div id="permission-roles">
             {{for r in object.perm_roles.order_by('name'):}}
                 <li class="rounded"><img src="/static/images/cross_grey_small.png" rel="{{=object.id}}_{{=r.id}}"/><span class="role-name" title="{{=r.description}}">{{=r.name}}</span></li>

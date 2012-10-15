@@ -1722,8 +1722,7 @@
             this.updateSelection(data);
             this.close();
             this.selection.focus();
-
-            if (!equal(old, this.id(data))) { this.triggerChange(); }
+            if (!equal(old, this.id(data))) { this.triggerChange({added:data}); }
         },
 
         // single

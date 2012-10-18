@@ -13,9 +13,9 @@
     <div class="row-fluid">
         <div>
             <ul class="breadcrumb">
-              <li><a href="{{=url_for('plugs.forums.views.ForumView.admin')}}">版块:{{=unicode(category)}}</a></li>
+              <li><a href="{{=url_for('plugs.forums.views.ForumView.admin')}}">返回版块</a></li>
                 <span class="divider">/</span>
-              <li class="active">论坛管理</li>
+              <li class="active">当前版块:{{=unicode(category)}}</li>
             </ul>
         </div>
         <div class="line">
@@ -279,6 +279,7 @@ function adminCtrl($scope, $rootScope) {
         var f = $scope.forums[$scope.find_forum(id)] || {};
         $scope.topictype = f.topictype;
         $('#topic_type').modal('show');
+        $scope.$apply();
     }
     $scope.edit_open = function(id){
         for(var i=0; i<$scope.forums.length; i++){

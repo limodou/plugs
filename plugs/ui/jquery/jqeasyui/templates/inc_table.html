@@ -16,8 +16,16 @@
             width:'auto',
             height:450,
             url:url + query_string,
-            frozenColumns:{{=json_dumps(table.get_columns(True))}},
-            columns:{{=json_dumps(table.get_columns(False))}},
+            frozenColumns:{{if defined('view'):}}
+                {{=json_dumps(view.get_columns(True))}}
+            {{else:}}
+                {{=json_dumps(table.get_columns(True))}}
+            {{pass}},
+            columns:{{if defined('view'):}}
+                {{=json_dumps(view.get_columns(False))}}
+            {{else:}}
+                {{=json_dumps(table.get_columns(False))}}
+            {{pass}},
             idField:'id'
         }
         if (options){

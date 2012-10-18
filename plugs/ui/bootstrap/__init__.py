@@ -12,13 +12,14 @@ def create_pagination(url, total, page, rows, length=None,
     """
     import math
     from uliweb import settings
+    from uliweb.utils.common import safe_unicode
     
     length = length or settings.BOOTSTRAP_PAGINATION.length
-    total_message = total_message or settings.BOOTSTRAP_PAGINATION.total_message
-    first = first or settings.BOOTSTRAP_PAGINATION.first
-    next = next or settings.BOOTSTRAP_PAGINATION.next
-    prev = prev or settings.BOOTSTRAP_PAGINATION.prev
-    last = last or settings.BOOTSTRAP_PAGINATION.last
+    total_message = safe_unicode(total_message or settings.BOOTSTRAP_PAGINATION.total_message)
+    first = safe_unicode(first or settings.BOOTSTRAP_PAGINATION.first)
+    next = safe_unicode(next or settings.BOOTSTRAP_PAGINATION.next)
+    prev = safe_unicode(prev or settings.BOOTSTRAP_PAGINATION.prev)
+    last = safe_unicode(last or settings.BOOTSTRAP_PAGINATION.last)
     
     def get_url(p):
         from uliweb.utils.common import query_string

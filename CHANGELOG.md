@@ -15,6 +15,7 @@ Plugs Change Log
   a `simple_select2` function
 * Add sisyphus js plugin
 * Add bootheme app
+* Add `jqmaskedinput` plugin in `ui.jquery.jqutils` app
 
 0.1.3 Version
 -----------------

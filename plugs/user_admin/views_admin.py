@@ -180,16 +180,17 @@ class UsersManageView(object):
         if c.get('username'):
             condition = (User.c.username.like('%'+c['username']+'%')) & condition
         
-        fields = [
-            {'name':'username'},
-            {'name':'email', 'width':150},
-            {'name':'is_superuser', 'width':80},
-            {'name':'date_join', 'width':150},
-            {'name':'last_login', 'width':150},
-        ]
+#        fields = [
+#            {'name':'username'},
+#            {'name':'email', 'width':150},
+#            {'name':'is_superuser', 'width':80},
+#            {'name':'date_join', 'width':150},
+#            {'name':'last_login', 'width':150},
+#        ]
         
         fields_convert_map = {'username':username}
-        view =  ListView(User, condition=condition, query=query, fields=fields,
+        view =  ListView(User, condition=condition, query=query, 
+#            fields=fields,
             rows_per_page=rows_per_page, pageno=pageno, 
             fields_convert_map=fields_convert_map, id='users_table')
         view.types_convert_map = {orm.BooleanProperty:boolean_convert}

@@ -1,0 +1,19 @@
+{{use "smartpaginator"}}
+<script type="text/javascript">
+    var create_pagination = function (el, total, page_nums, start, callback){
+        if (total){
+            $(el).smartpaginator({
+                totalrecords    : total,
+                initval 		: start,
+                theme           : 'blue',
+                recordsperpage  : page_nums,
+                next: '{{=_('Next')}}', 
+                prev: '{{=_('Prev')}}', 
+                first: '{{=_('First')}}', 
+                last: '{{=_('Last')}}',
+                go :'{{=_('Go')}}',
+                onchange        : callback
+            });
+        }
+    }
+</script>

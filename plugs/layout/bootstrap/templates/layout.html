@@ -1,0 +1,36 @@
+{{extend "bootstrap/bootstrap_fluid_layout.html"}}
+
+{{block title}}{{=settings.LAYOUT.TITLE}}{{end}}</title>
+
+{{block project}}{{=settings.LAYOUT.PROJECT}}{{end}}
+
+{{block nav}}
+<ul class="nav">
+    {{block menu}}
+    {{menu('home')}}
+    {{end}}
+</ul>
+{{end}}
+
+{{block before_header}}
+{{link "bootstrap_extend.css"}}
+{{include "menu.html"}}
+{{include "inc_show_flashes.html"}}
+{{end}}
+
+{{block user_info}}
+<p class="pull-right user_info">
+{{if hasattr(request, 'user') and request.user:}}
+    <img src="{{=functions.get_user_image(request.user, size=20)}}" align="top"/> {{=unicode(request.user)}} | <a href="/user/view">{{=_('Account Setting')}}</a> | <a href="/logout">{{=_('Logout')}}</a> 
+{{else:}}
+    {{=_('Not signed in yet')}}! <a href="/login">{{=_('Login')}}</a> | <a href="/register">{{=_('Register')}}</a>
+{{pass}}
+</p>
+{{end user_info}}
+
+{{block footer}}
+<p>
+{{<< settings.get_var('LAYOUT/COPYRIGHT')}}
+</p>
+{{end}}
+

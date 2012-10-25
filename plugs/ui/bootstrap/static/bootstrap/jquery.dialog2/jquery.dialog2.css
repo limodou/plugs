@@ -1,0 +1,26 @@
+.modal {
+    display: none;
+    top: 10%;
+    margin: 0 0 0 -280px;
+    overflow: hidden;
+}
+
+.wide-modal {
+    width: 800px;
+    margin: 0 0 0 -400px;
+}
+
+.modal .modal-header h3 {
+    display: inline-block;
+}
+
+.modal.loading .modal-header .loader {
+    height: 36px;
+    width: 16px;
+    
+    margin-right: 10px;
+    
+    display: block;
+    float: left;
+    background: no-repeat scroll url('./images/ajax-loader.gif') center center;
+}

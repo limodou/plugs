@@ -1,0 +1,15 @@
+{{extend "rbac_man_permissions_layout.html"}}
+
+{{block content_main}}
+{{use "jqutils"}}
+<div class="content">
+    <div class="panel">
+        <div class="panel-header">
+        <h2>Add New Permission</h2>
+        </div>
+        <div class="panel-content">
+            {{<< form}}
+        </div>
+    </div>
+</div>
+{{end}}

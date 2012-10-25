@@ -1,0 +1,10 @@
+{{use "jquery", ui=True}}
+{{use "jqmultiselect"}}
+<script>
+$(function(){
+    if (!$.browser.msie | $.browser.version >= '9.0'){
+        $.localise('ui-multiselect', {language: 'zh', path: '/static/jqmultiselect/js/locale/'});
+        $("select[multiple]").multiselect({sortable: false});
+    }
+});
+</script>

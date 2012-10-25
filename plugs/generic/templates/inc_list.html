@@ -1,0 +1,63 @@
+{{use "jquery"}}
+{{use "jqpagination"}}
+{{use "jsquery"}}
+<script type="text/javascript">
+  $(function(){
+      var width = $(window).width() - 250;
+      $('#content_main').width(width);
+      var box_width = Math.min(width, $('#{{=table_id}}').width());
+      $('#content_main .box-bottom').width(box_width);
+  });
+</script>
+
+<div id="content_main" class="box" style="overflow-x:auto;padding-bottom:20px;">
+{{block query}}{{end}}
+{{embed table}}
+<div class="box-bottom">
+<div id="pagination" class="right"></div>
+<div class="left">共有：<font color="red">{{=info['total']}}</font> 条记录 &nbsp;{{if defined('download') and download:}}<a id="download" href="#"><img src="{{=url_for_static('images/csv.png')}}" title="下载"/></a>{{pass}}</div>
+<script type="text/javascript">
+$(function(){
+    var query_string = $.query.set('download', '').toString();
+    $('#download').click(function(){
+        window.location = query_string;
+        return false;
+    });
+});
+
+var load_content = function(new_page_index){
+    new_page_index = new_page_index||0;
+//    var filter = $('#sel_type').find('a.ui-state-active').attr('rel');
+//    var query_string = $.query.set('pageno', new_page_index).set('filter', filter).toString();
+    var query_string = $.query.set('pageno', new_page_index).set('data', '').toString();
+    $.ajax({
+      type: 'POST',
+      url: "{{=request.path}}" + query_string,
+      dataType: 'json',
+      success: function(data){
+        $('#{{=table_id}}').find('tbody').html(data.table);
+        }
+    });
+}
+
+function handlePaginationClick(new_page_index, pagination_container) {
+        // This selects 20 elements from a content array
+        load_content(new_page_index);
+        return false;
+    }
+
+$(function(){
+    $("#pagination").pagination({{=info['total']}}, {
+            items_per_page:{{=info['rows_per_page']}},
+            prev_text:'上一页',
+            next_text:'下一页',
+            first_call:true,
+            current_page:{{=info['pageno']}},
+            num_display_entries:3,
+            num_edge_entries: 1,
+            callback:handlePaginationClick
+        });
+});
+</script>
+</div>
+</div>

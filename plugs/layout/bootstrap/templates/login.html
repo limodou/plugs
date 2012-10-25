@@ -1,0 +1,23 @@
+{{extend "layout.html"}}
+{{block user_info}}{{end}}
+{{block content}}
+{{include "inc_jquery_dialog2.html"}}
+<div id="login" style="display: none">
+	<h1>{{=_('Login')}}</h1>
+	<div>
+		{{<<form}}
+	</div>
+</div>
+<script type="text/javascript">
+	$(function() {
+		$("#login").dialog2({
+			showCloseHandle: false,
+			removeOnClose: false, 
+			autoOpen: true, 
+			closeOnEscape: false, 
+			closeOnOverlayClick: false
+		});
+
+	});
+</script>
+{{end}}

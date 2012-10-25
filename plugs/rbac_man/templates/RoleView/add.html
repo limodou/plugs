@@ -1,0 +1,14 @@
+{{extend "rbac_man_roles_layout.html"}}
+
+{{block content_main}}
+<div class="content">
+    <div class="panel">
+        <div class="panel-header">
+            <h2>{{=_('Add New Role')}}</h2>
+        </div>
+        <div class="panel-content">
+            {{<< form}}
+        </div>
+    </div>
+</div>
+{{end}}

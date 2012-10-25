@@ -1,0 +1,237 @@
+@charset "UTF-8";
+/**
+ * "Yet Another Multicolumn Layout" - (X)HTML/CSS Framework
+ *
+ * (en) CSS-component for creating vertical forms
+ * (de) CSS-Baustein zur Erstellung von Formularen mit untereinander angeordneten Elementen
+ *
+ * @note            Many thanks to Ansgar Hein (http://www.anatom5.de) for contribution
+ *
+ * @copyright       Copyright 2005-2009, Dirk Jesse
+ * @license         CC-A 2.0 (http://creativecommons.org/licenses/by/2.0/),
+ *                  YAML-C (http://www.yaml.de/en/license/license-conditions.html)
+ * @link            http://www.yaml.de
+ * @package         yaml
+ * @version         3.1
+ * @revision        $Revision: 343 $
+ * @lastmodified    $Date: 2009-01-19 23:41:32 +0100 (Mo, 19. Jan 2009) $
+ */
+
+@media all
+{
+  /**
+   *  YAML Forms - visual styling
+   *
+   *  (en) visual form styling area
+   *  (de) Festlegung des optischen Erscheinungsbildes
+   */
+
+  form.tform {
+/*    margin: 0 0 1em 0;
+    padding: 10px;*/
+  }
+
+  form.tform .type-text input,
+  form.tform .type-text textarea,
+  form.tform .type-select select {
+    font-family:  Arial, Helvetica, sans-serif; /* proportional fonts for all form elements */
+    border: 1px solid #ddd;
+  }
+
+  /* :hover and :focus status on form fields | Effekt zur Hervorhebung von Formularfeldern bei :hover oder :focus */
+  form.tform div input:focus,
+  form.tform div select:focus,
+  form.tform div textarea:focus,
+  form.tform div input:hover,
+  form.tform div select:hover,
+  form.tform div textarea:hover,
+  form.tform div input:active,
+  form.tform div select:active,
+  form.tform div textarea:active {
+    border: 1px #a66 solid;
+    background: #fff;
+  }
+
+  /* Styling of buttons | Gestaltung von Buttons */
+
+  form.tform .type-button input[type=submit] {
+    background: #525252; 
+    display: inline-block; 
+    padding: 5px 10px 6px; 
+    color: #fff; 
+    -moz-border-radius: 5px; 
+    -webkit-border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    border:none;
+    text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+    position: relative;
+    cursor: pointer;
+    margin-bottom:5px;
+    }
+
+  /* :hover and :focus status on buttons | Effekt zur Hervorhebung von Schaltern bei :hover oder :focus */
+  form.tform div.type-button input:focus,
+  form.tform div.type-button input:hover,
+  form.tform div.type-button input:active {
+    background: #555; 
+  }
+
+
+  form.tform div.type-button input[type=submit]:focus,
+  form.tform div.type-button input[type=submit]:hover,
+  form.tform div.type-button input[type=submit]:active {
+    background: #880; 
+  }
+
+ /*------------------------------------------------------------------------------------------------------*/
+
+ /**
+  * Vertical-Forms - technical base (standard)
+  *
+  * |-------------------------------|
+  * | fieldset                      |
+  * |-------------------------------|
+  * |   label                       |
+  * |   input / select / textarea   |
+  * |-------------------------------|
+  * | /fieldset                     |
+  * |-------------------------------|
+  *
+  * (en) Styling of forms where both label and input/select/textarea are styled with display: block;
+  * (de) Formulargestaltung, bei der sowohl label als auch input/select/textarea mit display: block; gestaltet werden
+  *
+  * WARNING: This part contains several IE-stability-fixes. Don't edit this part if you are not sure, what you're doing!
+  */
+
+  /* General form styling  | Allgemeine Formatierung des Formulars */
+  form.tform { overflow: hidden; }
+  form.tform fieldset { overflow: hidden; padding:5px 10px;}
+  form.tform label { display:inline; cursor: pointer; font-weight:bold;}
+  form.tform .message { display: block; margin-bottom: 0.5em; color: #666; }
+  form.tform label.description {color: #999; font-weight:normal;}
+  form.tform table {width:100%;}
+
+  /* Hiding of hidden fields (otherwise ugly spaces in Firefox) | Versteckte Felder wirklich verstecken (sonst ggf. häßliche Lücken im Firefox) */
+  form.tform input[type=hidden] { display: none !important; }
+
+  /* Highlight mandatory fields | Pflichtfeldkennzeichnung hervorheben */
+  form.tform sup { color: #800; font-weight: bold; }
+
+  /* styling containing DIV elements | Gestaltung der kapselnden DIV-Elemente */
+  form.tform div.type-text,
+  form.tform div.type-select,
+  form.tform div.type-check,
+  form.tform div.type-button {
+    margin: 4px 0;
+  }
+
+  /* styling standard form elements with 'almost' equal flexible width | Gestaltung der einzelnen Formularelemente mit annähend gleicher Breite */
+  form.tform .type-text input {
+    display: inline;
+    padding: 0.3em 0.3em;
+  }
+
+  form.tform .type-text textarea {
+    display: block;
+    width: 100%;
+    height: 100px;
+  }
+
+  form.tform .type-select select {
+    display: inline;
+    position: relative;
+    padding: 0.3em 2px 0.3em 1px;
+    cursor: pointer;
+  }
+  form.tform .type-select select[multiple] {
+    display: block;
+  }
+  form.tform .type-select select optgroup {
+    font-style: normal;
+    font-weight: bold;
+  }
+
+  form.tform .type-check input { cursor: pointer; }
+  form.tform .type-check label { display: inline; }
+
+  /* Styling of buttons | Gestaltung von Buttons */
+  form.tform .type-button input {
+    width: auto;
+    cursor: pointer;
+  }
+
+  /* Styling of error-messages | Fehlermeldungen */
+  form.tform div.error {
+    border: 1px #a00 dashed;
+    background: #faf4f4;
+    padding: 0.5em;
+  }
+
+  form.tform div.error .message { color: #800; }
+
+  input.disabled, textarea.disabled, select.disabled {background-color: #EBEBE4;}
+
+ /*------------------------------------------------------------------------------------------------------*/
+
+ /**
+  * Columnar forms display - technical base (optional)
+  *
+  * |-------------------------------------------|
+  * | fieldset                                  |
+  * |-------------------------------------------|
+  * |                                           |
+  * |   label   |   input / select / textarea   |
+  * |                                           |
+  * |-------------------------------------------|
+  * | /fieldset                                 |
+  * |-------------------------------------------|
+  *
+  * (en) Styling of forms where label floats left of form-elements
+  * (de) Formulargestaltung, bei der die label-Elemente nach links fließen
+  *
+  * WARNING: This part contains several IE-stability-fixes. Don't edit this part if you are not sure, what you're doing!
+  */
+
+  /* Columnar display | Spalten-Darstellung */
+  .columnar .type-text label,
+  .columnar .type-select label {
+    float: left;
+    width: 30%; /* Can be fixed width too | Kann auch eine fixe Angabe sein */
+  }
+
+  /* Indent Checkbox fields to match label-width | Checkboxen um den gleichen Wert einrücken, wie die Breite der labels */
+  .columnar div.type-check { padding-left: 30%; }
+  .columnar div.error .message { margin-left: 30%; }
+
+  .columnar div.type-text input,
+  .columnar div.type-text textarea { width: 67.8%; }
+  .columnar div.type-select select { width: 69.4%; }
+  
+  /* width adjustments for IE 5.x & IE6 | Breitenanpassung für Internet Explorer 5.x und 6.0 */
+  * html .columnar div.type-text input,
+  * html .columnar div.type-text textarea { width: 67.2%; }
+  * html .columnar div.type-select select { width: 68.8%; }
+  
+ /*------------------------------------------------------------------------------------------------------*/
+
+ /**
+  * Forms Fieldset/Legend-Bug in IE
+  * @see http://www.mattheerema.com/web-design/2006/04/getting-fieldset-backgrounds-and-legends-to-behave-in-ie/
+  *
+  * @workaround
+  * @affected IE 5.x/Win, IE6, IE7
+  * @css-for IE 5.x/Win, IE6, IE7
+  * @valid yes
+  */
+  
+  /* IE5.x & IE6 */
+  * html form.tform legend { position:absolute; top: -.5em; left: .5em; }
+  * html form.tform fieldset { overflow:visible; height: 1%; margin-top:1.5em; padding-top:1.5em; }
+
+  /* IE7 */
+  *+html form.tform legend { position:absolute; top: -.5em; left: .5em; }
+  *+html form.tform fieldset { overflow:visible; height:1%; margin-top:1.5em; padding-top:1.5em; }
+
+}

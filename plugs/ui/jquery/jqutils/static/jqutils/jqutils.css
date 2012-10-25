@@ -1,0 +1,13 @@
+a.jqrselect-button {background-image:url(search.png);background-position: top left;background-repeat: no-repeat;width:20px;height:20px;text-indent: -99999px;vertical-align: middle;text-decoration:none;padding-top: 0px; margin-top: 0px; padding-bottom: 6px;}
+a.jqrselect-clearButton {background-image:url(delete.png);background-position: top left;background-repeat: no-repeat;width:20px;height:20px;text-indent: -99999px;vertical-align: middle;text-decoration:none;}
+.simple_message {
+line-height:22px;
+text-align:center;
+margin-bottom:4px;
+}
+.simple_message .mg {
+background-color:#FFF1A8;
+display:inline-block;
+padding:4px;
+}
+.placeholder { color: #aaa; }

@@ -1,0 +1,55 @@
+{{extend "config_layout.html"}}
+
+{{block menu}}
+{{menu('config')}}
+{{end}}
+
+{{block sub_menu}}
+{{sub_menu(menu_items, 'log')}}
+{{end}}
+
+{{block content_main}}
+{{use "jquery"}}
+{{use "jqpagination"}}
+{{use "jsquery"}}
+{{use "fgbutton"}}
+<div class="box">
+<div class="query">
+{{embed query_form}}
+</div>
+{{embed table}}
+<div class="box-bottom">
+<div id="pagination" class="right"></div>
+<div class="left">共有：<font color="red">{{=info['total']}}</font> 条记录</div>
+<script type="text/javascript">
+var load_content = function(new_page_index){
+    new_page_index = new_page_index||0;
+//    var filter = $('#sel_type').find('a.ui-state-active').attr('rel');
+//    var query_string = $.query.set('pageno', new_page_index).set('filter', filter).toString();
+    var query_string = $.query.set('pageno', new_page_index).set('data', '').toString();
+    $.getJSON("/config/log/list" + query_string, function(data){
+        $('#audit_table').find('tbody').html(data.table);
+    });
+}
+
+function handlePaginationClick(new_page_index, pagination_container) {
+        // This selects 20 elements from a content array
+        load_content(new_page_index);
+        return false;
+    }
+
+$(function(){
+    $("#pagination").pagination({{=info['total']}}, {
+            items_per_page:{{=info['rows_per_page']}},
+            prev_text:'上一页',
+            next_text:'下一页',
+            first_call:true,
+            current_page:{{=info['pageno']}},
+            callback:handlePaginationClick
+        });
+});
+</script>
+</div>
+</div>
+
+{{end}}

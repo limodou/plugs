@@ -1,0 +1,40 @@
+{{extend "forums_layout.html"}}
+
+{{block content_main}}
+<div id="forum-body">
+    {{if count > 0:}}
+    <table class="table">
+        <colgroup>
+            <col width="*"></col>
+            <col width="60px"></col>
+            <col width="60px"></col>
+            <col width="200px"></col>
+        </colgroup>
+        <tbody>
+            {{for c in categories:}}
+                <tr class="linear-header">
+                    <th class="first">{{=c.name}}</th>
+                    <th>主题</th>
+                    <th>文章</th>
+                    <th>最新文章</th>
+                </tr>
+                {{from uliweb.utils.timesince import timesince
+                for f in c.forums.all().order_by('ordering'):}}
+                    <tr>
+                        <td class="first"><div class="title"><h3><a href="/forum/{{=f.id}}">{{=f.name}}</a></h3><p>{{=f.description}}</p></div></td>
+                        <td>{{=f.num_topics}}</td>
+                        <td>{{=f.num_posts}}</td>
+                        <td><cite>{{=f.get_display_value('last_post_user', f.last_post_user)}} <a href="/forum/id/{{=f.last_post}}" title="跳转到最后回复">&raquo;</a></cite><em>{{=timesince(f.last_reply_on)}}</em></td>
+                    </tr>
+                {{pass}}
+            {{pass}}
+        </tbody>
+    </table>
+    {{else:}}
+        <div class="alert alert-error">
+          <a class="close" data-dismiss="alert">×</a>
+          还没有创建任何论坛，请由系统管理员来创建。
+        </div>
+    {{pass}}
+</div>
+{{end}}

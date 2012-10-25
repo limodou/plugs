@@ -1,0 +1,208 @@
+{{extend "forums_layout.html"}}
+
+{{block title}}{{super}} - {{=forum.name}} - {{=topic.subject}}{{end}}
+
+{{block forum_nav}}
+    <ul class="breadcrumb">
+      <li>
+        <a href="{{=url_for('plugs.forums.views.ForumView.list')}}" class="home" title="首页">论坛首页</a> <span class="divider">/</span>
+      </li>
+      <li>
+        <a href="/forum/{{=forum.id}}">{{=forum.name}}</a> <span class="divider">/</span>
+      </li>
+      <li class="active">
+        <a href="/forum/{{=forum.id}}/{{=topic.id}}">{{=topic.subject}}</a>
+      </li>
+    </ul>
+{{end}}
+
+{{block content_main}}
+{{use "jquery"}}
+{{use "jqutils", ajaxForm=True}}
+{{use "xheditor"}}
+{{use "jqimgzoom"}}
+{{use "totop"}}
+
+{{def make_sub_posts(parent):}}
+    {{if len(sub_posts.get(parent, [])) > 0:}}
+    <ul id="sub_posts_{{=parent}}">
+        {{for post in sub_posts[parent]:}}
+            <div class="box">
+                <li class="post" id="post_{{=post.id}}">
+                <a name="post_{{=post.id}}"></a>
+                <div class="post_body">
+                    <div class="user_image">
+                        <img title="{{=post.username}}" src="{{=post.userimage}}">
+                    </div>
+                    <div class="body">
+                        <div class="header">
+                            由 <span class="user">{{<< post.posted_by}}</span> 回复于 
+                            <span class="date">{{= post.created_on}}</span>
+                        </div>
+                        {{<< post.content}}
+                        {{<< post.updated}}
+                        
+                        {{make_sub_posts(post.id)}}
+                        
+                    </div>
+                    <div class="footer">           
+                        <span class="actions" style="display:none">
+                            {{<< post.actions}}
+                        </span>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                </li>
+            </div>
+        {{pass}}
+    </ul><!-- ul -->
+    {{pass}}
+{{pass}}
+
+<a name="a_topic"></a>
+<div class="topic">
+    <h2>{{=topic.subject}}</h2>
+    <div class="topic_msg">
+        共有{{=topic.num_replies}}篇评论
+        分类: <span>{{=topic.get_display_value('topic_type')}}</span>
+    </div>
+</div>
+<ul id="posts" class="unstyled">
+    {{for post in posts:}}
+    <a name="{{=post.id}}"></a>
+    <li class="post" id="post_{{=post.id}}">
+        <div class="post_body first">
+            <div class="user_image">
+                <img title="{{=post.username}}" src="{{=post.userimage}}">
+            </div>
+            <div class="header">
+                {{=post.floor}}楼 由 <span class="user">{{=post.posted_by}}</span> 发表于 
+                <span class="date">{{=post.created_on}}</span>
+            </div>
+            <div class="body">
+            {{<< post.content}}
+            {{<< post.updated}}
+            
+            {{make_sub_posts(post.id)}}
+            
+            </div>
+            <div class="footer">
+                <span class="actions" style="display:none">
+                    {{<<post.actions}}
+                </span>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </li>
+    {{pass}}
+</ul>
+{{<< functions.get_var('FORUM/post_footer')}}
+
+<div class="pagination pagination-centered">{{<<pagination}}</div>
+{{include "inc_syntaxhighlighter.html"}}
+{{if request.user:}}
+    {{if not topic.closed:}}
+        <div class="replay">
+            <h3>发表评论</h3>
+            <form action="/forum/{{=forum.id}}/{{=topic.id}}/new_post" method="POST" id="postform">
+                <div class="type-text">
+                    <textarea name="content" class="field" cols="75" rows="15"></textarea>
+                </div>
+                <input type="hidden" name="slug" value="{{=slug}}"></input>
+                <div class="line">
+                    <input type="checkbox" name="reply_email" id="field_reply_email">有回复时邮件通知我</input>
+                </div>
+                <div class="line">
+                    <button type="submit" class="btn btn-primary">发表评论</button>
+                </div>
+            </form>
+        </div>
+    {{else:}}
+        <div class="replay">
+            <div class="alert alert-warn">此主题已经被关闭，无法继续评论！</div>
+        </div>
+    {{pass}}
+{{else:}}
+    <div class="replay">
+        <div class="alert alert-warn">你尚未登录，无法评论！</div>
+    </div>
+{{pass}}
+{{include "inc_xheditor_plugins.html"}}
+{{include "inc_xheditor_draw_plugins.html"}}
+{{include "inc_paginate.html"}}
+{{use "poshytip"}}
+{{use "fancybox"}}
+{{use "colorpicker"}}
+{{use "history"}}
+<script type="text/javascript">
+    var bind_action = function(el, action){
+        el.click(function(event){
+            event.preventDefault();
+            var post_id = el.attr('rel')
+            $.ajax({
+                type: "POST",
+                data: {post_id:post_id, action:action},
+                url: "{{=url_for('plugs.forums.views.ForumView.post_actions')}}",
+                success: function(data){
+                    show_message(data.msg);
+                    if(data.txt){
+                        el.html(data.txt);
+                    }
+                }
+            });
+        });
+    }
+    
+    function success(data){
+        window.location.href = '{{=request.path}}'+'?page='+data.page;
+    }
+    
+    $(function(){
+        $('textarea').xheditor({
+            tools:'Cut,Copy,Paste,Pastetext,|,Blocktag,Fontface,FontSize,Bold,Italic,Underline,Strikethrough,FontColor,BackColor,SelectAll,Removeformat,|,Align,List,Outdent,Indent,|,Link,Unlink,Img,Hr,Emot,Table,Code,Quote,Draw,|,About',
+            skin:'vista',
+            upLinkUrl:"!/forum/upload_file?forum_id={{=forum.id}}&slug={{=slug}}",
+            upImgUrl:"!/forum/upload_image?forum_id={{=forum.id}}&slug={{=slug}}",
+            plugins:$.extend(plugins, draw_plugins)
+        });
+        //初始化SyntaxHighlighter
+        //SyntaxHighlighter.defaults['highlight'] = [5, 10, 15];
+        SyntaxHighlighter.defaults['toolbar'] = true;
+        SyntaxHighlighter.config.strings.print = '打印';
+        do_syntax();
+        
+        //处理回复表格提交
+        var el = $('#postform');
+        var result_process = create_result_process(el, 
+            {success:success});
+        
+        var options = { 
+            success: result_process,  // post-submit callback 
+            dataType: 'json'
+        }; 
+        
+        el.ajaxForm(options);
+        
+        //处理贴子action
+        $('li.post').hover(
+            function(){
+                $(this).find('span.actions').slideDown();
+            },
+            function(){
+                $(this).find('span.actions').slideUp();
+            }
+        );
+        
+        $.each(['close', 'hidden', 'delete', 'top', 'essence', 'homepage', 'email'], function(index, value){
+                bind_action($('li.post').find('a.'+value), value);
+                bind_action($('li.post').find('a.un'+value), 'un'+value);
+            }); 
+        
+        //处理回到顶部显示
+        $('.content').UItoTop({ easingType: 'easeOutQuart', text:'<i class="icon-arrow-up"></i>回到顶部' });
+        
+        $('.post_body img').imgZoom({loadingImg:"{{=url_for_static('jqimgzoom/css/imgzoom-loading.gif')}}"});
+        
+    });
+</script>
+{{end}}

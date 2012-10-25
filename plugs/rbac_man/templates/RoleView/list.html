@@ -1,0 +1,20 @@
+{{extend "rbac_man_roles_layout.html"}}
+
+{{block content_main}}
+{{use "jquery"}}
+
+{{if request.user.is_superuser:}}
+    <a class="btn btn-blue" href="/admin/roles/add">点击这里增加新角色</a>
+{{pass}}
+
+<div class="content">
+    {{table_id='roles_table'}}
+    {{include "inc_table.html"}}
+    <script>
+        $(function(){
+            create_table("{{=request.path}}", false);
+        });
+    </script>
+</div>
+
+{{end}}

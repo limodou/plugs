@@ -1,0 +1,238 @@
+{{extend "forums_admin_layout.html"}}
+
+{{block content_main}}
+{{use "angularjs"}}
+{{use "jquery"}}
+{{use "jqutils"}}
+{{use "fontawesome"}}
+{{use "tablefixedheader"}}
+
+<div class="container-fluid" ng-app="ForumAdminApp" id="ng-app" ng-controller="adminCtrl">
+    <div class="row-fluid">
+        <!-- <div>
+            <ul class="breadcrumb">
+              <li class="active">版块</li>
+            </ul>
+        </div>
+         -->
+        <div class="line">
+            <a class="btn btn-primary" ng-click="add_open()">添加新版块</a>
+        </div>
+        <div class="line">
+            <table class="table table-bordered table-header" style="width:300px;">
+                <colgroup>
+                    <col width="50px"></col>
+                    <col width="*"></col>
+                    <col width="50px"></col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>版块名称</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="cat in categories | orderBy:ordering">
+                        <td>{%cat.ordering%}</td>
+                        <td><a ng-href="{{=url_for('plugs.forums.views.ForumView.admin_forum')}}?category_id={%cat.id%}">{%cat.name%}</a></td>
+                        <td><a href="#" ng-click="edit_open(cat.id)"><i class="icon-edit" title="编辑"></i></a> 
+                        <a href="#" ng-click="remove(cat.id)"><i class="icon-remove" title="删除"></i></a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal hide" id="add_category">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h3>新增版块</h3>
+          </div>
+          <div class="modal-body">
+            <form class="form form-horizontal">
+            <div class="control-group ng-class:get_error('name')._class;">
+                <label class="control-label required">名称：</label>
+                <div class="controls">
+                    <input type="text" ng-model="cat_name" class="span2"></input>
+                    <p class="help-block">{%get_error('name').message%}</p>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">顺序号：</label>
+                <div class="controls">
+                    <input type="number" ng-model="cat_ordering" class="span2"></input>
+                    <p class="help-block"></p>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">描述：</label>
+                <div class="controls">
+                    <textarea ng-model="cat_desc" rows="4" cols="120"></textarea>
+                    <p class="help-block"></p>
+                </div>
+            </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="add_save()">保存</button>
+          </div>
+        </div>
+        
+        <div class="modal hide" id="edit_category">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h3>修改版块</h3>
+          </div>
+          <div class="modal-body">
+            <form class="form form-horizontal">
+            <div class="control-group ng-class:get_error('name')._class;">
+                <label class="control-label required">名称：</label>
+                <div class="controls">
+                    <input type="text" ng-model="cat_name" class="span2"></input>
+                    <p class="help-block">{%get_error('name').message%}</p>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">顺序号：</label>
+                <div class="controls">
+                    <input type="number" ng-model="cat_ordering" class="span2"></input>
+                    <p class="help-block"></p>
+                </div>
+            </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="edit_save(cat_id)">保存</button>
+          </div>
+        </div>
+        
+    </div>
+</div>
+
+<script>
+
+var app = angular.module('ForumAdminApp', []).config(function ($interpolateProvider) {
+    $interpolateProvider.startSymbol('{%');
+    $interpolateProvider.endSymbol('%}');
+}); 
+
+function adminCtrl($scope, $http) {
+    $scope.error = {};
+    $.get('/forum/admin/categories')
+        .success(function(data, status, headers, config){
+            $scope.categories = data.rows;
+            $scope.$apply();
+        });
+        
+    $scope.find_category = function(id){
+        for(var i=0; i<$scope.categories.length; i++){
+            if ($scope.categories[i].id == id){
+                return i;
+            }
+        }
+        return -1;
+    }
+    $scope.add_save = function(){
+        $.post('/forum/admin/categories/add', {'name':$scope.cat_name, 
+            'description':$scope.cat_desc, 'ordering':$scope.cat_ordering})
+            .success(function(data, status, headers, config){
+                if (data.success){
+                    $scope.categories.push(data.data);
+                    $('#add_category').modal('hide');
+                    $scope.error = {};
+                }else{
+                    $scope.error = data.data;
+                }
+                $scope.$apply();
+            });
+    }
+    $scope.edit_save = function(id){
+        $.post('/forum/admin/categories/edit/'+id, {'name':$scope.cat_name, 
+            'description':$scope.cat_desc, 'ordering':$scope.cat_ordering})
+            .success(function(data, status, headers, config){
+                if (data.success){
+                    var index = $scope.find_category(data.data.id);
+                    $scope.categories[index] = data.data;
+                    $('#edit_category').modal('hide');
+                    $scope.error = {};
+                }else{
+                    $scope.error = data.data;
+                }
+                $scope.$apply();
+            });
+    }
+    
+    $scope.get_error = function(k){
+        var e = {};
+        if ($scope.error && k in $scope.error){
+            e._class = 'error';
+            e.message = $scope.error[k];
+        }else{
+            e._class = '';
+            e.message = '';
+        }
+        return e;
+    }
+    $scope.add_open = function(id){
+        $scope.cat_id = '';
+        $scope.cat_name = '';
+        $scope.cat_ordering = '';
+        $scope.cat_desc = '';
+        $('#add_category').modal('show');
+    }
+    $scope.edit_open = function(id){
+        for(var i=0; i<$scope.categories.length; i++){
+            if ($scope.categories[i].id == id){
+                var c = $scope.categories[i]
+                $scope.cat_id = c.id;
+                $scope.cat_name = c.name;
+                $scope.cat_ordering = c.ordering;
+                $scope.cat_desc = c.description;
+                $('#edit_category').modal('show');
+                break;
+            }
+        }
+    }
+    $scope.remove = function(id){
+        $.post('/forum/admin/categories/delete/' + id).success(function(data){
+            if(data.success){
+                for(var i=0; i<$scope.categories.length; i++){
+                    if ($scope.categories[i].id == id){
+                        $scope.categories.splice(i, 1);
+                        show_message(data.message);
+                        $scope.$apply();
+                        return;
+                    }
+                }
+            }else{
+                show_message(data.message, 'error');
+            }
+        });
+    }
+    
+    $scope.ordering = 'ordering';
+}
+/*
+app.value('settings', {has_rendered:false});
+
+app.directive('checklast', function(settings){
+    return {
+        restrict:'A',
+        link:function(scope, element, attrs, controller){
+            if (scope.$last === true && !settings.has_rendered) {
+                $('table').fixheadertable({
+                    wrapper: false,
+                    colratio    : [150, 80, '*', 50], 
+                    height: 300, 
+                    theme:'bootstrap'
+                });
+                settings.has_rendered = true;
+            }
+        }
+    }
+});
+*/
+$(document).ajaxError(function(e, jqxhr, settings, exception){
+    show_message('请求处理失败', 'error');
+});
+</script>
+{{end}}

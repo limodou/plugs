@@ -1,0 +1,6 @@
+{{def message(msg, category=''):}}
+<div class="alert {{if category:}}alert-{{=category}}{{pass}}"> 
+	<a class="close" data-dismiss="alert">×</a>
+	{{<< msg}}
+</div>
+{{pass}}

@@ -1,0 +1,50 @@
+{{use "jquery"}}
+{{use "jqutils"}}
+{{use "jqeasyui"}}
+{{from uliweb.core.js import json_dumps}}
+{{#param: table_id, query_form, table}}
+<table id="{{=table_id}}"></table>
+<script type="text/javascript">
+    var create_table = function(url, download, options){
+        var query_string = $.query_string.set('data', '').toString();
+        var settings = {
+            pagination:true,
+            striped: false,
+            singleSelect: true,
+            rownumbers:true,
+            nowrap: false,
+            width:'auto',
+            height:450,
+            url:url + query_string,
+            frozenColumns:{{if defined('view'):}}
+                {{=json_dumps(view.get_columns(True))}}
+            {{else:}}
+                {{=json_dumps(table.get_columns(True))}}
+            {{pass}},
+            columns:{{if defined('view'):}}
+                {{=json_dumps(view.get_columns(False))}}
+            {{else:}}
+                {{=json_dumps(table.get_columns(False))}}
+            {{pass}},
+            idField:'id'
+        }
+        if (options){
+            $.extend( settings, options );
+        }
+        $('#{{=table_id}}').datagrid(settings);
+        
+        if (download){
+            var pager = $('#{{=table_id}}').datagrid('getPager');    // get the pager of datagrid
+            pager.pagination({
+                buttons:[{
+                    text:'下载数据',
+                    iconCls:'icon-save',
+                    handler:function(){
+                        var query_string = $.query_string.remove('data').set('download', '').toString();
+                        $.download(url + query_string);
+                    }
+                }]
+            });
+        }
+    }
+</script>

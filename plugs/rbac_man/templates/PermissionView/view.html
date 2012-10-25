@@ -1,0 +1,90 @@
+{{extend "rbac_man_permissions_layout.html"}}
+
+{{block content_main}}
+{{use "jqutils", ajaxForm=True}}
+{{include "inc_select2.html"}}
+<style type="text/css">
+<!--
+#permission-roles {overflow:auto;}
+#permission-roles li {list-style:none; float:left; margin: 2px 4px; padding: 4px; background-color:#e7eef8;}
+#permission-roles li img{margin-right:4px;cursor:pointer;}
+-->
+</style>
+<div class="content">
+    <div class="panel">
+        <div class="panel-content">
+            <h2>{{=_('Permission')}}: {{=object.name}}</h2>
+            <table class="table table-bordered">
+                {{<< view.body}}
+            </table>
+            <a class="btn btn-primary" href="/admin/permissions/edit/{{=object.id}}">{{=_('Edit')}}</a>
+            <a class="btn btn-danger" href="/admin/permissions/delete/{{=object.id}}">{{=_('Delete')}}</a>
+        </div>
+        <div class="panel-content">
+            <h2 class="line">{{=_('Roles')}}</h2>
+            <div id="permission-roles">
+            {{for r in object.perm_roles.order_by('name'):}}
+                <li class="rounded"><img src="/static/images/cross_grey_small.png" rel="{{=object.id}}_{{=r.id}}"/><span class="role-name" title="{{=r.description}}">{{=r.name}}</span></li>
+            {{pass}}
+            </div>
+            <div class="separate">
+                <input id="perm-role" type="hidden"></input>
+                <a class="btn btn-primary" href="javascript:void(0)" id="role-add">{{=_('Add')}}</a>
+            </div>
+        </div>
+        
+    </div>
+</div>
+<script type="text/javascript">
+    var del_role = function(){
+        var self = $(this);
+        var ids = $(this).attr('rel').split('_');
+        var perm_id = ids[0];
+        var role_id = ids[1];
+        $.ajax({
+            type: 'POST',
+            url: '/admin/permissions/delrole',
+            data: {perm_id:perm_id, 'role_id':role_id},
+            dataType: 'json',
+            success: function(r){
+                if(r.success){
+                    show_message(r.message);
+                    self.parent('li').remove();
+                }else{
+                    show_message(r.message, 'error');
+                }
+            }
+        });
+    }
+    
+    $(function(){
+        simple_select2('#perm-role', {ajax:{url:'/admin/roles/search'}, width:'200px', dataLabel:'title'});
+
+        $('#permission-roles img').click(del_role);
+        $('#role-add').click(function(){
+            if (!$('#perm-role').val()){
+                alert('Please select an permission first.');
+            }else{
+                $.ajax({
+                    type: 'POST',
+                    url: '/admin/permissions/addrole',
+                    data: {role_id:$('#perm-role').val(), 'perm_id':{{=object.id}}},
+                    dataType: 'json',
+                    success: function(r){
+                        if(r.success){
+                            show_message(r.message);
+                            var e = $(template('<li class="rounded"><img src="/static/images/cross_grey_small.png" rel="{{=object.id}}_${id}"/><span class="role-name">${name}</span></li>', r.data));
+                            e.appendTo($('#permission-roles')).effect('highlight', 5000);
+                            e.find('img').click(del_role);
+                            $('.rselect').rselect('clear');
+                        }else{
+                            show_message(r.message, 'error');
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+{{end}}

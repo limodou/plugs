@@ -1,0 +1,8 @@
+{{def message(msg, category='information'):}}
+<div class="notice {{=category}} rounded png_bg"> 
+	<a href="#" class="close"><img src="/static/images/cross_grey_small.png" title="Close" alt="close" /></a> 
+	<div> 
+		{{=msg}}
+	</div> 
+</div>
+{{pass}}

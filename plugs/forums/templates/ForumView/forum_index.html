@@ -1,0 +1,89 @@
+{{extend "forums_layout.html"}}
+
+{{block title}}{{super}} - {{=forum.name}}{{end}}
+
+{{block forum_nav}}
+    <ul class="breadcrumb">
+      <li>
+        <a href="{{=url_for('plugs.forums.views.ForumView.list')}}" class="home" title="首页">论坛首页</a> <span class="divider">/</span>
+      </li>
+      <li class="active">
+        <a href="{{=url_for('plugs.forums.views.ForumView.forum_index', id=forum.id)}}">{{=forum.name}}</a>
+      </li>
+    </ul>
+    
+    <form class="form-inline pull-right" action="" method="GET">
+        <input type="text" class="input-large" name="term" value="{{=term}}">
+        <label class="radio">
+            <input type="radio" name="type" id="optionsRadios1" value="1" {{if type=="1":}}checked=""{{pass}}>
+            标题
+        </label>
+        <label class="radio">
+            <input type="radio" name="type" id="optionsRadios2" value="2" {{if type=="2":}}checked=""{{pass}}>
+            作者
+        </label>
+        <button type="submit" class="btn btn-primary">查找</button>
+    </form>
+    
+    <div class="pull-left" style="margin-bottom:16px;">
+        {{if request.user:}}
+        <a class="btn btn-success" href="{{=url_for('plugs.forums.views.ForumView.new_topic', id=forum.id)}}">新主题</a>
+        {{else:}}
+        <font color="red">你还没有登录，无法发表新主题！</font>
+        {{pass}}
+    </div>
+{{end}}
+
+{{block content_main}}
+{{use "jquery"}}
+{{use "jqutils", hoverIntent=True}}
+
+<script type="text/html" id="topicTemplate">
+    <tr>
+        <td align="left" class="first">${subject}</td>
+        <td align="left"><cite>${posted_by}</cite><em>${created_on}</em></td>
+        <td align="center"><b>${num_replies}</b>/<b>${num_views}</b></td>
+        <td align="left"><cite>${last_post_user} <a href="/forum/id/${last_post}" title="跳转到最后回复">&raquo;</a></cite><em>${last_reply_on}</em></td>
+    </tr>
+</script>
+<table class="table" id="forum-table">
+    <colgroup>
+        <col width="*"></col>
+        <col width="100px"></col>
+        <col width="100px"></col>
+        <col width="150px"></col>
+    </colgroup>
+    <tbody>
+        <tr class="linear-header">
+            <th class="first">
+            <span>筛选：</span>
+                <div class="hover-menu">
+                <cite>{{=filter_name}}<b class="caret"></b></cite>
+                <ul class="items">
+                    <li><a href="?filter=all">全部主题</a></li>
+                    <li><a href="?filter=essence">精华</a></li>
+                    <li><a href="?filter=sticky">顶置</a></li>
+                </ul>
+                </div>
+            </th>
+            <th>作者</th>
+            <th>文章/浏览</th>
+            <th>最后回复</th>
+        </tr>
+    {{for item in objects:}}
+        <tr>
+            <td class="first">{{<< item['subject']}}</td>
+            <td><cite>{{<< item['posted_by']}}</cite><em>{{<< item['created_on']}}</em></td>
+            <td><b>{{= item['num_replies']}}</b>/<b>{{= item['num_views']}}</b></td>
+            <td><cite>{{<< item['last_post_user']}} <a href="/forum/id/{{<< item['last_post']}}" title="跳转到最后回复">&raquo;</a></cite><em>{{<< item['last_reply_on']}}</em></td>
+        </tr>
+    {{pass}}
+    </tbody>
+</table>
+<div class="pagination pagination-centered">{{<<pagination}}</div>
+<script type="text/javascript">
+    $(function(){
+        $('.hover-menu').hover_menu();
+    });
+</script>
+{{end}}

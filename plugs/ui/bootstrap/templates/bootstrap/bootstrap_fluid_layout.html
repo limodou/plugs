@@ -1,0 +1,30 @@
+{{extend "bootstrap/bootstrap_layout.html"}}
+
+{{block content}}
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span2">
+      <div class="sidebar-nav">
+        {{block content_sidebar}}
+
+        {{end content_sidebar}}         
+      </div>
+
+    </div><!--/span-->
+    <div class="span10 content-container">
+        <div class="clearfix content-outter">
+            {{block content_tool_container}}
+            <div class="content_tool">
+                {{block content_tool}}
+                {{end}}
+            </div>
+            {{end}}
+            
+            {{block content_main}}
+            {{end}}
+        </div>    
+    </div><!--/span-->
+    
+  </div><!--/row-->
+</div>
+{{end content}}

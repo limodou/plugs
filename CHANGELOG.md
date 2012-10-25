@@ -1,6 +1,12 @@
 Plugs Change Log
 =====================
 
+0.1.5 Version
+-----------------
+
+* Add jquery_bootstrap configuration, so you can config initialization code of
+  jquery
+
 0.1.4 Version
 -----------------
 

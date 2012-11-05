@@ -7,6 +7,7 @@ Plugs Change Log
 * Add jquery_bootstrap configuration, so you can config initialization code of
   jquery
 * Upgrade bootstrap to 2.2.0
+* Add `inc_full.html` and `inc_full_fluid.html` template
 
 0.1.4 Version
 -----------------

@@ -76,7 +76,7 @@
                 <img title="{{=post.username}}" src="{{=post.userimage}}">
             </div>
             <div class="header">
-                {{=post.floor}}楼 由 <span class="user">{{=post.posted_by}}</span> 发表于 
+                {{=post.floor}}楼 由 <span class="user">{{<< post.posted_by}}</span> 发表于 
                 <span class="date">{{=post.created_on}}</span>
             </div>
             <div class="body">
@@ -131,9 +131,7 @@
 {{include "inc_xheditor_draw_plugins.html"}}
 {{include "inc_paginate.html"}}
 {{use "poshytip"}}
-{{use "fancybox"}}
 {{use "colorpicker"}}
-{{use "history"}}
 <script type="text/javascript">
     var bind_action = function(el, action){
         el.click(function(event){

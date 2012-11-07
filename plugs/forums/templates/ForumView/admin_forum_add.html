@@ -1,0 +1,11 @@
+<h1>增加论坛</h1>
+<div>
+    <form class="ajax {{=defined('form_class') or 'form-horizontal'}}" method="POST" action="{{=defined('action') or request.url}}">
+    {{build = form.build}}
+    {{<< build.body}}
+    {{<< build.buttons_line}}
+    </form>
+</div>
+<script type="text/javascript">
+    simple_select2('#field_managers', {ajax:{url:"/users/search"}});
+</script>

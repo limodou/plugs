@@ -35,9 +35,9 @@ def create_pagination(url, total, page, rows, length=None,
     total_message = total_message.replace('$pages', str(pages))
     total_message = total_message.replace('$total', str(total))
     buf.append('<li class="disabled total"><a href="#">%s</a></li>' % total_message)
-    if begin != 1:
+    if pages and (begin != 1):
         buf.append('<li class="first"><a href="%s">%s</a></li>' % (get_url(1), first))
-    if page != 1:
+    if pages and (page != 1):
         buf.append('<li class="prev"><a href="%s">%s</a></li>' % (get_url(page-1), prev))
     for i in range(begin, end+1):
         if page == i:
@@ -47,9 +47,9 @@ def create_pagination(url, total, page, rows, length=None,
             cls = ''
             href = get_url(i)
         buf.append('<li class="page%s"><a href="%s">%s</a></li>' % (cls, href, i))
-    if page != pages:
+    if pages and (page != pages):
         buf.append('<li class="next"><a href="%s">%s</a></li>' % (get_url(page+1), next))
-    if end != pages:
+    if pages and (end != pages):
         buf.append('<li class="last"><a href="%s">%s</a></li>' % (get_url(pages), last))
     buf.append('</ul>')
     return ''.join(buf)

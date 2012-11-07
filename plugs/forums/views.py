@@ -461,7 +461,7 @@ class ForumView(object):
             return ' | '.join(a)
         
         def updated(value, obj):
-            if obj.floor == 1 and obj.topic.updated_on:
+            if obj.floor == 1 and obj.topic.updated_on and not obj.parent:
                 return u'<div class="updated">由 %s 于 %s 更新</div>' % (obj.topic.modified_user.username, timesince(obj.topic.updated_on))
         
         fields = ['topic', 'id', 'username', 'userimage', 'posted_by', 'content',

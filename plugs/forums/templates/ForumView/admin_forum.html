@@ -5,9 +5,10 @@
 {{block content_main}}
 {{use "angularjs"}}
 {{use "jquery"}}
-{{use "jqutils"}}
+{{use "jqutils", ajaxForm=True}}
 {{use "fontawesome"}}
 {{include "inc_select2.html"}}
+{{include "inc_jquery_dialog2.html"}}
 
 <div class="container-fluid" ng-app="ForumAdminApp" id="ng-app" ng-controller="adminCtrl">
     <div class="row-fluid">
@@ -59,93 +60,6 @@
                 </tbody>
             </table>
         </div>
-    </div>
-    
-    <div class="modal hide" id="add_forum">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">×</button>
-        <h3>新增论坛</h3>
-      </div>
-      <div class="modal-body">
-        <form class="form form-horizontal">
-        <div class="control-group ng-class:get_error('name')._class;">
-            <label class="control-label required">名称：</label>
-            <div class="controls">
-                <input type="text" ng-model="forum_name" class="span2"></input>
-                <p class="help-block">{%get_error('name').message%}</p>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">顺序号：</label>
-            <div class="controls">
-                <input type="number" ng-model="forum_ordering" class="span2"></input>
-                <p class="help-block"></p>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">描述：</label>
-            <div class="controls">
-                <textarea ng-model="forum_desc" rows="4" cols="120"></textarea>
-                <p class="help-block"></p>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">版主：</label>
-            <div class="controls">
-                <select class="field" id="field_managers" multiple url="/users/search">
-                </select>
-                <p class="help-block"></p>
-            </div>
-        </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" type="button" ng-click="add_save()">保存</button>
-      </div>
-    </div>
-    
-    <div class="modal hide" id="edit_forum">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">×</button>
-        <h3>修改论坛</h3>
-      </div>
-      <div class="modal-body">
-        <form class="form form-horizontal">
-        <div class="control-group ng-class:get_error('name')._class;">
-            <label class="control-label required">名称：</label>
-            <div class="controls">
-                <input type="text" ng-model="forum_name" class="span2"></input>
-                <p class="help-block">{%get_error('name').message%}</p>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">顺序号：</label>
-            <div class="controls">
-                <input type="number" ng-model="forum_ordering" class="span2"></input>
-                <p class="help-block"></p>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">描述：</label>
-            <div class="controls">
-                <textarea ng-model="forum_desc" rows="4" cols="120"></textarea>
-                <p class="help-block"></p>
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label">版主：</label>
-            <div class="controls">
-                <select class="field" id="field_managers2" multiple url="/users/search">
-                    <option ng-repeat="(k, v) in form_managers" value="{%k%}" selected>{%v%}</option>
-                </select>
-                <p class="help-block"></p>
-            </div>
-        </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary" type="button" ng-click="edit_save(forum_id)">保存</button>
-      </div>
     </div>
     
     <div class="modal hide" id="topic_type">
@@ -201,7 +115,6 @@ var app = angular.module('ForumAdminApp', []).config(function ($interpolateProvi
 }); 
 
 function adminCtrl($scope, $rootScope) {
-    $scope.error = {};
     $.get('/forum/admin/forums/query?category_id={{=category.id}}')
         .success(function(data, status, headers, config){
             $scope.forums = data.rows;
@@ -223,56 +136,27 @@ function adminCtrl($scope, $rootScope) {
         else
             return {}
     }
-    $scope.add_save = function(){
-        $.post('/forum/admin/forums/add', {'name':$scope.forum_name, 
-            'description':$scope.forum_desc, 'ordering':$scope.forum_ordering,
-            'managers':$('#field_managers').val() || [], 'category':{{=category.id}}})
-            .success(function(data, status, headers, config){
-                if (data.success){
-                    $scope.forums.push(data.data);
-                    $('#add_forum').modal('hide');
-                    $scope.error = {};
-                }else{
-                    $scope.error = data.data;
-                }
-                $scope.$apply();
-            });
-    }
-    $scope.edit_save = function(id){
-        $.post('/forum/admin/forums/edit/'+id, {'name':$scope.forum_name, 
-            'description':$scope.forum_desc, 'managers':$('#field_managers2').val() || [],
-            'ordering':$scope.forum_ordering})
-            .success(function(data, status, headers, config){
-                if (data.success){
-                    var index = $scope.find_forum(data.data.id);
-                    $scope.forums[index] = $.extend(true, $scope.forums[index], data.data);
-                    $('#edit_forum').modal('hide');
-                    $scope.error = {};
-                }else{
-                    $scope.error = data.data;
-                }
-                $scope.$apply();
-            });
-    }
     
-    $scope.get_error = function(k){
-        var e = {};
-        if ($scope.error && k in $scope.error){
-            e._class = 'error';
-            e.message = $scope.error[k];
-        }else{
-            e._class = '';
-            e.message = '';
-        }
-        return e;
-    }
     $scope.add_open = function(id){
-        $scope.forum_id = '';
-        $scope.forum_name = '';
-        $scope.forum_ordering = '';
-        $scope.forum_desc = '';
-//        $('#field_managers').remote_multiple_select2('clear');
-        $('#add_forum').modal('show');
+        var dialog = $('<div id="add_object"></div>').dialog2(
+            {
+                autoFocus:false, 
+                url:'/forum/admin/forums/add?category={{=category.id}}',
+                ajaxFormOptions: {
+                    onSuccess: common_ajaxForm_success({
+                        success:function(data){
+                            $(this).dialog2('close');
+                            $scope.forums.push(data.data);
+                            $scope.$apply();
+                        }
+                    }),
+                    dataType: 'json'
+                }
+            }); 
+        dialog.closest('.modal').addClass('wide-modal');
+        dialog.bind('dialog2.content-update', function(e){
+        });
+        
     }
     $scope.open_topictype = function(id){
         $scope.forum_id = id;
@@ -282,21 +166,27 @@ function adminCtrl($scope, $rootScope) {
         $scope.$apply();
     }
     $scope.edit_open = function(id){
-        for(var i=0; i<$scope.forums.length; i++){
-            if ($scope.forums[i].id == id){
-                var c = $scope.forums[i]
-                $scope.forum_id = c.id;
-                $scope.forum_name = c.name;
-                $scope.forum_ordering = c.ordering;
-                $scope.forum_desc = c.description;
-                $scope.form_managers = c.managers
-                $scope.$apply(function(){
-                    simple_select2('#field_managers2', {ajax:{url:'/users/search'}});
-                    $('#edit_forum').modal('show');
-                });
-                break;
+        var dialog = $('<div id="edit_object"></div>').dialog2(
+            {
+                autoFocus:false, 
+                url:'/forum/admin/forums/edit/'+id,
+                ajaxFormOptions: {
+                    onSuccess: common_ajaxForm_success({
+                        success:function(data){
+                            $(this).dialog2('close');
+                            var index = $scope.find_forum(data.data.id);
+                            $scope.forums[index].managers = {}
+                            $scope.forums[index] = $.extend(true, $scope.forums[index], data.data);
+                            $scope.$apply();
             }
+                    }),
+                    dataType: 'json'
         }
+            }); 
+        dialog.closest('.modal').addClass('wide-modal');
+        dialog.bind('dialog2.content-update', function(e){
+        });
+
     }
     $scope.remove = function(id){
         $.post('/forum/admin/forums/delete/' + id).success(function(data){
@@ -372,6 +262,7 @@ function adminCtrl($scope, $rootScope) {
 $(document).ajaxError(function(e, jqxhr, settings, exception){
     show_message('请求处理失败', 'error');
 });
+
 </script>
 
 {{end}}

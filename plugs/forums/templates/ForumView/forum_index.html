@@ -75,7 +75,7 @@
             <td class="first">{{<< item['subject']}}</td>
             <td><cite>{{<< item['posted_by']}}</cite><em>{{<< item['created_on']}}</em></td>
             <td><b>{{= item['num_replies']}}</b>/<b>{{= item['num_views']}}</b></td>
-            <td><cite>{{<< item['last_post_user']}} <a href="/forum/id/{{<< item['last_post']}}" title="跳转到最后回复">&raquo;</a></cite><em>{{<< item['last_reply_on']}}</em></td>
+            <td><cite>{{<< item['last_post_user']}} {{if item['last_post']:}}<a href="/forum/id/{{<< item['last_post']}}" title="跳转到最后回复">&raquo;</a>{{pass}}</cite><em>{{<< item['last_reply_on']}}</em></td>
         </tr>
     {{pass}}
     </tbody>

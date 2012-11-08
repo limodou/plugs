@@ -140,17 +140,24 @@ class ForumView(object):
         """
         from uliweb.utils.generic import AddView, get_field_display
         
+        def post_created_form(fcls, model):
+            fcls.managers.choices = [('', '')]
+
         def success_data(obj, data):
             d = obj.to_dict()
             d['managers'] = convert_managers(None, obj)
             return d
         
-        view = AddView(self.model, url_for(ForumView.admin_forum), success_data=success_data)
+        view = AddView(self.model, 
+            success_data=success_data,
+            post_created_form=post_created_form,
+            default_data={'category':request.GET.get('category')},
+        )
         return view.run(json_result=True)
     
     @expose('admin/forums/edit/<id>')
     @decorators.check_role('superuser')
-    def forum_edit(self, id):
+    def admin_forum_edit(self, id):
         """
         修改论坛
         """
@@ -160,13 +167,18 @@ class ForumView(object):
     
         obj = forum.get(int(id))
         
+        def post_created_form(fcls, model, obj):
+            fcls.managers.query = obj.managers
+
         def success_data(obj, data):
             d = obj.to_dict()
             d['managers'] = convert_managers(None, obj)
             return d
         
         view = EditView(self.model, obj=obj,
-            success_data=success_data)
+            success_data=success_data,
+            post_created_form=post_created_form,
+            )
         return view.run(json_result=True)
     
     @expose('admin/forums/delete/<id>')
@@ -461,7 +473,7 @@ class ForumView(object):
             return ' | '.join(a)
         
         def updated(value, obj):
-            if obj.floor == 1 and obj.topic.updated_on:
+            if obj.floor == 1 and obj.topic.updated_on and not obj.parent:
                 return u'<div class="updated">由 %s 于 %s 更新</div>' % (obj.topic.modified_user.username, timesince(obj.topic.updated_on))
         
         fields = ['topic', 'id', 'username', 'userimage', 'posted_by', 'content',

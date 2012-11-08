@@ -11,8 +11,8 @@ html, body {font-family:微软雅黑,宋体;}
 #forum-body {background: white;margin-top:20px;}
 #forum-body td, #forum-body th, #forum-table td, #forum-table th {vertical-align:middle;text-align:center;}
 #forum-body th.first, #forum-body td.first, #forum-table td, #forum-table th {text-align:left;}
-#forum-body .title h3 {font-size:16px;height:22px;margin:0 0 5px 20px;}
-#forum-body .title p {height:1em;margin:0 0 5px 20px;}
+#forum-body .title h3 {font-size:14px;height:16px;line-height:16px;margin:0 0 5px 20px;}
+#forum-body .title p {margin:0 0 5px 20px;}
 .linear-header{
 background-color: whitesmoke;
 background-image: -moz-linear-gradient(top,white,whitesmoke);

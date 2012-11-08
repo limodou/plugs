@@ -52,7 +52,7 @@ class Forum(Model):#论坛
         return self.name
     
     class AddForm:
-        fields = ['category', 'name', 'description', 'ordering', 'managers']
+        fields = ['name', 'description', 'ordering', 'managers']
         
     class EditForm:
         fields = ['name', 'description', 'ordering', 'managers']

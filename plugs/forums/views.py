@@ -452,23 +452,23 @@ class ForumView(object):
             if obj.floor == 1 and obj.parent == None:
                 #第一楼为主贴，可以允许关闭，顶置等操作
                 if is_manager:
-                    a.append('<a href="#" rel="%d">%s</a>' % (obj.id, self.status['close'][obj.topic.closed]))
-                    a.append('<a href="#" rel="%d">%s</a>' % (obj.id, self.status['hidden'][obj.topic.hidden]))
-                    a.append('<a href="#" rel="%d">%s</a>' % (obj.id, self.status['sticky'][obj.topic.sticky]))
-                    a.append('<a href="#" rel="%d">%s</a>' % (obj.id, self.status['essence'][obj.topic.essence]))
-                    a.append('<a href="#" rel="%d">%s</a>' % (obj.id, self.status['homepage'][obj.topic.homepage]))
+                    a.append('<a href="#" rel="%d" class="close">%s</a>' % (obj.id, self.status['close'][obj.topic.closed]))
+                    a.append('<a href="#" rel="%d" class="hidden">%s</a>' % (obj.id, self.status['hidden'][obj.topic.hidden]))
+                    a.append('<a href="#" rel="%d" class="top">%s</a>' % (obj.id, self.status['sticky'][obj.topic.sticky]))
+                    a.append('<a href="#" rel="%d" class="essence">%s</a>' % (obj.id, self.status['essence'][obj.topic.essence]))
+                    a.append('<a href="#" rel="%d" class="homepage">%s</a>' % (obj.id, self.status['homepage'][obj.topic.homepage]))
                 if is_manager or (obj.posted_by.id == request.user.id and obj.created_on+timedelta(days=settings.get_var('PARA/FORUM_EDIT_DELAY'))>=date.now()):
                     #作者或管理员且在n天之内，则可以编辑
                     url = url_for(ForumView.edit_topic, forum_id=forum_id, topic_id=topic_id)
-                    a.append('<a href="%s" rel="%d">编辑</a>' % (url, obj.id))
+                    a.append('<a href="%s" rel="%d" class="edit">编辑</a>' % (url, obj.id))
                 if is_manager:
                     url = url_for(ForumView.remove_topic, forum_id=forum_id, topic_id=topic_id)
-                    a.append('<a href="%s" rel="%d">删除主题</a>' % (url, obj.id))
+                    a.append('<a href="%s" rel="%d" class="delete_topic">删除主题</a>' % (url, obj.id))
             if is_manager or (obj.posted_by.id == request.user.id):
                 if (obj.deleted and (obj.deleted_by.id == request.user.id or is_manager)) or not obj.deleted:
-                    a.append('<a href="#" rel="%d">%s</a>' % (obj.id, self.status['delete'][obj.deleted]))
+                    a.append('<a href="#" rel="%d" class="delete">%s</a>' % (obj.id, self.status['delete'][obj.deleted]))
             if obj.posted_by.id == request.user.id:    
-                a.append('<a href="#" rel="%d">%s</a>' % (obj.id, self.status['email'][obj.reply_email]))
+                a.append('<a href="#" rel="%d" class="email">%s</a>' % (obj.id, self.status['email'][obj.reply_email]))
             a.append('<a href="/forum/%d/%d/%d/new_reply">回复该作者</a>' % (forum_id, topic_id, obj.id))
             return ' | '.join(a)
         

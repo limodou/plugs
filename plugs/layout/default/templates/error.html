@@ -1,13 +1,24 @@
-{{extend "layout.html"}}
-
-{{block content}}
-<div class="content">
-    <div class="box center col_10">
-        <h2>出错啦!</h2>
-        <div class="box-body">
-            <p>{{=message}}</p>
-            <p><a href="{{=request.referrer}}">点击这里返回</a></p>
-        </div>
-    </div>
+<!doctype html>
+<html>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<head>
+  <title>Error</title>
+<style>
+body{background: #fff;}
+h1{text-align:center;font-size:48px;}
+.error{color:red;font-weight:bold;}
+</style>
+</head>
+<body>
+<h1>{{=_('Error')}}</h1>
+<div style="text-align:center;margin:0 auto;">
+    <img src="/static/images/error.png"></img>
+    <p class="error">{{=message}}</p>
+    <p><a href="/">{{=_('Click here to return HomePage')}}</a></p>
 </div>
-{{end}}
+
+</body>
+</html>
+
+
+

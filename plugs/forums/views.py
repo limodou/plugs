@@ -970,3 +970,5 @@ setTimeout(function(){callback(url);},100);
         page = int(math.ceil(1.0*obj.floor/settings.get_var('PARA/FORUM_PAGE_NUMS')))
         url = '/forum/%d/%d?page=%d' % (obj.topic._forum_, obj._topic_, page)
         return redirect(url)
+    
+    

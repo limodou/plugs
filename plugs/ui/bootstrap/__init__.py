@@ -53,3 +53,6 @@ def create_pagination(url, total, page, rows, length=None,
         buf.append('<li class="last"><a href="%s">%s</a></li>' % (get_url(pages), last))
     buf.append('</ul>')
     return ''.join(buf)
+
+
+

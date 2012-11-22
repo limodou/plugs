@@ -8,6 +8,7 @@ Plugs Change Log
   jquery
 * Upgrade bootstrap to 2.2.0
 * Add `inc_full.html` and `inc_full_fluid.html` template
+* Add highcharts and kinetic.js
 
 0.1.4 Version
 -----------------

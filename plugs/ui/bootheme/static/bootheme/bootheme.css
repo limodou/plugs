@@ -24,6 +24,7 @@ border-bottom-right-radius: 0px;
 -moz-box-shadow:  0px 0px 10px 5px rgba(128, 128, 128, 0.5);
 box-shadow:  0px 0px 10px 5px rgba(128, 128, 128, 0.5);
 margin:0;
+float:both;
 }
 html, body{
 background-image:url(/static/bootheme/bg.gif);

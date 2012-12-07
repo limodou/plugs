@@ -1,0 +1,24 @@
+{{extend "forums_admin_layout.html"}}
+
+{{block sub_menu}}
+{{sub_menu(menu_items, 'forumtopictype')}}
+{{end}}
+
+{{block content_tool}}
+    <a class="btn btn-blue" href="{{=url_for('plugs.forums.views.ForumView.forumtopictype_add')}}">增加新主题类型</a>
+{{end}}
+
+{{block content_main}}
+{{use "jquery"}}
+
+<div class="content">
+    {{table_id='forum_table'}}
+    {{include "inc_table.html"}}
+    <script>
+        $(function(){
+            create_table("{{=request.path}}");
+        });
+    </script>
+</div>
+
+{{end}}

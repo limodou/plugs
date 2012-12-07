@@ -769,7 +769,9 @@
 			selector = url.slice( off, url.length );
 			url = url.slice( 0, off );
 		}
-		
+        
+		type = this.data('options').type;
+        
 		// Request the remote document
 		jQuery.ajax({
 			url: url,

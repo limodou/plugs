@@ -467,8 +467,13 @@ class ForumView(object):
             if is_manager or (obj.posted_by.id == request.user.id):
                 if (obj.deleted and (obj.deleted_by.id == request.user.id or is_manager)) or not obj.deleted:
                     a.append('<a href="#" rel="%d" class="delete">%s</a>' % (obj.id, self.status['delete'][obj.deleted]))
-            if obj.posted_by.id == request.user.id:    
-                a.append('<a href="#" rel="%d" class="email">%s</a>' % (obj.id, self.status['email'][obj.reply_email]))
+            try:
+                obj.posted_by
+                if obj.posted_by.id == request.user.id:    
+                    a.append('<a href="#" rel="%d" class="email">%s</a>' % (obj.id, self.status['email'][obj.reply_email]))
+            except NotFound:
+                obj.posted_by = None
+                obj.save()
             a.append('<a href="/forum/%d/%d/%d/new_reply">回复该作者</a>' % (forum_id, topic_id, obj.id))
             return ' | '.join(a)
         

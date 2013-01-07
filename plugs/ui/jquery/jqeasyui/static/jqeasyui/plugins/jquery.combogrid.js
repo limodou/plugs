@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.4
+ * jQuery EasyUI 1.3.1
  * 
  * Licensed under the GPL terms
  * To use it on other terms please contact us
  *
- * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
+ * Copyright(c) 2009-2012 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -129,7 +129,7 @@ _1c(_25,[q],true);
 }
 if(_26.mode=="remote"){
 _27.datagrid("clearSelections");
-_27.datagrid("load",{q:q});
+_27.datagrid("load",$.extend({},_26.queryParams,{q:q}));
 }else{
 if(!q){
 return;
@@ -184,7 +184,7 @@ $(this).combo("clear");
 }};
 $.fn.combogrid.parseOptions=function(_2f){
 var t=$(_2f);
-return $.extend({},$.fn.combo.parseOptions(_2f),$.fn.datagrid.parseOptions(_2f),{idField:(t.attr("idField")||undefined),textField:(t.attr("textField")||undefined),mode:t.attr("mode")});
+return $.extend({},$.fn.combo.parseOptions(_2f),$.fn.datagrid.parseOptions(_2f),$.parser.parseOptions(_2f,["idField","textField","mode"]));
 };
 $.fn.combogrid.defaults=$.extend({},$.fn.combo.defaults,$.fn.datagrid.defaults,{loadMsg:null,idField:null,textField:null,mode:"local",keyHandler:{up:function(){
 _14(this,-1);

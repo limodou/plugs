@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.4
+ * jQuery EasyUI 1.3.1
  * 
  * Licensed under the GPL terms
  * To use it on other terms please contact us
  *
- * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
+ * Copyright(c) 2009-2012 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -178,8 +178,7 @@ var vv=jq.val().split(_25.separator);
 return parseInt(vv[2],10)||0;
 }};
 $.fn.timespinner.parseOptions=function(_26){
-var t=$(_26);
-return $.extend({},$.fn.spinner.parseOptions(_26),{separator:t.attr("separator"),showSeconds:(t.attr("showSeconds")?t.attr("showSeconds")=="true":undefined),highlight:(parseInt(t.attr("highlight"))||undefined)});
+return $.extend({},$.fn.spinner.parseOptions(_26),$.parser.parseOptions(_26,["separator",{showSeconds:"boolean",highlight:"number"}]));
 };
 $.fn.timespinner.defaults=$.extend({},$.fn.spinner.defaults,{separator:":",showSeconds:false,highlight:0,spin:function(_27){
 _19(this,_27);

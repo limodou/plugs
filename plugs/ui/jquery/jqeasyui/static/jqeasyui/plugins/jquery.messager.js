@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.4
+ * jQuery EasyUI 1.3.1
  * 
  * Licensed under the GPL terms
  * To use it on other terms please contact us
  *
- * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
+ * Copyright(c) 2009-2012 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -72,128 +72,132 @@ setTimeout(function(){
 $(el).window("destroy");
 },_9);
 };
-function _b(_c,_d,_e){
-var _f=$("<div class=\"messager-body\"></div>").appendTo("body");
-_f.append(_d);
-if(_e){
-var tb=$("<div class=\"messager-button\"></div>").appendTo(_f);
-for(var _10 in _e){
-$("<a></a>").attr("href","javascript:void(0)").text(_10).css("margin-left",10).bind("click",eval(_e[_10])).appendTo(tb).linkbutton();
-}
-}
-_f.window({title:_c,noheader:(_c?false:true),width:300,height:"auto",modal:true,collapsible:false,minimizable:false,maximizable:false,resizable:false,onClose:function(){
-setTimeout(function(){
-_f.window("destroy");
-},100);
-}});
-_f.window("window").addClass("messager-window");
-return _f;
-};
-$.messager={show:function(_11){
-var _12=$.extend({showType:"slide",showSpeed:600,width:250,height:100,msg:"",title:"",timeout:4000},_11||{});
-var win=$("<div class=\"messager-body\"></div>").html(_12.msg).appendTo("body");
-win.window({title:_12.title,width:_12.width,height:_12.height,collapsible:false,minimizable:false,maximizable:false,shadow:false,draggable:false,resizable:false,closed:true,onBeforeOpen:function(){
-_1(this,_12.showType,_12.showSpeed,_12.timeout);
+function _b(_c){
+var _d=$.extend({},$.fn.window.defaults,{collapsible:false,minimizable:false,maximizable:false,shadow:false,draggable:false,resizable:false,closed:true,style:{left:"",top:"",right:0,zIndex:$.fn.window.defaults.zIndex++,bottom:-document.body.scrollTop-document.documentElement.scrollTop},onBeforeOpen:function(){
+_1(this,_d.showType,_d.showSpeed,_d.timeout);
 return false;
 },onBeforeClose:function(){
-_7(this,_12.showType,_12.showSpeed);
+_7(this,_d.showType,_d.showSpeed);
 return false;
+}},{title:"",width:250,height:100,showType:"slide",showSpeed:600,msg:"",timeout:4000},_c);
+var _e=$("<div class=\"messager-body\"></div>").html(_d.msg).appendTo("body");
+_e.window(_d);
+_e.window("window").css(_d.style);
+_e.window("open");
+return _e;
+};
+function _f(_10,_11,_12){
+var win=$("<div class=\"messager-body\"></div>").appendTo("body");
+win.append(_11);
+if(_12){
+var tb=$("<div class=\"messager-button\"></div>").appendTo(win);
+for(var _13 in _12){
+$("<a></a>").attr("href","javascript:void(0)").text(_13).css("margin-left",10).bind("click",eval(_12[_13])).appendTo(tb).linkbutton();
+}
+}
+win.window({title:_10,noheader:(_10?false:true),width:300,height:"auto",modal:true,collapsible:false,minimizable:false,maximizable:false,resizable:false,onClose:function(){
+setTimeout(function(){
+win.window("destroy");
+},100);
 }});
-win.window("window").css({left:"",top:"",right:0,zIndex:$.fn.window.defaults.zIndex++,bottom:-document.body.scrollTop-document.documentElement.scrollTop});
-win.window("open");
-},alert:function(_13,msg,_14,fn){
-var _15="<div>"+msg+"</div>";
-switch(_14){
+win.window("window").addClass("messager-window");
+win.children("div.messager-button").children("a:first").focus();
+return win;
+};
+$.messager={show:function(_14){
+return _b(_14);
+},alert:function(_15,msg,_16,fn){
+var _17="<div>"+msg+"</div>";
+switch(_16){
 case "error":
-_15="<div class=\"messager-icon messager-error\"></div>"+_15;
+_17="<div class=\"messager-icon messager-error\"></div>"+_17;
 break;
 case "info":
-_15="<div class=\"messager-icon messager-info\"></div>"+_15;
+_17="<div class=\"messager-icon messager-info\"></div>"+_17;
 break;
 case "question":
-_15="<div class=\"messager-icon messager-question\"></div>"+_15;
+_17="<div class=\"messager-icon messager-question\"></div>"+_17;
 break;
 case "warning":
-_15="<div class=\"messager-icon messager-warning\"></div>"+_15;
+_17="<div class=\"messager-icon messager-warning\"></div>"+_17;
 break;
 }
-_15+="<div style=\"clear:both;\"/>";
-var _16={};
-_16[$.messager.defaults.ok]=function(){
-win.dialog({closed:true});
-if(fn){
-fn();
-return false;
-}
-};
-_16[$.messager.defaults.ok]=function(){
+_17+="<div style=\"clear:both;\"/>";
+var _18={};
+_18[$.messager.defaults.ok]=function(){
 win.window("close");
 if(fn){
 fn();
 return false;
 }
 };
-var win=_b(_13,_15,_16);
-},confirm:function(_17,msg,fn){
-var _18="<div class=\"messager-icon messager-question\"></div>"+"<div>"+msg+"</div>"+"<div style=\"clear:both;\"/>";
-var _19={};
-_19[$.messager.defaults.ok]=function(){
+var win=_f(_15,_17,_18);
+return win;
+},confirm:function(_19,msg,fn){
+var _1a="<div class=\"messager-icon messager-question\"></div>"+"<div>"+msg+"</div>"+"<div style=\"clear:both;\"/>";
+var _1b={};
+_1b[$.messager.defaults.ok]=function(){
 win.window("close");
 if(fn){
 fn(true);
 return false;
 }
 };
-_19[$.messager.defaults.cancel]=function(){
+_1b[$.messager.defaults.cancel]=function(){
 win.window("close");
 if(fn){
 fn(false);
 return false;
 }
 };
-var win=_b(_17,_18,_19);
-},prompt:function(_1a,msg,fn){
-var _1b="<div class=\"messager-icon messager-question\"></div>"+"<div>"+msg+"</div>"+"<br/>"+"<input class=\"messager-input\" type=\"text\"/>"+"<div style=\"clear:both;\"/>";
-var _1c={};
-_1c[$.messager.defaults.ok]=function(){
+var win=_f(_19,_1a,_1b);
+return win;
+},prompt:function(_1c,msg,fn){
+var _1d="<div class=\"messager-icon messager-question\"></div>"+"<div>"+msg+"</div>"+"<br/>"+"<input class=\"messager-input\" type=\"text\"/>"+"<div style=\"clear:both;\"/>";
+var _1e={};
+_1e[$.messager.defaults.ok]=function(){
 win.window("close");
 if(fn){
 fn($(".messager-input",win).val());
 return false;
 }
 };
-_1c[$.messager.defaults.cancel]=function(){
+_1e[$.messager.defaults.cancel]=function(){
 win.window("close");
 if(fn){
 fn();
 return false;
 }
 };
-var win=_b(_1a,_1b,_1c);
-},progress:function(_1d){
-var _1e=$.extend({title:"",msg:"",text:undefined,interval:300},_1d||{});
-var _1f={bar:function(){
+var win=_f(_1c,_1d,_1e);
+win.children("input.messager-input").focus();
+return win;
+},progress:function(_1f){
+var _20={bar:function(){
 return $("body>div.messager-window").find("div.messager-p-bar");
 },close:function(){
 var win=$("body>div.messager-window>div.messager-body");
 if(win.length){
-if(win[0].timer){
-clearInterval(win[0].timer);
-}
 win.window("close");
 }
 }};
-if(typeof _1d=="string"){
-var _20=_1f[_1d];
-return _20();
+if(typeof _1f=="string"){
+var _21=_20[_1f];
+return _21();
 }
-var _21="<div class=\"messager-progress\"><div class=\"messager-p-msg\"></div><div class=\"messager-p-bar\"></div></div>";
-var win=_b(_1e.title,_21,null);
-win.find("div.messager-p-msg").html(_1e.msg);
+var _22=$.extend({title:"",msg:"",text:undefined,interval:300},_1f||{});
+var _23="<div class=\"messager-progress\"><div class=\"messager-p-msg\"></div><div class=\"messager-p-bar\"></div></div>";
+var win=_f(_22.title,_23,null);
+win.find("div.messager-p-msg").html(_22.msg);
 var bar=win.find("div.messager-p-bar");
-bar.progressbar({text:_1e.text});
-win.window({closable:false});
-if(_1e.interval){
+bar.progressbar({text:_22.text});
+win.window({closable:false,onClose:function(){
+if(this.timer){
+clearInterval(this.timer);
+}
+$(this).window("destroy");
+}});
+if(_22.interval){
 win[0].timer=setInterval(function(){
 var v=bar.progressbar("getValue");
 v+=10;
@@ -201,8 +205,9 @@ if(v>100){
 v=0;
 }
 bar.progressbar("setValue",v);
-},_1e.interval);
+},_22.interval);
 }
+return win;
 }};
 $.messager.defaults={ok:"Ok",cancel:"Cancel"};
 })(jQuery);

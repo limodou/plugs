@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.4
+ * jQuery EasyUI 1.3.1
  * 
  * Licensed under the GPL terms
  * To use it on other terms please contact us
  *
- * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
+ * Copyright(c) 2009-2012 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -135,6 +135,10 @@ _13(this,[_23]);
 return jq.each(function(){
 var _24=$.data(this,"combotree").tree;
 _24.find("div.tree-node-selected").removeClass("tree-node-selected");
+var cc=_24.tree("getChecked");
+for(var i=0;i<cc.length;i++){
+_24.tree("uncheck",cc[i].target);
+}
 $(this).combo("clear");
 });
 }};

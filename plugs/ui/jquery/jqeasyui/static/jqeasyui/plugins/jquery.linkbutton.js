@@ -1,10 +1,10 @@
 ﻿/**
- * jQuery EasyUI 1.2.4
+ * jQuery EasyUI 1.3.1
  * 
  * Licensed under the GPL terms
  * To use it on other terms please contact us
  *
- * Copyright(c) 2009-2011 stworthy [ stworthy@gmail.com ] 
+ * Copyright(c) 2009-2012 stworthy [ stworthy@gmail.com ] 
  * 
  */
 (function($){
@@ -15,7 +15,7 @@ $(_2).addClass("l-btn");
 if(_3.id){
 $(_2).attr("id",_3.id);
 }else{
-$.fn.removeProp?$(_2).removeProp("id"):$(_2).removeAttr("id");
+$(_2).attr("id","");
 }
 if(_3.plain){
 $(_2).addClass("l-btn-plain");
@@ -33,6 +33,13 @@ if(_3.iconCls){
 $(_2).find(".l-btn-empty").addClass(_3.iconCls);
 }
 }
+$(_2).unbind(".linkbutton").bind("focus.linkbutton",function(){
+if(!_3.disabled){
+$(this).find("span.l-btn-text").addClass("l-btn-focus");
+}
+}).bind("blur.linkbutton",function(){
+$(this).find("span.l-btn-text").removeClass("l-btn-focus");
+});
 _4(_2,_3.disabled);
 };
 function _4(_5,_6){
@@ -89,7 +96,7 @@ _4(this,true);
 }};
 $.fn.linkbutton.parseOptions=function(_c){
 var t=$(_c);
-return {id:t.attr("id"),disabled:(t.attr("disabled")?true:undefined),plain:(t.attr("plain")?t.attr("plain")=="true":undefined),text:$.trim(t.html()),iconCls:(t.attr("icon")||t.attr("iconCls"))};
+return $.extend({},$.parser.parseOptions(_c,["id","iconCls",{plain:"boolean"}]),{disabled:(t.attr("disabled")?true:undefined),text:$.trim(t.html()),iconCls:(t.attr("icon")||t.attr("iconCls"))});
 };
 $.fn.linkbutton.defaults={id:null,disabled:false,plain:false,text:"",iconCls:null};
 })(jQuery);

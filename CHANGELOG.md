@@ -9,6 +9,7 @@ Plugs Change Log
 * Upgrade bootstrap to 2.2.0
 * Add `inc_full.html` and `inc_full_fluid.html` template
 * Add highcharts and kinetic.js
+* Upgrade jqeasyui to 1.3.1
 
 0.1.4 Version
 -----------------

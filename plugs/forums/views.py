@@ -406,6 +406,12 @@ class ForumView(object):
                 
         File.filter(File.c.slug==slug).filter(File.c.enabled==False).remove()
     
+    def _get_post_content(self, post):
+        if post.deleted:
+            return u'<div class="deleted">内容已经被 %s 于时间 %s 删除 </div>' % (post.deleted_by.username, post.field_str(post.deleted_on))
+        else:
+            return post.content
+        
     @expose('<int:forum_id>/<int:topic_id>')
     def topic_view(self, forum_id, topic_id):
         """
@@ -430,10 +436,7 @@ class ForumView(object):
             return date.to_local(value).strftime('%Y-%m-%d %H:%M:%S %Z')
         
         def content(value, obj):
-            if obj.deleted:
-                return u'<div class="deleted">内容已经被 %s 于时间 %s 删除 </div>' % (obj.deleted_by.username, obj.field_str(obj.deleted_on))
-            else:
-                return value
+            return self._get_post_content(obj)
         
         def username(value, obj):
             return obj.posted_by.username
@@ -452,7 +455,7 @@ class ForumView(object):
             if obj.floor == 1 and obj.parent == None:
                 #第一楼为主贴，可以允许关闭，顶置等操作
                 if is_manager:
-                    a.append('<a href="#" rel="%d" class="close">%s</a>' % (obj.id, self.status['close'][obj.topic.closed]))
+                    a.append('<a href="#" rel="%d" class="close_thread">%s</a>' % (obj.id, self.status['close'][obj.topic.closed]))
                     a.append('<a href="#" rel="%d" class="hidden">%s</a>' % (obj.id, self.status['hidden'][obj.topic.hidden]))
                     a.append('<a href="#" rel="%d" class="top">%s</a>' % (obj.id, self.status['sticky'][obj.topic.sticky]))
                     a.append('<a href="#" rel="%d" class="essence">%s</a>' % (obj.id, self.status['essence'][obj.topic.essence]))
@@ -547,6 +550,15 @@ class ForumView(object):
 #            topic = Topic.get(int(topic_id))
 #            return {'forum':forum, 'topic':topic, 'slug':slug, 'has_email':bool(request.user and request.user.email), 'page':pageno+1}
     
+    def get_post_content(self, post_id):
+        """
+        获得某个post的内容，用于动态删除和恢复中
+        """
+        Post = get_model('forumpost')
+
+        post = Post.get(int(post_id))
+        return json({'success':True, 'data':self._get_post_content(post)})
+        
     @expose('<forum_id>/<topic_id>/new_post')
     @decorators.check_role('trusted')
     def new_post(self, forum_id, topic_id):
@@ -884,7 +896,7 @@ setTimeout(function(){callback(url);},100);
         #topic
         is_manager = post.topic.forum.managers.has(request.user)
         if is_manager:
-            if action == 'close':
+            if action == 'close_thread':
                 topic.closed = not topic.closed
                 topic_flag = True
                 txt = self.status['close'][topic.closed]

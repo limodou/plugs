@@ -39,8 +39,10 @@
                             由 <span class="user">{{<< post.posted_by}}</span> 回复于 
                             <span class="date">{{= post.created_on}}</span>
                         </div>
+                        <div class="post_content" data-content="{{=post.id}}">
                         {{<< post.content}}
                         {{<< post.updated}}
+                        </div>
                         
                         {{make_sub_posts(post.id)}}
                         
@@ -80,8 +82,10 @@
                 <span class="date">{{=post.created_on}}</span>
             </div>
             <div class="body">
+            <div class="post_content" data-content="{{=post.id}}">
             {{<< post.content}}
             {{<< post.updated}}
+            </div>
             
             {{make_sub_posts(post.id)}}
             
@@ -136,7 +140,8 @@
     var bind_action = function(el, action){
         el.click(function(event){
             event.preventDefault();
-            var post_id = el.attr('rel')
+            var ele = $(this);
+            var post_id = ele.attr('rel')
             $.ajax({
                 type: "POST",
                 data: {post_id:post_id, action:action},
@@ -144,7 +149,13 @@
                 success: function(data){
                     show_message(data.msg);
                     if(data.txt){
-                        el.html(data.txt);
+                        ele.html(data.txt);
+                    }
+                    //添加删除的处理，动态切換内容
+                    if (action == 'delete'){
+                        $.get('/forum/get_post_content/'+post_id).success(function(data){
+                            $('div[data-content='+post_id+']').html(data.data);
+                        });
                     }
                 }
             });
@@ -191,9 +202,8 @@
             }
         );
         
-        $.each(['close', 'hidden', 'delete', 'top', 'essence', 'homepage', 'email'], function(index, value){
+        $.each(['close_thread', 'hidden', 'delete', 'top', 'essence', 'homepage', 'email'], function(index, value){
                 bind_action($('li.post').find('a.'+value), value);
-                bind_action($('li.post').find('a.un'+value), 'un'+value);
             }); 
         
         //处理回到顶部显示

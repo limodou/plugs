@@ -329,16 +329,13 @@
 				xL = xC = xR = this.eventX;
 				yT = yC = yB = this.eventY;
 			} else { // this.opts.alignTo == 'target'
-                if (this.opts.alignTo == 'fixed')
-                    var elmOffset = this.$elm.position() //change to position, inorder to suit for fixed
-				else
-                    var elmOffset = this.$elm.offset()
-					var elm = {
-						l: elmOffset.left,
-						t: elmOffset.top,
-						w: this.$elm.outerWidth(),
-						h: this.$elm.outerHeight()
-					};
+                var elmOffset = this.$elm.offset() //change to position, inorder to suit for fixed
+                var elm = {
+                    l: elmOffset.left,
+                    t: elmOffset.top,
+                    w: this.$elm.outerWidth(),
+                    h: this.$elm.outerHeight()
+                };
 				xL = elm.l + (this.opts.alignX != 'inner-right' ? 0 : elm.w);	// left edge
 				xC = xL + Math.floor(elm.w / 2);				// h center
 				xR = xL + (this.opts.alignX != 'inner-left' ? elm.w : 0);	// right edge

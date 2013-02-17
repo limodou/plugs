@@ -11,6 +11,7 @@ Plugs Change Log
 * Add highcharts and kinetic.js
 * Upgrade jqeasyui to 1.3.1
 * Upgrade angularjs to 1.0.4
+* Add jquery.dropdown plugin
 
 0.1.4 Version
 -----------------

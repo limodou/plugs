@@ -468,7 +468,7 @@ class ForumView(object):
                     url = url_for(ForumView.remove_topic, forum_id=forum_id, topic_id=topic_id)
                     a.append('<a href="%s" rel="%d" class="delete_topic">删除主题</a>' % (url, obj.id))
                 #处理贴子转移,管理员可以转移
-                if is_manager:
+                if is_manager or request.user.is_superuser:
                     url = url_for(ForumView.move_topic, forum_id=forum_id, topic_id=topic_id)
                     a.append('<a href="%s" rel="%d" class="move_topic">移动主题</a>' % (url, obj.id))
                     
@@ -931,7 +931,7 @@ setTimeout(function(){callback(url);},100);
             return json({'success':False, 'message':'论坛不存在'})
         
         is_manager = target_forum.managers.has(request.user)
-        if is_manager:
+        if is_manager or request.user.is_superuser:
             topic.forum = target_forum.id
             topic.save()
             

@@ -12,6 +12,7 @@ Plugs Change Log
 * Upgrade jqeasyui to 1.3.1
 * Upgrade angularjs to 1.0.4
 * Add jquery.dropdown plugin
+* Improve forum add move topic functionality
 
 0.1.4 Version
 -----------------

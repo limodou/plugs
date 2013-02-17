@@ -131,6 +131,18 @@
         <div class="alert alert-warn">你尚未登录，无法评论！</div>
     </div>
 {{pass}}
+
+{{use "jqdropdown"}}
+<div class="dropdown dropdown-tip" id="div_move_topic" style="display:none;">
+    <div class="dropdown-panel">
+        Loading...
+    </div>
+</div>
+
+<style>
+#div_move_topic form {margin-bottom:0;]
+</style>
+
 {{include "inc_xheditor_plugins.html"}}
 {{include "inc_xheditor_draw_plugins.html"}}
 {{include "inc_paginate.html"}}
@@ -211,6 +223,13 @@
         
         $('.post_body img').imgZoom({loadingImg:"{{=url_for_static('jqimgzoom/css/imgzoom-loading.gif')}}"});
         
+        //处理贴子移动
+        $('a.move_topic').dropdown('attach', '#div_move_topic');
+        $('#div_move_topic').on('show', function(e, d){
+            $.get('/forum/get_managed_forums?topic_id={{=topic.id}}').success(function(data){
+                $('#div_move_topic').find('.dropdown-panel').html(data);
+            });
+        });
     });
 </script>
 {{end}}

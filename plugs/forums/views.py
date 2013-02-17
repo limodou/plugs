@@ -467,6 +467,11 @@ class ForumView(object):
                 if is_manager:
                     url = url_for(ForumView.remove_topic, forum_id=forum_id, topic_id=topic_id)
                     a.append('<a href="%s" rel="%d" class="delete_topic">删除主题</a>' % (url, obj.id))
+                #处理贴子转移,管理员可以转移
+                if is_manager:
+                    url = url_for(ForumView.move_topic, forum_id=forum_id, topic_id=topic_id)
+                    a.append('<a href="%s" rel="%d" class="move_topic">移动主题</a>' % (url, obj.id))
+                    
             if is_manager or (obj.posted_by.id == request.user.id):
                 if (obj.deleted and (obj.deleted_by.id == request.user.id or is_manager)) or not obj.deleted:
                     a.append('<a href="#" rel="%d" class="delete">%s</a>' % (obj.id, self.status['delete'][obj.deleted]))
@@ -856,7 +861,7 @@ setTimeout(function(){callback(url);},100);
         FA = get_model('forumattachment')
         
         if not topic:
-            error("主题已经不存在的")
+            error("主题不存在")
             
         is_manager = post.topic.forum.managers.has(request.user)
         if is_manager:
@@ -878,6 +883,71 @@ setTimeout(function(){callback(url);},100);
             flash('你无权限删除主题！')
             return redirect(url_for(ForumView.topic_view, forum_id=forum_id, topic_id=topic_id))
         
+    @decorators.check_role('trusted')
+    def get_managed_forums(self):
+        """
+        获得某人可以操作的论坛清单，用于贴子的移动
+        """
+        from uliweb.form.widgets import Select
+        
+        Forum = get_model('forum')
+        Topic = get_model('forumtopic')
+        Category = get_model('forumcategory')
+        topic_id = request.GET.get('topic_id')
+        topic = Topic.get(int(topic_id))
+        
+        if request.user.is_superuser:
+            query = Forum.filter(Forum.c.category==Category.c.id).filter(Forum.c.id!=topic._forum_).values(Category.c.name, Forum.c.id, Forum.c.name)
+        else:
+            query = Forum.filter(Forum.c.category==Category.c.id).filter(Forum.c.id!=topic._forum_).filter(Forum.managers.in_(request.user.id)).values(Category.c.name, Forum.c.id, Forum.c.name)
+        choices = list(query)
+        return {'select':Select(choices=choices, id='target_forum'), 
+            'from_forum':topic._forum_,
+            'topic_id':topic_id}
+            
+    @decorators.check_role('trusted')
+    def move_topic(self):
+        """
+        移动贴子到另一个论坛
+        url?from_forum=x&target_forum=forum_id&topic=z
+        """
+        from sqlalchemy.sql import select
+        
+        Forum = get_model('forum')
+        target_forum = Forum.get(int(request.POST.get('target_forum', 0)))
+        from_forum_id = int(request.POST.get('from_forum', 0))
+        Topic = get_model('forumtopic')
+        topic = Topic.get(int(request.POST.get('topic', 0)))
+        Post = get_model('forumpost')
+        
+        if not topic:
+            return json({'success':False, 'message':'主题不存在'})
+        
+        if topic._forum_ == target_forum.id:
+            return json({'success':False, 'message':'主题已经在论坛中，不需要移动'})
+            
+        #check forum 是否存在
+        if not target_forum:
+            return json({'success':False, 'message':'论坛不存在'})
+        
+        is_manager = target_forum.managers.has(request.user)
+        if is_manager:
+            topic.forum = target_forum.id
+            topic.save()
+            
+            #处理原论坛的计数信息
+            post_query = Post.filter(Post.c.topic==topic.id)
+            post_count = post_query.count()
+            Forum.filter(Forum.c.id==from_forum_id).update(num_posts=Forum.c.num_posts-post_count, num_topics=Forum.c.num_topics-1)
+            
+            #处理目标论坛的计数信息
+            Forum.filter(Forum.c.id==target_forum.id).update(num_posts=Forum.c.num_posts+post_count, 
+                num_topics=Forum.c.num_topics+1)
+            
+            return json({'success':True, 'message':'移动成功'})
+        else:
+            return json({'success':False, 'message':'你无权限移动主题！'})
+
     @decorators.check_role('trusted')
     def post_actions(self):
         Post = get_model('forumpost')

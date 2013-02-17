@@ -1,0 +1,22 @@
+<form class="form-inline">
+<label>目标论坛: {{<< select}}</label>
+<a class="btn btn-primary btn-mini" id="btn_move">移动</a>
+</form>
+<script>
+$(function(){
+    $('#btn_move').click(function(e){
+        e.preventDefault();
+        $('#div_move_topic').dropdown('hide');
+        $.post('/forum/move_topic', 
+            {'target_forum':$('#target_forum').val(), 
+             'from_forum':{{=from_forum}},
+            'topic':{{=topic_id}} })
+            .success(function(d){
+            show_message(d.message);
+            if(d.success){
+                ;
+            }
+        });
+    });
+});
+</script>

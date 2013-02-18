@@ -49,7 +49,7 @@
 
 <div class="list">  
     {{for x in objects:}}
-    <div class="message{{if not x._obj_.read_flag :}} unread{{pass}}" data-message="{{=x.id}}" data-sender="{{=x._obj_._sender_}}" data-sender-name="{{=x.sender}}">  
+    <div class="message{{if not x._obj_.read_flag :}} unread{{pass}}" data-message="{{=x.id}}" data-sender="{{=x._obj_._sender_}}" data-sender-name="{{=x._obj_.sender.username}}">  
         <div class="icon">
             {{if x._obj_.read_flag :}}
                 <img src="/static/messages/reread.png" title="设置为未读" data-click="read"/>
@@ -60,7 +60,7 @@
         <div class="delete" data-click="delete" title="删除消息">&times;</div>
         <div class="body">
             <div class="title"> 
-                由 {{=x.sender}} 发送于 {{=x.create_date}}
+                由 {{<< x.sender}} 发送于 {{=x.create_date}}
                 <a href="#" data-click="reply"><i class="icon-comment-alt" title="回复"></i></a>
             </div> 
             <div class="details">

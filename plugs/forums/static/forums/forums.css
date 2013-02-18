@@ -9,6 +9,7 @@ html, body {font-family:微软雅黑,宋体;}
 #forum .post ol, #forum .post ul {margin-left:20px;}
 #forum .tool {line-height: 29px;padding: 0 10px 0 0;float:right;height:29px;}
 #forum-body {background: white;margin-top:20px;}
+#forum-body  tr {min-height:50px;}
 #forum-body td, #forum-body th, #forum-table td, #forum-table th {vertical-align:middle;text-align:center;}
 #forum-body th.first, #forum-body td.first, #forum-table td, #forum-table th {text-align:left;}
 #forum-body .title h3 {font-size:14px;height:16px;line-height:16px;margin:0 0 5px 20px;}

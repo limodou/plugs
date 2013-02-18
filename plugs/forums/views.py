@@ -322,7 +322,7 @@ class ForumView(object):
         pages = int(math.ceil(1.0*view.total/rows_per_page))
         return {'forum':forum, 'objects':objects, 'filter':filter, 'term':term, 
             'page':pageno+1, 'total':view.total, 'pages':pages,
-            'pagination':functions.create_pagination(request.url, view.total, pageno+1, rows_per_page),
+            'pagination':functions.create_pagination(request.path+'?'+request.query_string, view.total, pageno+1, rows_per_page),
             'type':type, 'filter_name':dict(settings.get_var('PARA/FILTERS')).get(filter)}
 #        if 'data' in request.values:
 #            return json(view.json())
@@ -439,11 +439,18 @@ class ForumView(object):
             return self._get_post_content(obj)
         
         def username(value, obj):
-            return obj.posted_by.username
+            try:
+                username = unicode(obj.posted_by)
+            except NotFound:
+                username = obj._posted_by_
+            return username
         
         def userimage(value, obj):
             get_user_image = function('get_user_image')
-            url = get_user_image(obj.posted_by)
+            try:
+                url = get_user_image(obj.posted_by)
+            except NotFound:
+                url = get_user_image()
             return url
         
         def actions(value, obj):
@@ -534,7 +541,7 @@ class ForumView(object):
             
         process_sub(ids)
            
-        pagination = functions.create_pagination(request.url, view1.total,
+        pagination = functions.create_pagination(request.path+'?'+request.query_string, view1.total,
             pageno+1, rows_per_page)
         return {'forum':forum, 'topic':topic, 'slug':slug, 
             'has_email':bool(request.user and request.user.email), 
@@ -897,9 +904,9 @@ setTimeout(function(){callback(url);},100);
         topic = Topic.get(int(topic_id))
         
         if request.user.is_superuser:
-            query = Forum.filter(Forum.c.category==Category.c.id).filter(Forum.c.id!=topic._forum_).values(Category.c.name, Forum.c.id, Forum.c.name)
+            query = Forum.filter(Forum.c.category==Category.c.id).filter(Forum.c.id!=topic._forum_).order_by(Category.c.ordering, Forum.c.ordering).values(Category.c.name, Forum.c.id, Forum.c.name)
         else:
-            query = Forum.filter(Forum.c.category==Category.c.id).filter(Forum.c.id!=topic._forum_).filter(Forum.managers.in_(request.user.id)).values(Category.c.name, Forum.c.id, Forum.c.name)
+            query = Forum.filter(Forum.c.category==Category.c.id).filter(Forum.c.id!=topic._forum_).filter(Forum.managers.in_(request.user.id)).order_by(Category.c.ordering, Forum.c.ordering).values(Category.c.name, Forum.c.id, Forum.c.name)
         choices = list(query)
         return {'select':Select(choices=choices, id='target_forum'), 
             'from_forum':topic._forum_,

@@ -426,7 +426,9 @@ class ForumView(object):
         Post = get_model('forumpost')
         Topic = get_model('forumtopic')
         Forum = get_model('forum')
-        forum = Forum.get(int(forum_id))
+        topic = Topic.get(int(topic_id))
+        forum = topic.forum
+
         condition = Post.c.topic == int(topic_id)
         condition1 = (Post.c.parent == None) & condition
         condition2 = (Post.c.parent != None) & condition
@@ -518,7 +520,6 @@ class ForumView(object):
             cache.set(key, 1, settings.get_var('PARA/FORUM_USER_VISITED_TIMEOUT'))
         
         slug = uuid.uuid1().hex
-        topic = Topic.get(int(topic_id))
         
         #处理posts和sub_posts
         query = view1.query()

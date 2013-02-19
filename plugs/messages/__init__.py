@@ -31,8 +31,10 @@ def parse_user(text):
     
     User = get_model('user')
     
+    u = set()
     for x in re_at.findall(text):
         user = User.get(User.c.username==x[1:])
         if user and user.id != request.user.id:
-            yield user
+            u.add(user.id)
+    return u
     

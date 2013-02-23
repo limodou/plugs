@@ -5,15 +5,19 @@
   <title>Error</title>
 <style>
 body{background: #fff;}
-h1{text-align:center;font-size:48px;}
-.error{color:red;font-weight:bold;}
+h1{text-align:center;font-size:48px;font-family: 'LeagueGothic', Arial, Helvetica, sans-serif;
+text-transform: uppercase;}
+.error{color:red;font-weight:bold;padding:20px;font-size:240%;
+border:3px dashed #ccc;display:inline;margin-bottom:20px;line-height:240%;
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;}
 </style>
 </head>
 <body>
 <h1>{{=_('Error')}}</h1>
 <div style="text-align:center;margin:0 auto;">
-    <img src="/static/images/error.png"></img>
-    <p class="error">{{=message}}</p>
+    <div class="error">{{=message}}</div>
     <p><a href="/">{{=_('Click here to return HomePage')}}</a></p>
 </div>
 

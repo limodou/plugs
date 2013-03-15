@@ -70,7 +70,7 @@ class MessageView(object):
 #        result['page'] = pageno+1
 #        result['total'] = view.total
 #        result['pages'] = pages
-        result['pagination'] = functions.create_pagination(request.url, view.total, pageno+1, rows_per_page)
+        result['pagination'] = functions.create_pagination(functions.request_url(), view.total, pageno+1, rows_per_page)
         result['objects'] = list(view.objects())
         ids = []
         for row in result['objects']:
@@ -244,7 +244,7 @@ class MessageView(object):
 #        result['page'] = pageno+1
 #        result['total'] = view.total
 #        result['pages'] = pages
-        result['pagination'] = functions.create_pagination(request.url, view.total, pageno+1, rows_per_page)
+        result['pagination'] = functions.create_pagination(functions.request_url(), view.total, pageno+1, rows_per_page)
         result['objects'] = view.objects()
         return result
 

@@ -14,7 +14,7 @@
 	// make sure the tips' position is updated on resize
 	function handleWindowResize() {
 		$.each(tips, function() {
-			this.refresh(true);
+			this.refresh(false);
 		});
 	}
 	$(window).resize(handleWindowResize);
@@ -71,13 +71,19 @@
 						break;
 				}
 			}
-      if (this.opts.closeButton){
-        var self = this;
-        this.$inner.css('padding-right', '15px');
-        this.$closeButton.click(function(){
-          self.hide();
-        });
-      }
+            if (this.opts.closeButton){
+                var self = this;
+                this.$inner.css('padding-right', '15px');
+                this.$closeButton.click(function(){
+                    self.hide();
+                });
+            }
+        
+            var $this = this;
+            $(window).scroll(function(e){
+                $this.refresh(false);
+            });
+            
 		},
 		mouseenter: function(e) {
 			if (this.disabled)
@@ -255,10 +261,6 @@
 				this.$tip.css({left: this.pos.l, top: this.pos.t});
 			}
             
-            //add target fix support
-            if(this.opts.alignTo == 'fixed')
-                this.$tip.css('position', 'fixed');
-                
 		},
 		display: function(hide) {
 			var active = this.$tip.data('active');

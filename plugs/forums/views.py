@@ -295,6 +295,8 @@ class ForumView(object):
             return timesince(value)
         
         def subject(value, obj):
+            import cgi
+            
             if obj.topic_type:
                 _type = u'[%s]' % obj.get_display_value('topic_type')
             else:
@@ -310,7 +312,7 @@ class ForumView(object):
                 s += u'<font color="red">[精]</font>'
             if obj.homepage:
                 s += u'<font color="red">[首]</font>'
-            return _type+ '<a href="/forum/%d/%d">%s</a>' % (int(id), obj.id, obj.subject) + s
+            return _type+ '<a href="/forum/%d/%d">%s</a>' % (int(id), obj.id, cgi.escape(obj.subject)) + s
         
         fields_convert_map = {'created_on':created_on, 'subject':subject,
             'last_reply_on':last_reply_on}

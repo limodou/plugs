@@ -343,73 +343,14 @@ var create_result_process = function(target, opt){
         var t = $(target);
         opt = opt || {};
         t.find('input').poshytip('hide');
-        show_simple_message(r.message);
-        //show_message(r.message);
         if (r.success){
+            if(r.message) show_message(r.message);
             if (opt.success){
                 opt.success(r.data);
-            }else{
-                show_simple_message(r.message);
-                //show_message(r.message);
             }
         } else if (!r.success){
-            $.each(r.data, function(key, value){
-                var el = t.find('input[name='+key+'],select[name='+key+'],textarea[name='+key+']');
-                if (el.is(':hidden')){
-                    el = el.parent();
-                }
-                $(el).poshytip({
-                    className: 'tip-yellowsimple',
-                    content: value,
-                    showOn: 'none',
-                    alignTo: 'target',
-                    alignX: 'inner-left',
-                    offsetX: 0,
-                    offsetY: 5,
-                    closeButton: true
-                });
-                $(el).poshytip('show');
-                $(el).focus(function(){
-                    $(this).poshytip('hide');
-                });
-            });
-        }
-    }
-}
-
-var create_ajax_callback = function(options){
-    return function(r){
-        var opts = {
-            field_prefix:'div_field_'
-            , message_type:'bootstrap'
-        };
-        if (typeof options === 'function'){
-            opts.success = options;
-        }else{
-            opts = $.extend(opts, options);
-        }
-        if (r.success){
-            if (opts.success){
-                opts.success(r.data);
-            }else{
-                show_simple_message(r.message);
-                //show_message(r.message);
-            }
-        } else if (!r.success){
-            if(opts.message_type == 'bootstrap'){
-                $('div.control-group').removeClass('error').find('.help-block.error').remove();
-                $.each(r.data, function(key, value){
-                    var f, t;
-                    f = '#' + opts.field_prefix + key;
-                    t = $(f).addClass('error');
-                    t.find('.controls').append('<p class="help-block error">'+value+'</p>');
-                });
-            }else if(opts.message_type == 'tip'){
-                var t = $(this);
-                $('body').on('dialog2.beforeClose', t, function(e){
-                    t.find('input, select, textarea').poshytip('hide');
-                });
-                t.find('input, select, textarea').poshytip('hide');
+            if(r.message) show_message(r.message, 'error');
+            if(r.data){
                 $.each(r.data, function(key, value){
                     var el = t.find('input[name='+key+'],select[name='+key+'],textarea[name='+key+']');
                     if (el.is(':hidden')){
@@ -430,6 +371,67 @@ var create_ajax_callback = function(options){
                         $(this).poshytip('hide');
                     });
                 });
+            }
+        }
+    }
+}
+
+var create_ajax_callback = function(options){
+    return function(r){
+        var opts = {
+            field_prefix:'div_field_'
+            , message_type:'bootstrap'
+        };
+        if (typeof options === 'function'){
+            opts.success = options;
+        }else{
+            opts = $.extend(opts, options);
+        }
+        if (r.success){
+            if(r.message) show_message(r.message);
+            if (opts.success){
+                opts.success(r.data);
+            }
+        } else if (!r.success){
+            if(r.message) show_message(r.message, 'error');
+            if(opts.message_type == 'bootstrap'){
+                $('div.control-group').removeClass('error').find('.help-block.error').remove();
+                if(r.data){
+                    $.each(r.data, function(key, value){
+                        var f, t;
+                        f = '#' + opts.field_prefix + key;
+                        t = $(f).addClass('error');
+                        t.find('.controls').append('<p class="help-block error">'+value+'</p>');
+                    });
+                }
+            }else if(opts.message_type == 'tip'){
+                var t = $(this);
+                $('body').on('dialog2.beforeClose', t, function(e){
+                    t.find('input, select, textarea').poshytip('hide');
+                });
+                t.find('input, select, textarea').poshytip('hide');
+                if(r.data){
+                    $.each(r.data, function(key, value){
+                        var el = t.find('input[name='+key+'],select[name='+key+'],textarea[name='+key+']');
+                        if (el.is(':hidden')){
+                            el = el.parent();
+                        }
+                        $(el).poshytip({
+                            className: 'tip-yellowsimple',
+                            content: value,
+                            showOn: 'none',
+                            alignTo: 'target',
+                            alignX: 'inner-left',
+                            offsetX: 0,
+                            offsetY: 5,
+                            closeButton: true
+                        });
+                        $(el).poshytip('show');
+                        $(el).focus(function(){
+                            $(this).poshytip('hide');
+                        });
+                    });
+                }
             }
         }
     }

@@ -227,7 +227,8 @@ class UsersManageView(object):
             obj.set_password(settings.USER_ADMIN.DEFAULT_PASSWORD)
             
         if request.user.is_superuser:
-            view = AddView('user', partial(get_url, 'view'), post_save=post_save, form_cls=AddUserForm)
+            view = AddView('user', partial(get_url, 'view'), 
+            post_save=post_save, form_cls=AddUserForm)
             return view.run()
         else:
             flash(_('You have no previlege to create user.'), 'error')
@@ -268,7 +269,7 @@ class UsersManageView(object):
 
         if request.user.is_superuser:
             view = EditView('user', condition=int(id), ok_url=get_url('view', id=id),
-                form_cls=EditUserForm)
+                form_cls=EditUserForm, meta='AdminEditForm')
             return view.run()
         else:
             flash(_('You have no previlege to edit user.'), 'error')

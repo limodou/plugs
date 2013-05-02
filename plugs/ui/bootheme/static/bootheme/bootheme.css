@@ -82,6 +82,7 @@ margin-bottom: 10px ;
 box-shadow: 0 0 10px rgba(189, 189, 189, 0.4);
 -webkit-box-shadow: 0 0 10px rgba(189, 189, 189, 0.4);
 -moz-box-shadow: 0 0 10px rgba(189, 189, 189, 0.4);
+position:relative;
 }
 
 .panel form{margin-bottom:0px;}
@@ -116,6 +117,7 @@ border-radius:0 0 3px 3px;
 -webkit-border-radius:0 0 3px 3px;
 -moz-border-radius:0 0 3px 3px;
 height:35px;
+line-height:35px;
 min-height:35px;
 margin-bottom: 0;
 font-weight:bold;

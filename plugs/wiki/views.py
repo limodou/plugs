@@ -306,7 +306,7 @@ class WikiView(object):
                     wiki.new_revision(wiki.content)
                     
                     #enable attachments
-                    enable_attachments(form.slug.data)
+                    enable_attachments(form.slug.data, 'wiki')
                     
                 return redirect(url_for(self.__class__.wiki_page, pagename=pagename))
             else:

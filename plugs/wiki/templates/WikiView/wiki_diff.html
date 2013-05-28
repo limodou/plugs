@@ -1,0 +1,16 @@
+{{extend "wiki_layout.html"}}
+
+{{block content_main}}
+{{include "WikiView/inc_wiki_nav.html"}}
+
+<div class="content-outter">
+
+<div class="wiki-header">
+    {{make_nav(pagename)}}
+
+    {{link "wiki/diff_view.css"}}
+    <div class="wiki_diff_content">{{<< content}}</div>
+</div>
+
+</div>
+{{end}}

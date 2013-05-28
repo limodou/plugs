@@ -1,0 +1,15 @@
+.wiki-header {position:relative;}
+.wiki-header h1 {background-color: whitesmoke;padding:15px;line-height:36px;
+border-bottom:5px solid #999;}
+.wiki-actions {position:absolute; right:5px;bottom:5px; text-align:right; margin: 2px; padding:1px; }
+#wiki-sidebar {}
+#wiki {}
+#wiki-message {background-color:#eee8aa; margin: 0; padding:4px}
+div.contents.topic {float:right; border:1px solid #dedede;padding:5px 20px 5px 5px; margin:5px; background-color:#FFF8AF;}
+div.document tt.docutils.literal {border:1px solid #dedede;background-color:#A4FF9F;}
+div.document pre {overflow:auto;}
+
+#wiki-content h2{border-bottom: 1px solid #ddd;}
+#wiki-content h1 {line-height:80px;}
+#wiki-content {font-family: "PT Serif",Georgia,Times,"Times New Roman",serif; font-size:1.2em;line-height:1.4em;}
+.wiki-info {font-size:12px;}

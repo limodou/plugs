@@ -1,0 +1,78 @@
+{{##
+slug could be string or object
+
+Usage:
+
+{{include "inc_generic_attachments.html"}}
+
+{{attachments_upload(slug)}}
+##}}
+
+{{use "jquery"}}
+{{use "jqupload"}}
+<style>
+span.deletefile {padding:2px;}
+span.deletefile:hover {
+background-color:#ccc;
+cursor:pointer;
+}
+</style>
+{{def attachments_upload(slug, table):}}
+<div class="control-group">
+    <label class="control-label" for="input_file">{{=_("Uploaded Files")}}: </label>
+    <div class="controls">
+      <ul class="attachments unstyled" id="attachments">
+        {{ Attachments = functions.get_model('generic_attachment')
+        delete_url = '/generic_attachments/delete/'
+        if isinstance(slug, (str, unicode)):
+            query = Attachments.filter(Attachments.c.slug==slug)
+            upload_url = url_for('generic_upload_file', slug=slug, table=table)
+        else:
+            query = Attachments.content_object.filter(slug)
+            upload_url = url_for('generic_upload_file', table=table, id=slug.id)
+        pass}}
+        {{for f in query:}}
+            {{url = functions.get_url(f.filepath, title=f.filename, query_para={'alt':f.filename}, _class='filedown')}}
+            <li><i class="icon-file"></i>{{<<url}} <span class="deletefile" title="{{=_('Delete File')}}" rel="{{=f.id}}">&times;</span></li>
+        {{pass}}
+        
+      </ul>
+      
+      <input id="input_file" type="file" name="fileupload" multiple title="{{=_('You can select multiple files at the same time')}}"></input><br/>
+      <script>
+          $(function () {
+              $('#input_file').fileupload({
+                  dataType: 'json',
+                  url: '{{<<upload_url}}',
+                  done: function (e, data) {
+                      if(data.result.success){
+                          $('#attachments').append('<li><i class="icon-file"></i>'+data.result.url+'<span class="deletefile" title="删除文件" rel="'+data.result.id+'">&times;</span></li>');
+                      }else if(data.result.error){
+                          $('#attachments').append('<font color="red">'+data.result.error+'</font>');
+                      }
+                  }
+              });
+          });
+      </script>
+    </div>
+</div>
+<script>
+$(function(){
+    $('span.deletefile').live('click', function(e){
+        e.preventDefault();
+        var $this = $(this);
+        var url = '{{<<delete_url}}'+$this.attr('rel');
+        $.ajax({
+            type: "POST",
+            url: url,
+            success: function(data){
+                if (data.success){
+                    $this.parent().remove();
+                }
+            }
+            
+        });
+    });
+});
+</script>
+{{pass}}

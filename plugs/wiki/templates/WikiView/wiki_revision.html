@@ -1,0 +1,44 @@
+{{extend "wiki_layout.html"}}
+
+{{block content_main}}
+{{include "WikiView/inc_wiki_nav.html"}}
+
+<div class="content-outter">
+
+<div class="wiki-header">
+{{make_nav(wiki.name)}}
+<h1><a href="{{=url_for('plugs.wiki.views.WikiView.wiki_page', pagename=wiki.name)}}">{{=wiki.name}}</a></h1>
+</div>
+
+<form action="{{=url_for('plugs.wiki.views.WikiView.wiki_diff', pagename=wiki.name)}}" method="GET">
+<table class="table">
+<thead>
+<tr><th>#Rev</th>
+<th>Date</th>
+<th><input type="submit" class="btn btn-mini btn-primary" value="Compare"/></th>
+<th>Modified User</th>
+<th>Actions</th></tr>
+</thead>
+<tbody>
+{{i = 0}}
+{{for item in changeset:}}
+    {{i += 1}}
+    <tr>
+    <td>{{=item.revision}}</td>
+    <td>{{=item.modified_time and item.modified_time.strftime('%Y-%m-%d %H:%M:%S')}}</td>
+    <td>
+        <input type="radio" name="rev1" value="{{=item.revision}}"{{if i==2:}} checked{{pass}}>
+        <input type="radio" name="rev2" value="{{=item.revision}}"{{if i==1:}} checked{{pass}}>
+    </td>
+    <td>{{=unicode(item.editor) or 'uliwiki'}}</td>
+    <td>
+        <a href="{{=url_for('plugs.wiki.views.WikiView.wiki_page', pagename=wiki.name)}}?rev={{=item.revision}}">View</a> 
+        {{if i!=1 and can_revert:}}<a href="{{=url_for('plugs.wiki.views.WikiView.wiki_revert', pagename=wiki.name)}}?rev={{=item.revision}}">Revert</a>{{pass}}
+    </td>
+    </tr>
+{{pass}}
+</tbody>
+</table>
+</form>
+</div>
+{{end}}

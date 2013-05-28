@@ -1,0 +1,22 @@
+{{extend "wiki_layout.html"}}
+
+{{block content_main}}
+{{include "WikiView/inc_wiki_nav.html"}}
+
+<div class="content-outter">
+
+<div class="wiki-header">
+
+{{make_nav('Pages')}}
+
+</div>
+
+<div id="wiki-content">
+    <ul>
+    {{for obj in objects:}}
+        <li><a href="/wiki/{{=obj.name}}">{{=obj.name}}</a></li>
+    {{pass}}
+    </ul>
+</div>
+</div>
+{{end}}

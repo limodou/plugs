@@ -1,0 +1,21 @@
+{{def make_nav(pagename):}}
+<ul class="nav nav-tabs">
+  {{flag = False}}
+  {{for name, caption, url in settings.WIKI.MENUS:}}
+    {{if name == pagename:}}
+        {{cls = 'active'}}
+        {{flag = True}}
+    {{else:}}
+        {{cls = ''}}
+    {{pass}}
+    <li class="{{=cls}}">
+        <a href="{{=url}}">{{=caption}}</a>
+    </li>
+  {{pass}}
+  {{if not flag:}}
+    <li class="active">
+        <a href="{{=url_for('plugs.wiki.views.WikiView.wiki_page', pagename=pagename)}}">{{=pagename}}</a>
+    </li>
+  {{pass}}
+</ul>
+{{pass}}

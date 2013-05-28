@@ -7,7 +7,7 @@ def parse_acl(line):
     acl = []
     for t in line.split():
         n, p_ = t.split(':')
-        permissions = {x.strip() for x in p_.split(',')}
+        permissions = set([x.strip() for x in p_.split(',')])
         
         if not n or not permissions:
             continue

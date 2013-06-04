@@ -785,9 +785,21 @@ class ForumView(object):
                 data['updated_on'] = date.now()
             
         def get_form_field(name, obj):
+            from uliweb.utils.generic import ReferenceSelectField
             from uliweb.form import TextField
+            
+            forumtopictype = get_model('forumtopictype')
+            type = request.GET.get('type', '')        
+            
             if name == 'content':
                 return TextField('内容', required=True, rows=20, convert_html=True)
+            elif name == 'topic_type':
+                if type:
+                    return ReferenceSelectField('forumtopictype', 
+                        condition=forumtopictype.c.forum==forum.id, label='主题分类名称', default=type)                    
+                else:
+                    return ReferenceSelectField('forumtopictype', 
+                        condition=forumtopictype.c.forum==forum.id, label='主题分类名称')
         
         data = {'content':post.content}
         view = EditView('forumtopic', url_for(ForumView.topic_view, forum_id=forum_id, topic_id=topic_id),
@@ -1067,5 +1079,32 @@ setTimeout(function(){callback(url);},100);
         page = int(math.ceil(1.0*obj.floor/settings.get_var('PARA/FORUM_PAGE_NUMS')))
         url = '/forum/%d/%d?page=%d' % (obj.topic._forum_, obj._topic_, page)
         return redirect(url)
+    
+    @decorators.check_role('trusted')
+    def paste_image(self):
+        """
+        图片上传处理
+        """
+        import base64
+        from StringIO import StringIO
+        from uliweb.utils.common import log
+    
+        File = get_model('forumattachment')
+        
+        forum_id = request.GET.get('forum_id')
+        slug = request.GET.get('slug')
+    
+        filename='forum/%s/%s.png' % (forum_id, slug)
+        data = request.POST.get('urls')
+        prefix = 'data:image/png;base64,'
+        if data.startswith(prefix):
+            fobj = StringIO(base64.b64decode(data[len(prefix):]))
+            nname=functions.save_file(filename, fobj)
+            url_name=functions.get_href(nname)
+            ff = File(slug=slug, file_name=nname, name=nname)
+            ff.save()
+            return url_name
+        else:
+            return data
     
     

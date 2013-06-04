@@ -42,7 +42,9 @@
             upFlashExt:"swf",
             upImgUrl:"!/forum/upload_image?forum_id={{=forum.id}}&slug={{=form.data['slug']}}",
             plugins:$.extend(plugins, draw_plugins),
-            height:300
+            height:300,
+            localUrlTest:/^https?:\/\/[^\/]*?(xxx\.com)\//i,
+            remoteImgSaveUrl:'/forum/paste_image?forum_id={{=forum.id}}&slug={{=form.data['slug']}}'
         });
         {{if not has_email:}}
             //设置poshytip关闭图片

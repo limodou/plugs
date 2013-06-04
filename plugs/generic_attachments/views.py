@@ -51,13 +51,13 @@ def deletefile(f_id):
     fileserving = AttachmentsFileServing()
     
     Attachment = functions.get_model('generic_attachment')
-    Tables = functions.get_models('tables')
+    Tables = functions.get_model('tables')
     
     obj = Attachment.get(int(f_id))
     if obj:
         
         #get tablename
-        tablename = Tables.get_tablename(obj.table_id)
+        tablename = Tables.get(obj.table_id)
         check_func = settings.Generic_Attachment_Download_Checking.get(tablename)
         if check_func:
             enable = check_func(obj.content_object, request.user, 'delete')

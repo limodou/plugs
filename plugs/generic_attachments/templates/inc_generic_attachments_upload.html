@@ -8,8 +8,12 @@ Usage:
 {{attachments_upload(slug)}}
 ##}}
 
-{{use "jquery"}}
+{{use "jquery", ui=True}}
 {{use "jqupload"}}
+{{use "jqutils"}}
+{{use "jqimgzoom"}}
+{{use "jsreader"}}
+
 <style>
 span.deletefile {padding:2px;}
 span.deletefile:hover {
@@ -39,8 +43,16 @@ cursor:pointer;
       </ul>
       
       <input id="input_file" type="file" name="fileupload" multiple title="{{=_('You can select multiple files at the same time')}}"></input><br/>
+      <div class="alert alert-success">
+          <a class="close" data-dismiss="alert" href="#">&times;</a>
+          <p>向编辑窗口插入图片只要拖动要插入的图片到编辑窗口中即可。在支持HTML5文件拖拽的浏览器上可以拷贝或拖拽文件到当前页面，图片会自动上传。</p>
+      </div>
+      <ul id="album_images" class="thumbnails">
+      </ul>
+      
       <script>
           $(function () {
+              //上传文件
               $('#input_file').fileupload({
                   dataType: 'json',
                   url: '{{<<upload_url}}',
@@ -52,27 +64,55 @@ cursor:pointer;
                       }
                   }
               });
+            //删除文件
+            $('span.deletefile').live('click', function(e){
+                e.preventDefault();
+                var $this = $(this);
+                var url = '{{<<delete_url}}'+$this.attr('rel');
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    success: function(data){
+                        if (data.success){
+                            $this.parent().remove();
+                        }
+                    }
+                    
+                });
+            });
+            
+            //处理图片拷贝
+            if(window.FileReader){
+                $('#copy_image').show();
+                var opts = {
+                    readAsMap:{'image/*': 'DataURL'},
+                    dragClass:'dragging',
+                    on:{
+                        loadend:function(e, file){
+                            var arr = e.target.result.split(",");
+                            {{upload_img_url = url_for('generic_upload_img')}}
+                            {{if isinstance(slug, (str, unicode)):}}
+                            var data = {'data':arr[1], 'filename':file.name, 'slug':'{{=slug}}','table':'{{=table}}'}; // raw base64
+                            {{else:}}
+                            var data = {'data':arr[1], 'filename':file.name, 'id':{{=slug.id}},'table':'{{=table}}'};
+                            {{pass}}
+                            $.post('{{=upload_img_url}}',
+                                data,
+                                function(data){
+                                    if(data.success){
+                                        $('#attachments').append('<li><i class="icon-file"></i>'+data.url+'<span class="deletefile" title="删除文件" rel="'+data.id+'">&times;</span></li>');
+                                    }
+                                }
+                            );
+                        }
+                    }
+                }
+                $("body").fileClipboard(opts);
+            }
+            
+            
           });
       </script>
     </div>
 </div>
-<script>
-$(function(){
-    $('span.deletefile').live('click', function(e){
-        e.preventDefault();
-        var $this = $(this);
-        var url = '{{<<delete_url}}'+$this.attr('rel');
-        $.ajax({
-            type: "POST",
-            url: url,
-            success: function(data){
-                if (data.success){
-                    $this.parent().remove();
-                }
-            }
-            
-        });
-    });
-});
-</script>
 {{pass}}

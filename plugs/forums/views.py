@@ -1,7 +1,7 @@
 #coding=utf-8
 import os
 from uliweb import expose, decorators, functions
-from uliweb.orm import get_model, do_
+from uliweb.orm import get_model, do_, NotFound
 from datetime import timedelta
 from uliweb.utils.common import safe_str
 from uliweb.utils import date
@@ -27,6 +27,7 @@ class ForumView(object):
             'hidden':{True:'取消隐藏', False:'隐藏'},
             'email':{True:'取消邮件关注', False:'设置邮件关注'},
             'homepage':{True:'取消首页显示', False:'设置首页显示'},
+            'enable_comment':{True:'设置禁止回复', False:'设置允许回复'},
         }
         self.model = get_model('forum')
     
@@ -340,8 +341,13 @@ class ForumView(object):
         """
         from uliweb.utils.generic import AddView
         
+        type = request.GET.get('type', '')        
+        
         Forum = get_model('forum')
         forum = Forum.get(int(id))
+        
+        if forum.manager_only and not forum.managers.has(request.user.id):
+            error('本论坛被设置为只有管理员才可以发贴！')
         
         def post_save(obj, data):
             from sqlalchemy.sql import select, func
@@ -369,13 +375,17 @@ class ForumView(object):
             if name == 'content':
                 return TextField('内容', required=True, convert_html=True)
             elif name == 'topic_type':
-                return ReferenceSelectField('forumtopictype', 
-                    condition=forumtopictype.c.forum==forum.id, label='主题分类名称')
+                if type:
+                    return ReferenceSelectField('forumtopictype', 
+                        condition=forumtopictype.c.forum==forum.id, label='主题分类名称', default=type)                    
+                else:
+                    return ReferenceSelectField('forumtopictype', 
+                        condition=forumtopictype.c.forum==forum.id, label='主题分类名称')
             elif name == 'reply_email':
                 return BooleanField('有回复时邮件通知我')
             
         slug = uuid.uuid1().hex
-        data = {'slug':slug, 'reply_email':False}
+        data = {'slug':slug, 'reply_email':False, 'enable_comment':True}
         
         has_email = bool(request.user and request.user.email)
         
@@ -424,6 +434,7 @@ class ForumView(object):
         
         pageno = int(request.values.get('page', 1)) - 1
         rows_per_page=int(request.values.get('rows', settings.get_var('PARA/FORUM_PAGE_NUMS')))
+        cur_page = request.values.get('page', 1)
         
         Post = get_model('forumpost')
         Topic = get_model('forumtopic')
@@ -471,6 +482,7 @@ class ForumView(object):
                     a.append('<a href="#" rel="%d" class="top">%s</a>' % (obj.id, self.status['sticky'][obj.topic.sticky]))
                     a.append('<a href="#" rel="%d" class="essence">%s</a>' % (obj.id, self.status['essence'][obj.topic.essence]))
                     a.append('<a href="#" rel="%d" class="homepage">%s</a>' % (obj.id, self.status['homepage'][obj.topic.homepage]))
+                    a.append('<a href="#" rel="%d" class="enable_comment">%s</a>' % (obj.id, self.status['enable_comment'][obj.topic.enable_comment]))
                 if is_manager or (obj.posted_by.id == request.user.id and obj.created_on+timedelta(days=settings.get_var('PARA/FORUM_EDIT_DELAY'))>=date.now()):
                     #作者或管理员且在n天之内，则可以编辑
                     url = url_for(ForumView.edit_topic, forum_id=forum_id, topic_id=topic_id)
@@ -482,6 +494,11 @@ class ForumView(object):
                 if is_manager or request.user.is_superuser:
                     url = url_for(ForumView.move_topic, forum_id=forum_id, topic_id=topic_id)
                     a.append('<a href="%s" rel="%d" class="move_topic">移动主题</a>' % (url, obj.id))
+            else:
+                if is_manager or (obj.posted_by.id == request.user.id and obj.created_on+timedelta(days=settings.get_var('PARA/FORUM_EDIT_DELAY'))>=date.now()):
+                    #作者或管理员且在n天之内，则可以编辑
+                    url = url_for(ForumView.edit_post, forum_id=forum_id, topic_id=topic_id, post_id=obj.id) + '?page=' + str(cur_page)
+                    a.append('<a href="%s" rel="%d" class="edit_post">编辑</a>' % (url, obj.id))
                     
             if is_manager or (obj.posted_by.id == request.user.id):
                 if (obj.deleted and (obj.deleted_by.id == request.user.id or is_manager)) or not obj.deleted:
@@ -493,7 +510,9 @@ class ForumView(object):
             except NotFound:
                 obj.posted_by = None
                 obj.save()
-            a.append('<a href="/forum/%d/%d/%d/new_reply">回复该作者</a>' % (forum_id, topic_id, obj.id))
+            #只有允许评论时能可以回复
+            if topic.enable_comment:
+                a.append('<a href="/forum/%d/%d/%d/new_reply?page=%d">回复该作者</a>' % (forum_id, topic_id, obj.id, int(cur_page)))
             return ' | '.join(a)
         
         def updated(value, obj):
@@ -584,9 +603,16 @@ class ForumView(object):
         
         Post = get_model('forumpost')
         Topic = get_model('forumtopic')
+        topic = Topic.get(int(topic_id))
         Forum = get_model('forum')
         User = get_model('user')
 
+        forum = Forum.get(int(forum_id))
+
+        #检查是否允许回复
+        if not topic.enable_comment:
+            return json({'success':False, 'message':'此主题已经被设置为禁止回复！'})
+        
         def pre_save(data):
             from sqlalchemy.sql import select, func
 
@@ -650,9 +676,9 @@ class ForumView(object):
         def success_data(obj, data):
             import math
             
-            return {'page':int(math.ceil(1.0*obj.floor/settings.get_var('PARA/FORUM_PAGE_NUMS')))}
+            return {'page':int(math.ceil(1.0*obj.floor/settings.get_var('PARA/FORUM_PAGE_NUMS'))), 'id':obj.id}
         
-        view = AddView('forumpost', url_for(ForumView.topic_view, forum_id=int(forum_id), topic_id=int(topic_id)),
+        view = AddView('forumpost', 
             hidden_fields=['slug'], template_data={'slug':slug}, data=data,
             success_data=success_data,
             pre_save=pre_save, get_form_field=get_form_field, post_save=post_save)
@@ -674,6 +700,14 @@ class ForumView(object):
         post = Post.get(int(parent_id))
         User = get_model('user')
     
+        forum = Forum.get(int(forum_id))
+        
+        #检查是否允许回复
+        if not topic.enable_comment:
+            error('此主题已经被设置为禁止回复！')
+
+        cur_page = request.values.get('page', 1)
+
         def pre_save(data):
             from sqlalchemy.sql import select, func
     
@@ -732,11 +766,14 @@ class ForumView(object):
             if name == 'content':
                 return TextField('内容',required=True, convert_html=True, default='')
 
+        def get_url(id):
+            return url_for(ForumView.topic_view, forum_id=int(forum_id), topic_id=int(topic_id))+'?page='+cur_page+'#post_'+str(id)
+
         slug = uuid.uuid1().hex
-        data = {'slug':slug, 'reply_email':False, 'content':_('RE')+ ' @'+unicode(post.posted_by)+': '}
+        data = {'slug':slug, 'reply_email':False, 'content':_('RE')+ ' @'+post.posted_by.username+': '}
         has_email = bool(request.user and request.user.email)
         view = AddView('forumpost', 
-            url_for(ForumView.topic_view, forum_id=int(forum_id), topic_id=int(topic_id)),
+            ok_url=get_url,
 #            default_data={'last_post_user':request.user.id, 'last_reply_on':date.now()}, 
             hidden_fields=['slug'], data=data,
             pre_save=pre_save, 
@@ -768,6 +805,7 @@ class ForumView(object):
         def post_save(obj, data):
             #更新Post表
             post.content = data['content']
+            post.updated_on = date.now()
             post.save()
             
             self._clear_files(obj.slug, data['content'])
@@ -805,6 +843,42 @@ class ForumView(object):
         view = EditView('forumtopic', url_for(ForumView.topic_view, forum_id=forum_id, topic_id=topic_id),
             obj=topic, data=data, pre_save=pre_save, hidden_fields=['slug'],
             post_save=post_save, get_form_field=get_form_field, template_data={'forum':forum, 'topic':topic, 'slug':post.slug})
+        return view.run()
+    
+    def edit_post(self, forum_id, topic_id, post_id):
+        """
+        修改回复
+        """
+        from uliweb.utils.generic import EditView
+        
+        Forum = get_model('forum')
+        forum = Forum.get(int(forum_id))
+        
+        Topic = get_model('forumtopic')
+        topic = Topic.get(int(topic_id))
+        Post = get_model('forumpost')
+        obj = Post.get(int(post_id))
+        cur_page = request.values.get('page', 1)
+        
+        def pre_save(obj, data):
+            data['updated_on'] = date.now()
+
+        def post_save(obj, data):
+            self._clear_files(obj.slug, data['content'])
+        
+        def get_form_field(name, obj):
+            from uliweb.form import TextField
+            if name == 'content':
+                return TextField('内容', required=True, convert_html=True, rows=20)
+        
+        if obj.parent == None:
+            anchor = post_id
+        else:
+            anchor = 'post_'+post_id
+        url = '/forum/%s/%s?page=%s#%s' % (forum_id, topic_id, str(cur_page), anchor)
+        view = EditView('forumpost', ok_url=url,
+            obj=obj, pre_save=pre_save, post_save=post_save, get_form_field=get_form_field, 
+            template_data={'forum':forum, 'topic':topic, 'slug':obj.slug, 'anchor':anchor})
         return view.run()
     
     def upload_file(self):
@@ -1008,6 +1082,10 @@ setTimeout(function(){callback(url);},100);
                 topic.homepage = not topic.homepage
                 topic_flag = True
                 txt = self.status['homepage'][topic.homepage]
+            elif action == 'enable_comment':
+                topic.enable_comment = not topic.enable_comment
+                topic_flag = True
+                txt = self.status['enable_comment'][topic.enable_comment]
             
         #post
         ok = False

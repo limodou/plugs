@@ -11,6 +11,15 @@
             <col width="200px"></col>
         </colgroup>
         <tbody>
+            {{from datetime import timedelta
+            from uliweb.utils import date
+            
+            def is_new(d):
+                if d and (d+timedelta(settings.get_var('PARA/NEW_DIFF_DAYS')))>=date.now():
+                    return True
+                pass
+            pass
+            }}
             {{for c in categories:}}
                 <tr class="linear-header">
                     <th class="first">{{=c.name}}</th>

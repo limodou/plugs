@@ -165,5 +165,7 @@ class ForumPost(Model):#can't edit...回复
     class AddForm:
         fields = ['content', 'slug', 'reply_email']
     
-    class EditForm:
-        fields = ['content']
+class ForumMp3(Model):
+        filename = Field(FILE, verbose_name='附件')
+        datetime     = Field(datetime.datetime, auto_now_add=True)
+ 

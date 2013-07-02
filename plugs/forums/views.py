@@ -840,9 +840,12 @@ class ForumView(object):
                         condition=forumtopictype.c.forum==forum.id, label='主题分类名称')
         
         data = {'content':post.content}
+        has_email = bool(request.user and request.user.email)
         view = EditView('forumtopic', url_for(ForumView.topic_view, forum_id=forum_id, topic_id=topic_id),
             obj=topic, data=data, pre_save=pre_save, hidden_fields=['slug'],
-            post_save=post_save, get_form_field=get_form_field, template_data={'forum':forum, 'topic':topic, 'slug':post.slug})
+            post_save=post_save, get_form_field=get_form_field, 
+            template_data={'forum':forum, 'topic':topic, 'slug':post.slug, 'has_email':has_email}
+            )
         return view.run()
     
     def edit_post(self, forum_id, topic_id, post_id):
@@ -1144,6 +1147,35 @@ setTimeout(function(){callback(url);},100);
         if request.method == 'GET':
             return {'forum_id':forum_id,'slug':slug}
     
+    def mp3upload(self, forum_id, slug):
+        Mp3 = get_model('forummp3')
+
+        targetmp3=""
+        if request.method == 'POST':
+            _filename = 'forum/%s/%s.wav' % (forum_id, slug)
+            try:
+                _filename = functions.save_file(_filename, request.stream)
+                source = functions.get_filename(_filename, convert=False)
+                
+                _filename2 = 'forum/%s/%s.mp3' % (forum_id, slug)
+                target = functions.get_filename(_filename2)
+
+                r = os.system("lame %s %s" % (source, target))
+                if r != 0:
+                    return json({'success':False, 'message':'转换出错'})
+            finally:
+                if os.path.exists(source):
+                    try:
+                        os.remove(source)
+                    except:
+                        pass
+                
+            obj = Mp3(filename=functions.get_href(_filename2))
+            obj.save()
+
+            return json({'success':True, "filename":functions.get_href(_filename2)})
+        return {} 
+ 
     def id(self, pid):
         """
         根据pid跳转到相应的贴子

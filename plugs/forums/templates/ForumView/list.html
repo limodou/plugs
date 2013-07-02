@@ -15,7 +15,7 @@
             from uliweb.utils import date
             
             def is_new(d):
-                if d and (d+timedelta(settings.get_var('PARA/NEW_DIFF_DAYS')))>=date.now():
+                if d and (d+timedelta(settings.get_var('PARA/NEW_DIFF_DAYS', 3)))>=date.now():
                     return True
                 pass
             pass

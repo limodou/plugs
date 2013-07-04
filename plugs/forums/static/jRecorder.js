@@ -212,6 +212,11 @@
 		
 	}
 	
+	$.jRecorder.callback_finished_sending_r = function(data){
+		
+		jRecorderSettings['callback_finished_sending_r'](data);
+		
+	}
 	$.jRecorder.callback_activityLevel = function(level){
 		
 		jRecorderSettings['callback_activityLevel'](level);	

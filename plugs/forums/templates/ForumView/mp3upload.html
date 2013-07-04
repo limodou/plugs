@@ -42,6 +42,7 @@ $(function(){
         callback_stopped_recording:     function(){callback_stopped(); },
         callback_activityTime:     function(time){callback_activityTime(time); },
         callback_finished_sending:     function(data){ callback_finished_sending(data); },
+        callback_finished_sending_r:     function(data){ callback_finished_sending_r(data); },
         swf_path : '/static/jRecorder.swf',
         }
     );
@@ -57,7 +58,6 @@ $(function(){
         $.jRecorder.stop();
         $.jRecorder.sendData();
     })
-                
     
     function callback_stopped()
     {
@@ -67,28 +67,27 @@ $(function(){
     {
     }
                 
-                
-                
-                
     function callback_error(code)
     {
         $('#status').html('Error, code:' + code);
     }
-                
-                
-                
-    function callback_finished_sending(data)
+
+    function callback_finished_sending_r(data)
     {	
+        $('#status').html(data);
         var mp3Data = JSON.parse(data)
         if (mp3Data.success){
-            parent.show_message('文件上传成功');
             parent.mp3addr = mp3Data.filename;
             parent.jQuery.fancybox.close();
         }else{
             parent.show_message(mp3Data.message, 'error');
         }
     }
-    
+     
+    function callback_finished_sending(data)
+    {	
+        $('#status').html('文件上传成功:'+data);
+    } 
     
     function callback_activityTime(time)
     {

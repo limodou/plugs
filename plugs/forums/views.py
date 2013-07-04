@@ -1148,34 +1148,21 @@ setTimeout(function(){callback(url);},100);
             return {'forum_id':forum_id,'slug':slug}
     
     def mp3upload(self, forum_id, slug):
-        Mp3 = get_model('forummp3')
-
-        targetmp3=""
+        """
+        mp3上传显示及上传处理
+        """
         if request.method == 'POST':
-            _filename = 'forum/%s/%s.wav' % (forum_id, slug)
-            try:
-                _filename = functions.save_file(_filename, request.stream)
-                source = functions.get_filename(_filename, convert=False)
+            _filename = 'forum/%s/%s.mp3' % (forum_id, slug)
+            filename = functions.save_file(_filename, request.stream)
                 
-                _filename2 = 'forum/%s/%s.mp3' % (forum_id, slug)
-                target = functions.get_filename(_filename2)
-
-                r = os.system("lame %s %s" % (source, target))
-                if r != 0:
-                    return json({'success':False, 'message':'转换出错'})
-            finally:
-                if os.path.exists(source):
-                    try:
-                        os.remove(source)
-                    except:
-                        pass
-                
-            obj = Mp3(filename=functions.get_href(_filename2))
+            Mp3 = get_model('forummp3')
+            obj = Mp3(filename=functions.get_href(filename))
             obj.save()
 
-            return json({'success':True, "filename":functions.get_href(_filename2)})
-        return {} 
- 
+            return json({'success':True, "filename":functions.get_href(filename)})
+        else:
+            return {}
+        
     def id(self, pid):
         """
         根据pid跳转到相应的贴子

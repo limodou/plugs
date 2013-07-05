@@ -892,7 +892,7 @@ class ForumView(object):
 
     def _upload_file(self, image=False, show_filename=True):
         import os
-        import Image
+        from PIL import Image
         if image:
             from forms import ImageUploadForm as Form
         else:

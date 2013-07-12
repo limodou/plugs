@@ -37,7 +37,7 @@ cursor:pointer;
         pass}}
         {{for f in query:}}
             {{url = functions.get_url(f.filepath, title=f.filename, query_para={'alt':f.filename}, _class='filedown')}}
-            <li><i class="icon-file"></i>{{<<url}} <span class="deletefile" title="{{=_('Delete File')}}" rel="{{=f.id}}">&times;</span></li>
+            <li><i class="icon-file"></i>{{<<url}} (由{{=unicode(f.submitter)}}于{{=f.created_date}}上传) <span class="deletefile" title="{{=_('Delete File')}}" rel="{{=f.id}}">&times;</span></li>
         {{pass}}
         
       </ul>

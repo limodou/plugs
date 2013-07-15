@@ -22,21 +22,33 @@ def get_attachments(slug_or_obj):
         query = Attachments.content_object.filter(slug_or_obj)
     return query
 
-def enable_attachments(slug_or_obj, path):
+def enable_attachments(slug, obj, path, movefile=False):
+    """
+    Used to process new object files upload
+    it'll rename the filename to new path and also add content_object according obj
+    and if slug is None, then it'll do nothing
+    """
     fileserving = AttachmentsFileServing()
     
-    for f in get_attachments(slug_or_obj):
+    for f in get_attachments(slug or obj):
         f.enabled = True
-        if isinstance(slug_or_obj, (str, unicode)):
+        f.content_object = obj
+        if slug and movefile:
             r_filename = fileserving.get_filename(f.filepath, convert=False)
             dir = os.path.dirname(f.filepath)
             _file = os.path.basename(f.filepath)
-            new_filename = os.path.join(dir, path, _file)
+            new_filename = os.path.join(dir, str(path), _file)
             f.filepath = new_filename
             r_new_filename = fileserving.get_filename(new_filename, convert=False)
+            
+            #check if the new directory is existed
+            new_dir = os.path.dirname(r_new_filename)
+            if not os.path.exists(new_dir):
+                os.makedirs(new_dir)
             try:
                 os.rename(r_filename, r_new_filename)
             except Exception, e:
                 log.exception(e)
+                log.info("from %s to %s", r_filename, r_new_filename)
         f.save()
         

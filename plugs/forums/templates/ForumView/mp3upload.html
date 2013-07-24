@@ -1,0 +1,115 @@
+<html>
+<head>
+  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+{{use "jquery"}}
+{{link "jRecorder.js"}}
+
+<title>语音留言</title>  
+
+<style>
+
+li {display:inline; margin-right:10px;}
+</style>
+
+<script>
+   
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+$(function(){
+    $.jRecorder(
+    { 
+        {{if settings.get_var('CSRF/enable'):}}
+            host : '{{=functions.request_url()}}?csrf_token='+getCookie('{{=settings.CSRF.cookie_token_name}}') ,  //replace with your server path please
+        {{else:}}
+            host : '{{=functions.request_url()}}' ,  //replace with your server path please
+        {{pass}}
+        callback_started_recording:     function(){callback_started(); },
+        callback_stopped_recording:     function(){callback_stopped(); },
+        callback_activityTime:     function(time){callback_activityTime(time); },
+        callback_finished_sending:     function(data){ callback_finished_sending(data); },
+        callback_finished_sending_r:     function(data){ callback_finished_sending_r(data); },
+        swf_path : '/static/jRecorder.swf',
+        }
+    );
+
+    $('#record').click(function(){
+        $('#stop').prop('disabled', false); 
+        $.jRecorder.record(30);
+        $('#status').html('');
+    });
+                
+    $('#stop').click(function(){
+        $('#stop').prop('disabled', true);
+        $.jRecorder.stop();
+        $.jRecorder.sendData();
+    })
+    
+    function callback_stopped()
+    {
+    }
+                
+    function callback_started()
+    {
+    }
+                
+    function callback_error(code)
+    {
+        $('#status').html('Error, code:' + code);
+    }
+
+    function callback_finished_sending_r(data)
+    {	
+        $('#status').html(data);
+        var mp3Data = JSON.parse(data)
+        if (mp3Data.success){
+            parent.mp3addr = mp3Data.filename;
+            parent.jQuery.fancybox.close();
+        }else{
+            parent.show_message(mp3Data.message, 'error');
+        }
+    }
+     
+    function callback_finished_sending(data)
+    {	
+        $('#status').html('文件上传成功:'+data);
+    } 
+    
+    function callback_activityTime(time)
+    {
+        $('#time').html(time);
+    }
+
+});
+</script>
+</head>
+
+<body> 
+    <div style="background-color: #eeeeee;border:1px solid #cccccc">
+        Time: <span id="time">00:00</span>
+    </div>
+
+    <div>
+        Status: <span id="status"></status>
+    </div> 
+
+    <div>
+        <input type="button" id="record" value="开始录音" style="color:red">  
+        <input type="button" id="stop" value="结束并上传" >
+    </div>
+</body>
+</html>

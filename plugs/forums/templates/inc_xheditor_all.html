@@ -1,0 +1,38 @@
+{{include "inc_xheditor_plugins.html"}}
+{{include "inc_xheditor_draw_plugins.html"}}
+{{include "inc_xheditor_mp3upload_plugins.html"}}
+{{use "poshytip"}}
+{{use "fancybox"}}
+<script type="text/javascript">
+    $(function(){
+        $('textarea').xheditor({
+            tools:'Cut,Copy,Paste,Pastetext,|,Blocktag,Fontface,FontSize,Bold,Italic,Underline,Strikethrough,FontColor,BackColor,SelectAll,Removeformat,|,Align,List,Outdent,Indent,|,Link,Unlink,Anchor,Img,Flash,Hr,Emot,Table,Code,Quote,Draw,Mp3upload,|,About',
+            skin:'vista',
+            upLinkUrl:"!/upload_file?forum_id={{=forum.id}}&slug={{=form.data['slug']}}",
+            upFlashUrl:"!/upload_file?forum_id={{=forum.id}}&slug={{=form.data['slug']}}",
+            upFlashExt:"swf",
+            upImgUrl:"!/upload_image?forum_id={{=forum.id}}&slug={{=form.data['slug']}}",
+            plugins:$.extend(plugins, mp3upload_plugins),
+            plugins:$.extend(plugins, draw_plugins),
+            height:300,
+            localUrlTest:/^https?:\/\/[^\/]*?(xxx\.com)\//i,
+            remoteImgSaveUrl:'/forum/paste_image?forum_id={{=forum.id}}&slug={{=slug}}'
+        });
+        {{if not has_email:}}
+            //设置poshytip关闭图片
+            $.fn.poshytip.defaults.closeImage = '{{=url_for_static("jqutils/cross_grey_small.png")}}';
+            var el = $('#field_reply_email').poshytip({
+                className: 'tip-yellowsimple',
+                content: '您尚未设置邮箱，将无法处理邮件',
+                showOn: 'none',
+                alignTo: 'target',
+                alignX: 'inner-left',
+                offsetX: 0,
+                offsetY: 5,
+                closeButton: true
+            });
+            el.poshytip('show');
+        {{pass}}
+    });
+</script>
+

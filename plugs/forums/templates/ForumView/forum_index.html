@@ -27,7 +27,11 @@
     
     <div class="pull-left" style="margin-bottom:16px;">
         {{if request.user:}}
-        <a class="btn btn-success" href="{{=url_for('plugs.forums.views.ForumView.new_topic', id=forum.id)}}">新主题</a>
+            {{if (forum.manager_only and forum.managers.has(request.user.id)) or not forum.manager_only:}}
+                <a class="btn btn-success" href="{{=url_for('plugs.forums.views.ForumView.new_topic', id=forum.id)}}">新主题</a>
+            {{else:}}
+                <font color="red">本论坛被设置为只有管理员才可以发贴！</font>
+            {{pass}}
         {{else:}}
         <font color="red">你还没有登录，无法发表新主题！</font>
         {{pass}}
@@ -70,12 +74,26 @@
             <th>文章/浏览</th>
             <th>最后回复</th>
         </tr>
+    {{from datetime import timedelta
+    from uliweb.utils import date
+    
+    def is_new(d):
+        if d and (d+timedelta(settings.get_var('PARA/NEW_DIFF_DAYS')))>=date.now():
+            return True
+        pass
+    pass
+    }}
     {{for item in objects:}}
         <tr>
-            <td class="first">{{<< item['subject']}}</td>
+            <td class="first">{{<< item['subject']}}
+                {{if is_new(item['_obj_'].updated_on) or is_new(item['_obj_'].created_on):}}
+                    <img src="/static/forums/new.png"/>
+                {{pass}}
+            </td>
             <td><cite>{{<< item['posted_by']}}</cite><em>{{<< item['created_on']}}</em></td>
             <td><b>{{= item['num_replies']}}</b>/<b>{{= item['num_views']}}</b></td>
-            <td><cite>{{<< item['last_post_user']}} {{if item['last_post']:}}<a href="/forum/id/{{<< item['last_post']}}" title="跳转到最后回复">&raquo;</a>{{pass}}</cite><em>{{<< item['last_reply_on']}}</em></td>
+            <td><cite>{{<< item['last_post_user']}} {{if is_new(item['_obj_'].last_reply_on):}}<img src="/static/forums/new.png"/>{{pass}}
+            {{if item['last_post']:}}<a href="/forum/id/{{<< item['last_post']}}" title="跳转到最后回复">&raquo;</a>{{pass}}</cite><em>{{<< item['last_reply_on']}}</em></td>
         </tr>
     {{pass}}
     </tbody>

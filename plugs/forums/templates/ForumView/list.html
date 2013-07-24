@@ -11,6 +11,15 @@
             <col width="200px"></col>
         </colgroup>
         <tbody>
+            {{from datetime import timedelta
+            from uliweb.utils import date
+            
+            def is_new(d):
+                if d and (d+timedelta(settings.get_var('PARA/NEW_DIFF_DAYS', 3)))>=date.now():
+                    return True
+                pass
+            pass
+            }}
             {{for c in categories:}}
                 <tr class="linear-header">
                     <th class="first">{{=c.name}}</th>
@@ -24,7 +33,8 @@
                         <td class="first"><div class="title"><h3><a href="/forum/{{=f.id}}">{{=f.name}}</a></h3><p>{{=f.description}}</p></div></td>
                         <td>{{=f.num_topics}}</td>
                         <td>{{=f.num_posts}}</td>
-                        <td><cite>{{=f.get_display_value('last_post_user', f.last_post_user)}} {{if f.last_post:}}<a href="/forum/id/{{=f.last_post}}" title="跳转到最后回复">&raquo;</a>{{pass}}</cite><em>{{=timesince(f.last_reply_on)}}</em></td>
+                        <td><cite>{{=f.get_display_value('last_post_user', f.last_post_user)}} {{if is_new(f.last_reply_on):}}<img src="/static/forums/new.png"/>{{pass}}
+                        {{if f.last_post:}}<a href="/forum/id/{{=f.last_post}}" title="跳转到最后回复">&raquo;</a>{{pass}}</cite><em>{{=timesince(f.last_reply_on)}}</em></td>
                     </tr>
                 {{pass}}
             {{pass}}

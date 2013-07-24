@@ -2,6 +2,8 @@
 from uliweb.orm import *
 from uliweb.i18n import ugettext_lazy as _
 from uliweb.utils.generic import GenericReference
+from uliweb.utils.common import log
+from uliweb import functions
 
 class Generic_Attachment(Model):
     filepath = Field(FILE, verbose_name=_('Filepath'))
@@ -12,3 +14,13 @@ class Generic_Attachment(Model):
     enabled = Field(bool, verbose_name=_('Enabled Flag'))
     deleted = Field(bool, verbose_name=_('Deleted Flag'))
     slug = Field(str, verbose_name=_('Slug'), max_length=32) 
+
+    @classmethod
+    def delete_files(cls, obj):
+        for row in cls.content_object.filter(obj):
+            try:
+                functions.delete_filename(row.filepath)
+            except:
+                log.exception("Can't delete file %s" % row.filepath)
+                
+        

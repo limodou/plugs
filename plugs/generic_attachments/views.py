@@ -103,3 +103,46 @@ def downloadfile(f_id):
         return fileserving.download(alt_filename, real_filename=_filename, x_filename=x_filename)
     else:
         raise Forbidden("You have no permission to download the file.")
+    
+def postimage():
+    """
+    处理HTML5文件上传
+    """
+    import base64
+    from StringIO import StringIO
+    from uliweb.utils.image import thumbnail_image, fix_filename
+    from uliweb.form import Form, FileField
+    
+    fileserving = AttachmentsFileServing()
+    
+    Attachment = functions.get_model('generic_attachment')
+    table = request.values.get('table')
+    id = request.values.get('id')
+    slug = request.values.get('slug')
+    if request.method == 'POST':
+        
+        dir = settings.Generic_Attachment_Save_Dirs.get(table)
+        if not dir:
+            raise Exception("Saving directory of table %s is not defined in Generic_Attachment_Save_Dirs" % table)
+        
+        if id:
+            path = os.path.join(dir, id, request.values.get('filename'))
+        else:
+            path = os.path.join(dir, request.values.get('filename'))
+            
+        fobj = StringIO(base64.b64decode(request.params.get('data')))
+        filename = functions.save_file(path, fobj)
+#        rfilename, thumbnail = thumbnail_image(functions.get_filename(filename, filesystem=True), filename, settings.get_var('Generic_Attachment_FileServing/IMAGE_THUMBNAIL_SIZE'))
+#        thumbnail_url = functions.get_href(thumbnail)
+#        url = functions.get_href(filename)
+        
+        f = Attachment(filepath=filename, filename=request.values.get('filename'), 
+            submitter=request.user.id)
+        if slug:
+            f.slug = slug
+        else:
+            f.content_object = (table, id)
+        f.save()
+        url = fileserving.get_url(filename, title=f.filename, query_para={'alt':f.filename}, _class='filedown')
+        return json({'success':True, 'filename':request.values.get('filename'), 'url':url, 'id':f.id})
+  

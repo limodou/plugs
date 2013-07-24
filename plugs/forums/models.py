@@ -47,15 +47,17 @@ class Forum(Model):#论坛
     last_post_user = Reference('user', verbose_name='最后回复人', collection_name="last_post_user_forums")
     last_post = Field(int, verbose_name='最后发贴id')
     managers = ManyToMany('user', verbose_name='管理员')
+
+    manager_only = Field(bool, verbose_name='是否只有管理员可以发贴')
     
     def __unicode__(self):
         return self.name
     
     class AddForm:
-        fields = ['name', 'description', 'ordering', 'managers']
+        fields = ['name', 'description', 'ordering', 'managers', 'manager_only']
         
     class EditForm:
-        fields = ['name', 'description', 'ordering', 'managers']
+        fields = ['name', 'description', 'ordering', 'managers', 'manager_only']
     
     class Table:
         fields = [
@@ -65,6 +67,7 @@ class Forum(Model):#论坛
             {'name':'ordering', 'width':40},
             {'name':'managers', 'width':100},
             {'name':'topictype'},
+            {'name': 'manager_only', 'width': 100},
         ]
     
 class SubForum(Model):
@@ -116,8 +119,12 @@ class ForumTopic(Model):#主题
     homepage = Field(bool, verbose_name='是否放首页')
     essence = Field(bool, verbose_name='是否精华贴')
     
+    # 増加是否允许回复标志，缺省应为允许
+    enable_comment = Field(bool, verbose_name='是否允许回复')
+
     class AddForm:
-        fields = ['topic_type', 'subject', 'content', 'slug', 'reply_email']
+        fields = ['topic_type', 'subject', 'content',
+                  'slug', 'reply_email', 'enable_comment']
         
     class EditForm:
         fields = ['topic_type', 'subject', 'content', 'slug']
@@ -158,3 +165,7 @@ class ForumPost(Model):#can't edit...回复
     class AddForm:
         fields = ['content', 'slug', 'reply_email']
     
+class ForumMp3(Model):
+        filename = Field(FILE, verbose_name='附件')
+        datetime     = Field(datetime.datetime, auto_now_add=True)
+ 

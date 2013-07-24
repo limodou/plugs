@@ -32,7 +32,7 @@ class UserView(object):
         from forms import UploadImageForm
         from uliweb.utils.generic import EditView
         import os
-        import Image
+        from PIL import Image
         
         def pre_save(obj, data):
             if 'image' in data and data['image']:

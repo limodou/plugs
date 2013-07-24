@@ -19,7 +19,7 @@ class ImageUploadForm(Form):
     is_thumbnail = BooleanField('是否进行缩略处理')
 
     def validate_filedata(self, data):
-        import Image
+        from PIL import Image
 
         data['file'].seek(0, 2)
         size = data['file'].tell()

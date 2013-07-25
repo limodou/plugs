@@ -12,10 +12,12 @@
         _create: function() {
             var self = this,
                 select = this.element.hide(),
-                value = select.val(),
                 display = select.attr('alt'),
                 title = select.attr('title') || 'Search Result',
                 url = '';
+                this.value = {'element':select.val(), 'input':display};
+                
+            
             if (!this.options.url){
                 url = select.attr('url');
             }else{
@@ -40,8 +42,8 @@
                     },
                     success: function( data ) {
                         if (data.length == 0){
-                            self.element.val('');
-                            self.input.val('');
+//                            self.element.val('');
+//                            self.input.val('');
                             refresh_delicon();
                             response([]);
                         }
@@ -72,9 +74,14 @@
                         if (self.options.onSelect){
                             self.options.onSelect.call(self);
                         }
+                        
+                        self.value['element'] = self.element.val();
+                        self.value['input'] = self.input.val();
+                        
                         return false;
                     }
-                }).keydown(function(event){
+                })
+                .keydown(function(event){
                     var keycode = (event.keyCode ? event.keyCode : event.which);
                     if(keycode == 13){
                         event.preventDefault();
@@ -84,7 +91,17 @@
                         //input.autocomplete('option', 'minLength', old_minLength);
                         //input.focus();
                     }
-                }).keyup(refresh_delicon);
+                })
+                .keyup(refresh_delicon)
+                .blur(function(){
+                    if (self.input.val().length <= 0){
+                        self.value['element'] = ''
+                        self.value['input'] = ''
+                    }
+                    
+                    self.element.val(self.value['element']);
+                    self.input.val(self.value['input']);
+                });
 
             input.data( "autocomplete" )._renderItem = function( ul, item ) {
                 return $( "<li></li>" )
@@ -148,6 +165,7 @@
         clear: function(){
             this.input.val('');
             this.element.val('');
+            this.value = {'element':'', 'input':''};
         },
         options:{
         	showRemoveable:true,

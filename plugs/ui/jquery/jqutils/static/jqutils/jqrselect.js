@@ -42,8 +42,6 @@
                     },
                     success: function( data ) {
                         if (data.length == 0){
-//                            self.element.val('');
-//                            self.input.val('');
                             refresh_delicon();
                             response([]);
                         }
@@ -85,11 +83,6 @@
                     var keycode = (event.keyCode ? event.keyCode : event.which);
                     if(keycode == 13){
                         event.preventDefault();
-                        //var old_minLength = input.autocomplete('option', 'minLength');
-                        //input.autocomplete('option', 'minLength', 0);
-                        //input.autocomplete( "search", input.val() );
-                        //input.autocomplete('option', 'minLength', old_minLength);
-                        //input.focus();
                     }
                 })
                 .keyup(refresh_delicon)

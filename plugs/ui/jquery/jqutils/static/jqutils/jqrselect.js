@@ -24,7 +24,7 @@
                 url = this.options.url;
             }
             
-            var refresh_delicon = function(){
+            var refresh_delicon = this.refresh_delicon = function(){
                 var len = self.input.val().length;
                 if(len>0) {
                     $(self.input).next("a").show();
@@ -94,6 +94,8 @@
                     
                     self.element.val(self.value['element']);
                     self.input.val(self.value['input']);
+                    
+                    self.refresh_delicon();
                 });
 
             input.data( "autocomplete" )._renderItem = function( ul, item ) {
@@ -140,7 +142,10 @@
                     $( this ).blur();
                     input.val('');
                     self.element.val('');
+                    refresh_delicon();
                 });
+            
+            refresh_delicon();
             
             if(!self.options.showRemoveable){
             	this.clearBtn.css("display", "none");
@@ -159,6 +164,7 @@
             this.input.val('');
             this.element.val('');
             this.value = {'element':'', 'input':''};
+            this.refresh_delicon();
         },
         options:{
         	showRemoveable:true,

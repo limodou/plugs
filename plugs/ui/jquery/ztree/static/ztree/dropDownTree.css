@@ -1,0 +1,23 @@
+.x-form-text{
+	float:left;
+	background-color:#fff !important;
+    
+    border:1px solid #B5B8C8;
+    padding:1px 3px;
+    height:23px;
+	cursor:default !important;
+}
+.selBtn{
+	
+	float:left;
+	background:url("./img/trigger.gif") 39px 0px;
+	width:18px;
+	height:27px;
+	cursor:pointer;
+}
+.hidden{
+	position:absolute;
+	left:-1000px;
+}
+
+ul.ztree {margin-top: 10px;border: 1px solid #617775;background: #ffffff;width:220px;height:360px;overflow-y:scroll;overflow-x:auto;}

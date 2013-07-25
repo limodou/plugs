@@ -12,15 +12,27 @@
         _create: function() {
             var self = this,
                 select = this.element.hide(),
-                value = select.val(),
                 display = select.attr('alt'),
                 title = select.attr('title') || 'Search Result',
                 url = '';
+                this.value = {'element':select.val(), 'input':display};
+                
+            
             if (!this.options.url){
                 url = select.attr('url');
             }else{
                 url = this.options.url;
             }
+            
+            var refresh_delicon = function(){
+                var len = self.input.val().length;
+                if(len>0) {
+                    $(self.input).next("a").show();
+                } else {
+                    $(self.input).next("a").hide();
+                }
+            }
+            
             function fetch_data( request, response ) {
                 $.ajax({
                     url: url,
@@ -30,8 +42,7 @@
                     },
                     success: function( data ) {
                         if (data.length == 0){
-                            self.element.val('');
-                            self.input.val('');
+                            refresh_delicon();
                             response([]);
                         }
                         else{
@@ -52,8 +63,8 @@
                 .val( display )
                 .css('display', 'inline')
                 .autocomplete({
-                    delay: 0,
-                    minLength: 999,
+                    delay: 200,
+                    minLength: 2,
                     source: fetch_data,
                     select: function( event, ui ) {
                         self.element.val(ui.item.id);
@@ -61,18 +72,28 @@
                         if (self.options.onSelect){
                             self.options.onSelect.call(self);
                         }
+                        
+                        self.value['element'] = self.element.val();
+                        self.value['input'] = self.input.val();
+                        
                         return false;
                     }
-                }).keydown(function(event){
+                })
+                .keydown(function(event){
                     var keycode = (event.keyCode ? event.keyCode : event.which);
                     if(keycode == 13){
                         event.preventDefault();
-                        var old_minLength = input.autocomplete('option', 'minLength');
-                        input.autocomplete('option', 'minLength', 0);
-                        input.autocomplete( "search", input.val() );
-                        input.autocomplete('option', 'minLength', old_minLength);
-                        input.focus();
                     }
+                })
+                .keyup(refresh_delicon)
+                .blur(function(){
+                    if (self.input.val().length <= 0){
+                        self.value['element'] = ''
+                        self.value['input'] = ''
+                    }
+                    
+                    self.element.val(self.value['element']);
+                    self.input.val(self.value['input']);
                 });
 
             input.data( "autocomplete" )._renderItem = function( ul, item ) {
@@ -82,43 +103,44 @@
                     .appendTo( ul );
             };
 
-            this.button = $( "<a href='#' class='jqrselect-button' title='click to search'>&nbsp;&nbsp;&nbsp;&nbsp;</a>" )
+//            this.button = $( "<a href='#' class='jqrselect-button' title='click to search'>&nbsp;&nbsp;&nbsp;&nbsp;</a>" )
+//                .attr( "tabIndex", -1 )
+//                .attr( "title", title )
+//                .insertAfter( input )
+//                .click(function(e) {
+//                    e.preventDefault();
+//                    // close if already visible
+//                    if ( input.autocomplete( "widget" ).is( ":visible" ) ) {
+//                        input.autocomplete( "close" );
+//                        return;
+//                    }
+//
+//                    // work around a bug (likely same cause as #5265)
+//                    $( this ).blur();
+//
+//                    // pass empty string as value to search for, displaying all results
+//                    var old_minLength = input.autocomplete('option', 'minLength');
+//                    input.autocomplete('option', 'minLength', 0);
+//                    input.autocomplete( "search", input.val() );
+//                    input.autocomplete('option', 'minLength', old_minLength);
+//                    input.focus();
+//                });
+            this.clearBtn = $("<a href='#' class='jqrselect-clearButton' title='click to clear' style='display:none'>&times;</a>" )
                 .attr( "tabIndex", -1 )
-                .attr( "title", title )
-                .insertAfter( input )
+                .insertAfter( this.input )
+//                .insertAfter( this.button )
                 .click(function(e) {
                     e.preventDefault();
-                    // close if already visible
                     if ( input.autocomplete( "widget" ).is( ":visible" ) ) {
                         input.autocomplete( "close" );
                         return;
                     }
-
+                    
                     // work around a bug (likely same cause as #5265)
                     $( this ).blur();
-
-                    // pass empty string as value to search for, displaying all results
-                    var old_minLength = input.autocomplete('option', 'minLength');
-                    input.autocomplete('option', 'minLength', 0);
-                    input.autocomplete( "search", input.val() );
-                    input.autocomplete('option', 'minLength', old_minLength);
-                    input.focus();
+                    input.val('');
+                    self.element.val('');
                 });
-            this.clearBtn = $("<a href='#' class='jqrselect-clearButton' title='click to clear'>&nbsp;&nbsp;&nbsp;&nbsp;</a>" )
-            .attr( "tabIndex", -1 )
-            .insertAfter( this.button )
-            .click(function(e) {
-                e.preventDefault();
-                if ( input.autocomplete( "widget" ).is( ":visible" ) ) {
-                    input.autocomplete( "close" );
-                    return;
-                }
-                
-                // work around a bug (likely same cause as #5265)
-                $( this ).blur();
-                input.val('');
-                self.element.val('');
-            });
             
             if(!self.options.showRemoveable){
             	this.clearBtn.css("display", "none");
@@ -136,6 +158,7 @@
         clear: function(){
             this.input.val('');
             this.element.val('');
+            this.value = {'element':'', 'input':''};
         },
         options:{
         	showRemoveable:true,
@@ -143,7 +166,7 @@
         },
         destroy: function() {
             this.input.remove();
-            this.button.remove();
+//            this.button.remove();
             this.clearBtn.remove();
             this.element.show();
             $.Widget.prototype.destroy.call( this );

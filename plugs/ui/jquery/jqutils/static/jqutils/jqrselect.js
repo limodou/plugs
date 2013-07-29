@@ -62,6 +62,7 @@
                 .insertAfter( select )
                 .val( display )
                 .css('display', 'inline')
+                .css('paddingRight', '25px')
                 .autocomplete({
                     delay: 200,
                     minLength: 2,

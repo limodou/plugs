@@ -13,6 +13,8 @@ Plugs Change Log
 * Upgrade angularjs to 1.0.4
 * Add jquery.dropdown plugin
 * Improve forum add move topic functionality
+* Add avalon to `plugs.ui.avalon` and now only `avalon.js` included.
+* Add jquery.editable to `plugs.ui.jquery.jeditable`
 
 0.1.4 Version
 -----------------

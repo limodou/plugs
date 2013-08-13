@@ -54,7 +54,12 @@
   * @param Function options[onerror]  function(settings, original, xhr) { ... } called on error
   *             
   * @param Hash    options[ajaxoptions]  jQuery Ajax options. See docs.jquery.com.
-  *             
+  *  
+  * verion 1.8 by limodou
+  * 2013.08.12 
+  *   Add array data type for select type, you can pass [[value, title], [value, title]]
+  *   Add bool, int type
+  *   Add serializeObject, and you can get input.val() from it, it fix checkbox and select         
   */
 
 (function($) {
@@ -62,28 +67,36 @@
     serializeObject = function(el) {
         var o = {};
     //    var a = this.serializeArray();
-        $(el).find('input[type="hidden"], input[type="text"], input[type="password"], input[type="checkbox"]:checked, input[type="radio"]:checked, select').each(function() {
-            if ($(el).attr('type') == 'hidden') { //if checkbox is checked do not take the hidden field
-                var $parent = $(el).parent();
-                var $chb = $parent.find('input[type="checkbox"][name="' + el.name.replace(/\[/g, '\[').replace(/\]/g, '\]') + '"]');
+        $(el).find('input[type="hidden"], input[type="text"], input[type="password"], input[type="number"], input[type="checkbox"]:checked, input[type="radio"]:checked, select, textarea').each(function() {
+            if ($(this).attr('type') == 'hidden') { //if checkbox is checked do not take the hidden field
+                var $parent = $(this).parent();
+                var $chb = $parent.find('input[type="checkbox"][name="' + this.name.replace(/\[/g, '\[').replace(/\]/g, '\]') + '"]');
                 if ($chb != null) {
                     if ($chb.prop('checked')) return;
                 }
             }
-            if (el.name === null || el.name === undefined || el.name === '') return;
+            if (this.name === null || this.name === undefined || this.name === '') return;
             var elemValue = null;
-            if ($(el).is('select')) elemValue = $(el).find('option:selected').val();
-            else elemValue = el.value;
-            if (o[el.name] !== undefined) {
-                if (!o[el.name].push) {
-                    o[el.name] = [o[el.name]];
+            if ($(this).is('select')) elemValue = $(this).find('option:selected').val();
+            else elemValue = this.value;
+            if (o[this.name] !== undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
                 }
-                o[el.name].push(elemValue || '');
+                o[this.name].push(elemValue || '');
             } else {
-                o[el.name] = elemValue || '';
+                o[this.name] = elemValue || '';
             }
         });
         return o;
+    }
+    
+    get_val = function(formdata, input){
+        if (!$.isPlainObject(formdata)){
+            //formdata maybe an element
+            formdata = serializeObject(formdata);
+        }
+        return formdata[$(input).attr('name')];
     }
     
     $.fn.editable = function(target, options) {
@@ -299,6 +312,7 @@
                         t = setTimeout(function() {
                             reset.apply(form, [settings, self]);
                         }, 500);
+//                        reset.apply(form, [settings, self]);
                     });
                 } else if ('submit' == settings.onblur) {
                     input.blur(function(e) {
@@ -306,6 +320,7 @@
                         t = setTimeout(function() {
                             form.submit();
                         }, 200);
+                        //form.submit();
                     });
                 } else if ($.isFunction(settings.onblur)) {
                     input.blur(function(e) {
@@ -322,6 +337,22 @@
                     if (t) { 
                         clearTimeout(t);
                     }
+                    
+                    //check if the data is changed, if not then do nothing
+                    var input_val = get_val(form, input);
+                    var changed = false;
+                    //check settings.modified function to see if the data is changed
+                    if(settings.modified){
+                        changed = settings.modified(input_val);
+                    }
+                    if (!changed){
+                        /*t = setTimeout(function() {
+                            reset.apply(form, [settings, self]);
+                        }, 500);
+                        */
+                        reset.apply(form, [settings, self]);
+                        return false;
+                    }
 
                     /* Do no submit. */
                     e.preventDefault(); 
@@ -335,14 +366,14 @@
 
                           /* Check if given target is function */
                           if ($.isFunction(settings.target)) {
-                              var str = settings.target.apply(self, [input.val(), settings]);
+                              var str = settings.target.apply(self, [input_val, settings]);
                               $(self).html(str);
                               self.editing = false;
                               callback.apply(self, [self.innerHTML, settings]);
                               /* TODO: this is not dry */                              
-                              if (!$.trim($(self).html())) {
+                              /*if (!$.trim($(self).html())) {
                                   $(self).html(settings.placeholder);
-                              }
+                              }*/
                           } else {
                               /* Add edited content and id of edited element to POST. */
                               //var submitdata = {};
@@ -351,7 +382,8 @@
                               //fix checkbox and select bug
                               //by limodou 2013/08/12
                               //submitdata[settings.name] = input.val();
-                              submitdata = serializeObject(form);
+                              submitdata = {}
+                              submitdata[settings.name] = input_val;
                               submitdata[settings.id] = self.id;
                               /* Add extra data to be POST:ed. */
                               if ($.isFunction(settings.submitdata)) {
@@ -378,11 +410,13 @@
                                       if (ajaxoptions.dataType == 'html') {
                                         $(self).html(result);
                                       }
-                                      self.editing = false;
-                                      callback.apply(self, [result, settings]);
-                                      if (!$.trim($(self).html())) {
-                                          $(self).html(settings.placeholder);
+                                      if (!callback.apply(self, [result, settings])){
+                                          reset.apply(form, [settings, self]);
                                       }
+                                      self.editing = false;
+                                      /*if (!$.trim($(self).html())) {
+                                          $(self).html(settings.placeholder);
+                                      }*/
                                   },
                                   error   : function(xhr, status, error) {
                                       onerror.apply(form, [settings, self, xhr]);
@@ -484,8 +518,8 @@
             text: {
                 element : function(settings, original) {
                     var input = $('<input />');
-                    if (settings.width  != 'none') { input.attr('width', settings.width);  }
-                    if (settings.height != 'none') { input.attr('height', settings.height); }
+                    if (settings.width  != 'none') { input.width(settings.width);  }
+                    if (settings.height != 'none') { input.height(settings.height); }
                     /* https://bugzilla.mozilla.org/show_bug.cgi?id=236791 */
                     //input[0].setAttribute('autocomplete','off');
                     input.attr('autocomplete','off');
@@ -496,8 +530,8 @@
             int: {
                 element : function(settings, original) {
                     var input = $('<input type="number"/>');
-                    if (settings.width  != 'none') { input.attr('width', settings.width);  }
-                    if (settings.height != 'none') { input.attr('height', settings.height); }
+                    if (settings.width  != 'none') { input.width(settings.width);  }
+                    if (settings.height != 'none') { input.height(settings.height); }
                     /* https://bugzilla.mozilla.org/show_bug.cgi?id=236791 */
                     //input[0].setAttribute('autocomplete','off');
                     input.attr('autocomplete','off');

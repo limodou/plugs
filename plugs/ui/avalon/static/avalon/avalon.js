@@ -1,5 +1,5 @@
 //==================================================
-// avalon 0.92   by 司徒正美 2013.7.26
+// avalon 0.93   by 司徒正美 2013.7.26
 // 疑问:
 //    什么协议? MIT, (五种开源协议的比较(BSD,Apache,GPL,LGPL,MIThttp://www.awflasher.com/blog/archives/939)
 //    依赖情况? 没有任何依赖，可自由搭配jQuery, mass等使用,并不会引发冲突问题
@@ -226,11 +226,7 @@
         bind: function(el, type, fn, phase) {// 绑定事件
             function callback(e) {
                 var ex = e.target ? e : fixEvent(e || window.event)
-//                var ret = fn.call(el, e)
-                //绑定event对象到vmodel上,$vmodel好象还不一定存在，比如checkbox?
-                if (el.$vmodel)
-                    el.$vmodel.$event = ex;
-                var ret = fn.call(el)
+                var ret = fn.call(el, e)
                 if (ret === false) {
                     ex.preventDefault()
                     ex.stopPropagation()
@@ -1259,12 +1255,11 @@
         vmodel.$events = {} //VB对象的方法里的this并不指向自身，需要使用bind处理一下
         vmodel.$id = generateID()
         vmodel.$accessor = accessores
-        vmodel.$event = null //为真正的event预留
         for (var i in Observable) {
             vmodel[i] = Observable[i].bind(vmodel)
         }
         vmodel.hasOwnProperty = function(name) {
-            return name in vmodel.$model || name in vmodel
+            return name in vmodel.$model
         }
         return vmodel
     }
@@ -1520,11 +1515,10 @@
                     //如果是以指定前缀命名的
                     var array = attr.name.split("-")
                     var type = array[1]
-                    var args = array.slice(2)
                     if (typeof bindingHandlers[type] === "function") {
                         bindings.push({
                             type: type,
-                            args: args || [],
+                            param: array.slice(2).join("-"),
                             element: el,
                             remove: true,
                             node: attr,
@@ -1559,7 +1553,7 @@
                     var binding = {
                         type: "text",
                         node: node,
-                        args: [],
+                        param: "",
                         element: textNode.parentNode,
                         value: token.value,
                         filters: filters
@@ -1609,22 +1603,18 @@
     }
 
     //添加赋值语句
-    //改造addAssign，让其返回赋值结果和是否函数状态
+
     function addAssign(vars, scope, name) {
         var ret = [],
-                prefix = " = " + name + ".",
-                is_funcs = {}
+                prefix = " = " + name + "."
         for (var i = vars.length; name = vars[--i]; ) {
             name = vars[i]
             if (scope.hasOwnProperty(name)) {
                 ret.push(name + prefix + name)
                 vars.splice(i, 1)
-                //判断是否函数
-                if (typeof scope[name] === 'function')
-                    is_funcs[name] = true
             }
         }
-        return [ret, is_funcs]
+        return ret
 
     }
 
@@ -1646,13 +1636,9 @@
         })
     }
     //取得求值函数及其传参
-    
-    var events = ("dblclick,mouseout,click,mouseover,mouseenter,"
-        + "mouseleave,mousemove,mousedown,mouseup,keypress,"
-        + "keydown,keyup,blur,focus,change,animationend").split(',');
-    
-    function parseExpr(code, scopes, data, setget) {
-        if (setget) {
+
+    function parseExpr(code, scopes, data, four) {
+        if (four === "setget") {
             var fn = Function("a", "b", "if(arguments.length === 2){\n\ta." + code + " = b;\n }else{\n\treturn a." + code + ";\n}")
             args = scopes
         } else {
@@ -1664,40 +1650,24 @@
                     originCode = code
             //args 是一个对象数组， names 是将要生成的求值函数的参数
             vars = uniqArray(vars), scopes = uniqArray(scopes, 1)
-            var vars_len = vars.length
-            var isfuncs = {}
             for (var i = 0, n = scopes.length; i < n; i++) {
                 if (vars.length) {
                     var name = "vm" + expose + "_" + i
                     names.push(name)
                     args.push(scopes[i])
-                    var r = addAssign(vars, scopes[i], name)
-                    assigns.push.apply(assigns, r[0])
-                    avalon.mix(isfuncs, r[1]);
+                    assigns.push.apply(assigns, addAssign(vars, scopes[i], name))
                 }
             }
-            
-            //处理单个函数不带括号的引用，如果是事件且code为函数，则自动在code之后加 ()
-            if (vars_len === 1 && code.charAt(code.length-1)!==')' && code in isfuncs)
-                code = code + '()';
-                
-            //如果是事件回调，则需要将函数调用变型为 func.call(this, args)
-            if (events.indexOf(data.type) !== -1){
-                var pos = code.indexOf('(')
-                if (pos !== -1){
-                    var func_name = code.slice(0, pos);
-                    var rest = code.slice(pos+1);
-                    code = func_name + '.call(this';
-                    if (rest !== ')') rest = ', '+rest;
-                    code = code + rest;
-                }
-            }
-            
             var prefix = assigns.join(", ")
             if (prefix) {
                 prefix = "var " + prefix
             }
-            
+            if (data.type === "on") {
+                code = code.replace("(", ".call(this,")
+                if (four === "$event") {
+                    names.push(four)
+                }
+            }
             if (data.filters) {
                 code = "\nvar ret" + expose + " = " + code
                 var textBuffer = [],
@@ -1730,7 +1700,6 @@
             }
         }
         try {
-//            fn.apply(fn, args)
             return [fn, args]
         } catch (e) {
             data.remove = false
@@ -1747,18 +1716,7 @@
                 var fn = array[0],
                         args = array[1]
                 updateView = function() {
-                    //应根据是事件函数还是一般函数来决定是否执行函数
-                    var result = fn;
-                    if (events.indexOf(data.type) === -1){
-                        try{
-                            result = fn.apply(fn, args);
-                        }catch (e){
-                            data.remove = false;
-                        }
-                    }
-                    else
-                        result = fn.partial.apply(fn, args);
-                    callback(result, data.element)
+                    callback(fn.apply(fn, args), data.element)
                 }
             }
         } else {
@@ -1832,6 +1790,7 @@
         "class": "className",
         "for": "htmlFor"
     }
+    var rdash = /\(([^)]*)\)/
     var bindingHandlers = avalon.bindingHandlers = {
         "if": function(data, vmodels) {
             var placehoder = DOC.createComment("@"),
@@ -1873,7 +1832,7 @@
         // ms-attr-name="yyy"  vm.yyy="ooo" 为元素设置name属性
         "attr": function(data, vmodels) {
             watchView(data.value, vmodels, data, function(val, elem) {
-                var attrName = data.args.join("-")
+                var attrName = data.param  //
                 var toRemove = (val === false) || (val === null) || (val === void 0)
                 if (toRemove)
                     elem.removeAttribute(attrName)
@@ -1890,22 +1849,41 @@
             })
         },
         "on": function(data, vmodels) {
-            var callback, type = data.args[0],
-                    elem = data.element
-            watchView(data.value, vmodels, data, function(fn) {
-                callback = fn
-            })
-            if (!elem.$vmodels) {
-                elem.$vmodel = elem.$scope = vmodels[0]
-                elem.$vmodels = vmodels
+            data.type = "on"
+            var value = data.value, four = "$event", elem = data.element, type = data.param, callback
+            if (value.indexOf("(") > 0 && value.indexOf(")") > -1) {
+                var matched = (value.match(rdash) || ["", ""])[1].trim()
+                if (matched === "" || matched === "$event") {// aaa() aaa($event)当成aaa处理
+                    four = void 0
+                    value = value.replace(rdash, "")
+                }
+            } else {
+                four = void 0
             }
-            if (type && typeof callback === "function") {
-                avalon.bind(elem, type, callback)
+            var array = parseExpr(value, vmodels, data, four)
+            if (array) {
+                var fn = array[0],
+                        args = array[1]
+                if (!four) {
+                    callback = fn.apply(fn, args)
+                } else {
+                    callback = function(e) {
+                        fn.apply(this, args.concat(e))
+                    }
+                }
+                if (!elem.$vmodels) {
+                    elem.$vmodel = elem.$scope = vmodels[0]
+                    elem.$vmodels = vmodels
+                }
+                if (type && typeof callback === "function") {
+                    avalon.bind(elem, type, callback)
+                }
             }
+
         },
         "data": function(data, vmodels) {
             watchView(data.value, vmodels, data, function(val, elem) {
-                var key = "data-" + data.args.join("-")
+                var key = "data-" + data.param // 
                 elem.setAttribute(key, val)
             })
         },
@@ -1951,7 +1929,7 @@
             }
             watchView(text, vmodels, data, function(val, elem) {
                 if (method === "css") {
-                    avalon(elem).css(data.args.join("-"), val)
+                    avalon(elem).css(data.param, val) //
                 } else if (method === "include" && val) {
                     if (data.args + "" === "src") {
                         var ajax = new (window.XMLHttpRequest || ActiveXObject)("Microsoft.XMLHTTP")
@@ -2000,7 +1978,7 @@
                 }
                 if (typeof fn === "function") {
                     fn.call(data.element)
-                    scope.$watch(data.args[0], function(neo, old) {
+                    scope.$watch(data.args, function(neo, old) {
                         fn.call(data.element, neo, old)
                     })
                     ret = true
@@ -2038,7 +2016,7 @@
             }
             elem[id + "vmodels"] = vmodels //将它临时保存起来
             if (typeof avalon.ui[uiName] === "function") {
-                var optsName = data.args.join("-")
+                var optsName = data.param //
                 if (optsName) {
                     for (var i = 0, vm; vm = vmodels[i++]; ) {
                         if (vm.hasOwnProperty(optsName)) {
@@ -2060,7 +2038,7 @@
     //http://www.cnblogs.com/rubylouvre/archive/2012/12/17/2818540.html
     "class,hover,active".replace(rword, function(method) {
         bindingHandlers[method] = function(data, vmodels) {
-            var oldStyle = data.args.join("-")
+            var oldStyle = data.param //
             var elem = data.element
             if (!oldStyle || isFinite(oldStyle)) {
                 var text = data.value, toggle
@@ -2140,20 +2118,36 @@
             log("ms-model已经被废弃，请使用ms-duplex")
         }
         if (typeof modelBinding[tagName] === "function") {
-            var array = parseExpr(data.value, vmodels, data, true)
+            var array = parseExpr(data.value, vmodels, data, "setget")
             if (array) {
-                modelBinding[tagName](element, array[0], vmodels[0])
+                var val = data.value.split("."), first = val[0], second = val[1]
+                for (var el, i = vmodels.length - 1; el = vmodels[i--]; ) {
+                    if (el.hasOwnProperty(first)) {
+                        if (second && el[first]) {
+                            if (el[first].hasOwnProperty(second)) {
+                                break
+                            }
+                        } else {
+                            break
+                        }
+                    }
+                }
+                modelBinding[tagName](element, array[0], el, data.param)
             }
         }
     }
     //如果一个input标签添加了model绑定。那么它对应的字段将与元素的value连结在一起
     //字段变，value就变；value变，字段也跟着变。默认是绑定input事件，
-    modelBinding.INPUT = function(element, fn, scope) {
+    modelBinding.INPUT = function(element, fn, scope, fixType) {
         if (element.name === void 0) {
             element.name = generateID()
         }
+
         var type = element.type,
                 god = avalon(element)
+        if (type === "checkbox" && fixType === "radio") {
+            type = "radio"
+        }
         //当value变化时改变model的值
         var updateModel = function() {
             if (god.data("observe") !== false) {
@@ -2167,6 +2161,7 @@
                 element.value = neo
             }
         }
+
         //https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Input
         if (/^(password|textarea|text|url|email|date|month|time|week|number)$/.test(type)) {
             var event = element.attributes["data-event"] || {}
@@ -2223,7 +2218,11 @@
             }
             updateView = function() {
                 var array = [].concat(fn(scope)) //强制转换为数组
-                element.checked = array.indexOf(element.value) >= 0
+                try {
+                    element.checked = array.indexOf(element.value) >= 0
+                } catch (e) {
+                    log("<input type='checkbox' ms-duplex='prop' /> 中prop应为一个数组")
+                }
             }
             god.bind("click", updateModel) //IE6-8
         }
@@ -2297,7 +2296,7 @@
     "dblclick,mouseout,click,mouseover,mouseenter,mouseleave,mousemove,mousedown,mouseup,keypress,keydown,keyup,blur,focus,change,animationend".
             replace(rword, function(name) {
         bindingHandlers[name] = function(data) {
-            data.args = [name]
+            data.param = name
             bindingHandlers.on.apply(0, arguments)
         }
     })
@@ -2546,7 +2545,7 @@
                             arr = el
                     for (var i = 0, n = arr.length; i < n; i++) {
                         var ii = i + pos
-                        var tmodel = createEachModel(ii, arr[i], list, data.args)
+                        var tmodel = createEachModel(ii, arr[i], list, data.param)
                         var tview = data.vTemplate.cloneNode(true)
                         tmodel.$view = tview
                         tmodels.splice(ii, 0, tmodel)
@@ -2649,13 +2648,13 @@
         })
     }
     var watchEachOne = oneObject("$index,$remove,$first,$last")
-    function createEachModel(index, item, list, args) {
-        var itemName = args[0] || "$data"
+    function createEachModel(index, item, list, param) {
+        param = param || "$data"
         var source = {}
         source.$index = index
         source.$view = {}
-        source.$itemName = itemName
-        source[itemName] = {
+        source.$itemName = param
+        source[param] = {
             get: function() {
                 return item
             },
@@ -3341,19 +3340,6 @@
     avalon.ready(function() {
         avalon.scan(document.body)
     })
-    
-    //公共函数
-    Function.prototype.partial = function(){
-        var fn = this, args = Array.prototype.slice.call(arguments);
-        return function(){
-          var arg = 0;
-          for ( var i = 0; i < args.length && arg < arguments.length; i++ )
-            if ( args[i] === undefined )
-              args[i] = arguments[arg++];
-          return fn.apply(this, args);
-        };
-      };
-    
 })(document)
 //2012.8.31 完成 v1
 //https://github.com/RubyLouvre/mass-Framework/commit/708e203a0e274b69729d08de8fe1cde2722520d2

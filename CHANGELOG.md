@@ -15,6 +15,7 @@ Plugs Change Log
 * Improve forum add move topic functionality
 * Add avalon to `plugs.ui.avalon` and now only `avalon.js` included.
 * Add jquery.editable to `plugs.ui.jquery.jeditable`
+* Add ZeroClipboard to `plugs.ui.jquery.ZeroClipboard`
 
 0.1.4 Version
 -----------------
@@ -48,29 +49,29 @@ Plugs Change Log
 0.1.2 Version
 -----------------
 
-* Improve forum upload filename convert process, add `alt=` to download href, so 
+* Improve forum upload filename convert process, add `alt=` to download href, so
    that the download filename will use alt value.
 * Fix pnotify inc_show_message js bug, change `top.$(window)` to `$(top.window)`
 * Upgrade pnotify to 1.2.0
 * Add backbone and underscore to plugs.ui.js.jsutils, and you can use:
-    
+
     ```
     {{use "backbone""}}
     ```
-    
+
    to use backbone.
 * Add AngularJS in 'plugs.ui.angularjs', and you can use::
-    
+
     ```
     {{use "angularjs"}}
     ```
-    
+
 * Add font-awesome support in 'plugs.ui.bootstrap', and you can use::
 
     ```
     {{use "fontawesome"}}
     ```
-    
+
 * Fix fontawesome confict with bootstrap icon class
 * Upgrade bootstrap to 2.0.4
 * Add slickgrid and jqevent plugin
@@ -83,13 +84,13 @@ Plugs Change Log
     pagination = functions.create_pagination(url, total, page, rows, length=None)
     return {'pagination':pagination}
     ```
-    
+
     and in template you can:
-    
+
     ```
     <div class="pagination">{{<< pagination}}</div>
     ```
-    
+
 * Add jquery.cookie
 * Fix bootstrap prettify theme = default bug
 * Remove jqjson

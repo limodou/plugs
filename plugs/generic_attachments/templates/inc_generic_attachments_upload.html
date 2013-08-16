@@ -58,7 +58,10 @@ cursor:pointer;
                   url: '{{<<upload_url}}',
                   done: function (e, data) {
                       if(data.result.success){
-                          $('#attachments').append('<li><i class="icon-file"></i>'+data.result.url+'<span class="deletefile" title="删除文件" rel="'+data.result.id+'">&times;</span></li>');
+                          $('#attachments').append('<li><i class="icon-file"></i>'+
+                            data.result.url+
+                            '(由' + data.result.submitter + '于' + data.result.create_date + '上传) ' +
+                            '<span class="deletefile" title="删除文件" rel="'+data.result.id+'">&times;</span></li>');
                       }else if(data.result.error){
                           $('#attachments').append('<font color="red">'+data.result.error+'</font>');
                       }

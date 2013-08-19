@@ -16,6 +16,7 @@ Plugs Change Log
 * Add avalon to `plugs.ui.avalon` and now only `avalon.js` included.
 * Add jquery.editable to `plugs.ui.jquery.jeditable`
 * Add ZeroClipboard to `plugs.ui.jquery.ZeroClipboard`
+* Add d3 to `plugs.ui.d3`
 
 0.1.4 Version
 -----------------

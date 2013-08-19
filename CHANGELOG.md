@@ -17,6 +17,7 @@ Plugs Change Log
 * Add jquery.editable to `plugs.ui.jquery.jeditable`
 * Add ZeroClipboard to `plugs.ui.jquery.ZeroClipboard`
 * Add d3 to `plugs.ui.d3`
+* Add staticize app to `plug.staticize` and modified wiki app
 
 0.1.4 Version
 -----------------

@@ -1,0 +1,31 @@
+{{extend "wiki_layout.html"}}
+
+{{block content_main}}
+{{include "WikiView/inc_wiki_nav.html"}}
+{{use "prettify"}}
+
+<div class="content-outter" id="wiki">
+
+<div class="top clearfix">
+    <h3><a href="/wiki/{{=wiki.name}}">{{=unicode(wiki)}}</a></h3>
+    {{include "WikiView/inc_wiki_search.html"}}
+</div>
+
+<div class="wiki-header">
+    
+    {{make_nav(wiki.name, '_Code_')}}
+
+    <div class="wiki-content">
+        <pre class="prettyprint linenums"><code>{{=wiki.content}}</code></pre>
+    </div>
+</div>
+
+</div>
+
+<script>
+    $(function(){
+        // make code pretty
+        window.prettyPrint && prettyPrint()
+    });
+</script>
+{{end}}

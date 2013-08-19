@@ -1,0 +1,17 @@
+{{link "wiki/stoc.js"}}
+
+<script>
+$(function(){
+    $('#toc').stoc({search:'#wiki-content', tocnumber:true, depth:3, stocTitle:'<div class="toctopic">目录[<a href="#" id="btnToc">隐藏</a>]</div>'});
+    $('#btnToc').bind('click', function(e){
+        e.preventDefault();
+        var el =  $('#toc').find('ul.tocitems');
+        el.toggle();
+        if(el.is(':visible')){
+            $(this).text('隐藏');
+        }else{
+            $(this).text('显示');
+        }
+    });
+});
+</script>    

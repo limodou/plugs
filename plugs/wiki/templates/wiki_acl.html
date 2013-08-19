@@ -1,0 +1,29 @@
+{{from plugs.wiki.forms import WikiAclForm}}
+{{build = WikiAclForm().build }}
+<form id="acl_form">
+{{<<build.body}}
+{{<<build.buttons_line}}
+</form>
+<div id="acl_test_result">
+</div>
+<script>
+$(function(){
+    $('#acl_form').submit(function(){return false;});
+    $('#btnTest').click(function(e){
+        e.preventDefault();
+        var data = $('#acl_form').serialize();
+        $.post('/wiki/{{=wiki.name}}?action=test_acl', data).success(function(r){
+            if(r.success){
+                var txt = '';
+                var line1 = '<tr>', line2 = '<tr>';
+                for(var i=0; i<r.data.length; i++){
+                    line1 = line1 + '<th>' + r.data[i][0] + '</th>'; 
+                    line2 = line2 + '<td>' + r.data[i][1] + '</td>'; 
+                }
+                txt = '<table class="table table-bordered"><tbody>' + line1 + line2 + '</tbody></table>';
+                $('#acl_test_result').empty().html(txt);
+            }
+        });
+    });
+});
+</script>

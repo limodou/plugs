@@ -1,0 +1,9 @@
+{{## <div class="search">
+    <form action="/essearch">
+        <input type="text" name="keyword" value="{{=request.GET.get('keyword', '')}}"/>
+        <input type="hidden" name="query"/>
+        <input type="hidden" name="doc_type" value="wikipage"/>
+        <button type="submit">搜 索</button>
+    </form>
+</div>
+##}}

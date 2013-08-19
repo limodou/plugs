@@ -4,41 +4,100 @@
 <style>
 #field_title {width:90%;}
 #field_content {width:90%;}
+#help {align: right}
 </style>
+{{#use "sisyphus"}}
+{{link "wiki/stoc.js"}}
+{{use "jqhotkeys"}}
 
-<div class="content-outter">
+<div class="content-outter" id="wiki">
 
-<h1><a href="{{=url_for('plugs.wiki.views.WikiView.wiki_page', pagename=pagename)}}">{{=pagename}}</a></h1>
+<div class="top clearfix">
+    <h3><a href="/wiki/{{=wiki.name}}">{{=unicode(wiki)}}</a></h3>
+</div>
 
 <ul class="nav nav-tabs" id="write_form">
-  <li class="active"><a href="#write" data-toggle="tab">{{=_('Write')}}</a></li>
-  <li><a href="#preview" id="a_preview" data-toggle="tab">{{=_('Preview')}}</a></li>
+  <li class="active"><a href="#write" data-toggle="tab" id="a_write">{{=_('Write')}}(Shift+E)</a></li>
+  <li><a href="#wiki-content" id="a_preview" data-toggle="tab">{{=_('Preview')}}(Shift+P)</a></li>
+  <li><a href="#help" id="a_help" data-toggle="tab">帮助(Shift+H)</a></li>
+  <li><a href="#acl" id="a_acl" data-toggle="tab">权限测试(Shift+T)</a></li>
 </ul>
  
 <div class="tab-content">
   <div class="tab-pane active" id="write">
-    <form class="form-vertical" method="POST" id="preview_form">
+    <form class="form-vertical" method="POST" id="wikiform">
     {{build = form.build}}
     {{<< build.body}}
     {{include "inc_generic_attachments_upload.html"}}
-    {{attachments_upload(slug, 'wikipage')}}
+    {{attachments_upload(wiki, 'wikipage')}}
     {{<< build.buttons_line}}
     </form>
   </div>
-  <div class="tab-pane" id="preview">
+  <div class="tab-pane wiki-preview" id="wiki-content">
   </div>
+  <div class="tab-pane" id="help">
+    {{include "wiki_help.html"}}
+  </div>
+  <div class="tab-pane" id="acl">
+    {{include "wiki_acl.html"}}
+  </div>
+
 </div>
 
 </div>
 
 <script>
+
 $(function(){
     $('#a_preview').on('shown', function (e) {
-        $.post('/wiki/{{=pagename}}/preview', 
+        $.post('/wiki/{{=wiki.name}}?action=preview', 
             {'content':$('#field_content').val()}).success(function(d){
-            $('#preview').html(d.data);
+            $('#wiki-content').html(d.data).append('<div class="totop"><a href="#">回到顶部</a></div>');
+            
+            if (d.page_args.toc == '1'){
+                $('#wiki-content').prepend('<div id="toc"></div>');
+                $('#toc').stoc({search:'#wiki-content', tocnumber:true, depth:3, stocTitle:'<div class="toctopic">目录[<a href="#" id="btnToc">隐藏</a>]</div>'});
+                $('#btnToc').bind('click', function(e){
+                    e.preventDefault();
+                    var el =  $('#toc').find('ul.tocitems');
+                    el.toggle();
+                    if(el.is(':visible')){
+                        $(this).text('隐藏');
+                    }else{
+                        $(this).text('显示');
+                    }
+                });
+                
+                $('#wiki-content').find('h1,h2,h3,h4,h5,h6').bind('click', function(e){
+                    $("html, body").animate({  
+                        scrollTop: $('#toc').offset().top + "px"  
+                    }, {  
+                        duration: 500,  
+                        easing: "swing"  
+                    });  
+                }).css('cursor', 'pointer');
+                
+            }
+            
         });
+    });
+    
+    //$('#wikiform').sisyphus();
+    
+    $(document).bind('keydown.shift_e', function(){
+        $('#a_write').tab('show');
+    }).bind('keydown.shift_p', function(){
+        $('#a_preview').tab('show');
+    }).bind('keydown.shift_h', function(){
+        $('#a_help').tab('show');
+    }).bind('keydown.ctrl_return', function(){
+        $('#wikiform').submit();
+    }).bind('keydown.shift_t', function(){
+        $('#a_acl').tab('show');
     })
+;
+    
 })
 </script>
+
 {{end}}

@@ -3,13 +3,24 @@
 {{block content_main}}
 {{include "WikiView/inc_wiki_nav.html"}}
 
-<div class="content-outter">
+<div class="content-outter" id="wiki">
+
+<div class="top clearfix">
+    <h3><a href="/wiki/{{=wiki.name}}">{{=unicode(wiki)}}</a></h3>
+    {{include "WikiView/inc_wiki_search.html"}}
+</div>
+
 
 <div class="wiki-header">
-    {{make_nav(pagename)}}
+    {{make_nav(wiki.name)}}
 
     {{link "wiki/diff_view.css"}}
+    <h4>标题差异</h4>
+    <div class="wiki_diff_content">{{<< subject_content}}</div>
+    <h4>正文差异</h4>
     <div class="wiki_diff_content">{{<< content}}</div>
+    <h4>附件差异</h4>
+    <div class="wiki_diff_content">{{<< attachments_content}}</div>
 </div>
 
 </div>

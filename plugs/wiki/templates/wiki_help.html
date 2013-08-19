@@ -1,0 +1,369 @@
+<h1 id="title_1">Markdown语法说明</h1>
+<h2 id="title_1.1">标题</h2>
+<h3 id="title_1.1.1">Setext方式</h3>
+<pre id="test" class="prettyprint linenums"><code>标题1
+=================
+
+标题2
+-----------------</code></pre>
+<script type="text/code-comment">
+{"test":{"1":{"content":"<p>line 1</p>\n","title":"1"},"3":{"content":"<p>line 2</p>\n","title":"3"}}}
+</script>
+<p>使用setext只能显示 <code>&lt;h1&gt;</code> 和 <code>&lt;h2&gt;</code> 级别标题。更多级别的标题，请使用Atx方式。</p>
+<h3 id="title_1.1.2">Atx方式</h3>
+<pre class="prettyprint linenums"><code># 标题1
+## 标题2
+###### 标题6</code></pre>
+<p>或者可以在后面添加若干 <code>#</code> ，并且不一定要和前面的 <span class="inline-tag" data-rel="num"><i class="icon-question-sign"></i>个数</span> 对应：</p>
+<script type="text/code-comment">
+{"":{"num":{"content":"<p>This is num</p>\n","title":"答案"}}}
+</script>
+<pre class="prettyprint linenums"><code># 标题1 #
+## 标题2 #
+###### 标题6 ##</code></pre>
+<p>示例：</p>
+<h6 id="title_1.1.2.0.0.1">标题6</h6>
+<h2 id="title_1.2">段落</h2>
+<p>可以把整个Markdown文档理解为由若干段落组成的块，块与块之间或者通过空行来区分，或者通过特殊的开始字符来区分。常见的块有：</p>
+<ul>
+<li>代码段， 使用 <code>```</code> 或 <code>&lt;code&gt;&lt;/code&gt;</code> 来分隔，可以占多行；或者使用4个空格或1个制表符来缩近的文本段</li>
+<li>标题，使用 <code>#</code> 开头，只占一行</li>
+<li>列表，以 <code>*|+|-</code> + 空格 或 数字+`.`+空格为列表开始</li>
+<li>引用块， 以 <code>&lt;</code>+空格 开始</li>
+<li>定义段</li>
+<li>分隔线</li>
+<li>表格</li>
+<li>HTML块</li>
+<li>文本段，多行文本，每行不以上面特殊字符 <code>#</code>, <code>+</code>, <code>-</code>, <code>*</code> 等开始的文本行，遇到空行则结束</li>
+</ul>
+<h3 id="title_1.2.3">代码段</h3>
+<p>有几种定义方法</p>
+<ol>
+<li><p>使用 <code>&lt;code&gt;</code> 定义</p><pre class="prettyprint linenums"><code>&lt;code&gt;
+import os
+&lt;/code&gt;</code></pre>
+<p>结果：</p>
+<pre class="prettyprint linenums"><code>import os</code></pre>
+<p><code>&lt;code&gt;</code> 和 <code>&lt;/code&gt;</code> 要独占一行</p></li>
+<li><p>使用 <code>```</code> 来定义，同样 <code>```</code> 在前后都要独占一行。</p><pre class="prettyprint linenums"><code>```
+import os
+```</code></pre>
+<p>结果：</p>
+<pre id="import" class="prettyprint linenums"><code>import os</code></pre></li>
+<li><p>使用缩近块，每行要缩近4个空格或1个制表符，中间可以有空行，如：</p><pre class="prettyprint linenums"><code>    import os
+    
+    os.path</code></pre>
+<p>结果：</p>
+<pre class="prettyprint linenums"><code>import os
+    
+os.path</code></pre></li>
+</ol>
+<script type="text/code-comment">
+{"import":{"import":{"content":"<p>this is import</p>\n","title":"import"},"os":{"content":"<p>this is os</p>\n","title":"os"}}}
+</script>
+<h3 id="title_1.2.4">引用</h3>
+<p>行首使用 <code>&gt;</code> 加上一个空格表示引用段落，内部可以嵌套多个引用。</p>
+<pre class="prettyprint linenums"><code>&gt; 这是一个引用，
+&gt; 这里木有换行，   
+&gt; 
+&gt; 在这里换行了。
+&gt; &gt; 内部嵌套</code></pre>
+<p>结果为：</p>
+<blockquote><p>这是一个引用， 这里木有换行，</p>
+<p>在这里换行了。</p>
+<blockquote><p>内部嵌套</p>
+</blockquote>
+</blockquote>
+<h3 id="title_1.2.5">列表</h3>
+<h4 id="title_1.2.5.1">无序列表</h4>
+<p>无序列表使用 <code>*</code> , <code>+</code>, <code>-</code> 后面加空格来表示。列表可以嵌套，下一级的列表前面应缩近4个空格或1个制表符。</p>
+<p>如：</p>
+<pre class="prettyprint linenums"><code>* a
++ b
+- c
+    + c1
+    + c2</code></pre>
+<p>结果：</p>
+<ul>
+<li>a</li>
+<li>b</li>
+<li><p>c</p><ul>
+<li>c1</li>
+<li>c2</li>
+</ul></li>
+</ul>
+<p>如果一行太长写不下，可以是多行，如：</p>
+<pre class="prettyprint linenums"><code>* a
+   b c
++ b</code></pre>
+<p>结果：</p>
+<ul>
+<li>a    b c</li>
+<li>b</li>
+</ul>
+<p>在列表中可以嵌套其它的格式，如：</p>
+<pre class="prettyprint linenums"><code>* a **b** _c_
+
+    ```
+    import os
+    ```
+* b
+
+    &gt; quote</code></pre>
+<p>结果：</p>
+<ul>
+<li><p>a <strong>b</strong> <em>c</em></p><pre class="prettyprint linenums"><code>import os</code></pre></li>
+<li><p>b</p><blockquote><p>quote</p>
+</blockquote></li>
+</ul>
+<h4 id="title_1.2.5.2">有序列表</h4>
+<p>使用数字加英文句号加空格表示。</p>
+<pre class="prettyprint linenums"><code>1. Item 1
+2. Item 2
+3. Item 3</code></pre>
+<p>结果：</p>
+<ol>
+<li>Item 1</li>
+<li>Item 2</li>
+<li>Item 3</li>
+</ol>
+<h3 id="title_1.2.6">分隔线</h3>
+<p>在一行中使用三个或三个以上的 <code>*</code>、`-` 或 <code>_</code> 可以添加分隔线，其中可以有空白，但是不能有其他字符。</p>
+<p>如：</p>
+<pre class="prettyprint linenums"><code>* * * *
+------
+__ __ __</code></pre>
+<p>结果：</p>
+<hr/>
+<hr/>
+<hr/>
+<h3 id="title_1.2.7">定义段(par扩展)</h3>
+<p>生成如 <code>&lt;dl&gt;&lt;dt&gt;&lt;dd&gt;</code> 的格式。首行应顶格，首字符不能是其它段的开始字符，如 <code>*</code>, <code>+</code>, <code>-</code>, <code>#</code> ，最后以 空格+`--`结束。 第二行开始为缩近段。如：</p>
+<pre class="prettyprint linenums"><code>a --
+    This is a definition</code></pre>
+<p>结果：</p>
+<dl>
+<dt>a</dt>
+<dd><p>This is a definition</p>
+</dd>
+</dl><h3 id="title_1.2.8">表格(par扩展)</h3>
+<p>每行代表一个表格行，字段之间使用 <code>||</code> 分隔，如：</p>
+<pre class="prettyprint linenums"><code>||a||b||c||
+||a1||b1||c1||</code></pre>
+<p>结果：</p>
+<table class="table table-bordered">
+<tr><td>a</td><td>b</td><td>c</td>
+</tr>
+<tr><td>a1</td><td>b1</td><td>c1</td>
+</tr>
+
+</table>
+<h3 id="title_1.2.9">HTML片段</h3>
+<p>首列以 <code>&lt;</code> 开始的将视为HTML片段，如：</p>
+<pre class="prettyprint linenums"><code>&lt;img src="/uploads/tutorial/10/ed7e964fcf1311e1b58bdd53d280702b.png"&gt;</code></pre>
+<p>结果：</p>
+<p><img src="/uploads/tutorial/10/ed7e964fcf1311e1b58bdd53d280702b.png"></p>
+<h3 id="title_1.2.10">文本段</h3>
+<p>文本段可以由多行文本组成，以空行作为一个段落的结束。首字符不能是特殊的段落开始符。除首行外，第二行可以前面有空格。如：</p>
+<pre class="prettyprint linenums"><code>This is a test
+paragraph.
+
+This is a test
+    paragraph.</code></pre>
+<p>结果：</p>
+<p>This is a test paragraph.</p>
+<p>This is a test     paragraph.</p>
+<h3 id="title_1.2.11">Bootstrap 标签页(par扩展)</h3>
+<p>标签页是par项目做的一个Markdown语法上的扩展，需要在调用相应的解析时传入对应块的处理函数。目前已经在uliwebzone上支持了。定义格式为：</p>
+<pre class="prettyprint linenums"><code>{% tabs %}
+-- hello --
+```
+This is a test
+```
+-- world --
+* this is a list
+* test
+{% endtabs %}</code></pre>
+<p>结果：</p>
+<div class="tabbable">
+<ul class="nav nav-tabs">
+<li class="active"><a href="#tab_item_1_1" data-toggle="tab">hello</a></li>
+<li><a href="#tab_item_1_2" data-toggle="tab">world</a></li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane active" id="tab_item_1_1">
+
+<pre class="prettyprint linenums"><code>This is a test</code></pre>
+
+</div>
+<div class="tab-pane" id="tab_item_1_2">
+
+<ul>
+<li>this is a list</li>
+<li>test</li>
+</ul>
+
+</div>
+</div>
+</div>
+<p>其中 <code>{% tabs %}</code> 和 <code>{% endtabs %}</code> 是标签开始和结束，各占一行。</p>
+<p>每个Tab页，由标题和内容组成。标题形式为 <code>-- xxx --</code> ，前后各两个 <code>--</code> ，中间是标题名称。标题前后各有两个空格。</p>
+<h3 id="title_1.2.12">Bootstrap 提醒(par扩展)</h3>
+<p>生成Bootstrap alert 的展示效果，格式为：</p>
+<pre class="prettyprint linenums"><code>{% alert class=success %}
+Success
+{% endalert %}
+{% alert class=error %}
+Error
+{% endalert %}
+{% alert class=info %}
+Info
+{% endalert %}
+{% alert %}
+Message
+{% endalert %}
+{% alert %}
+#### Alert Title
+This is alert message
+{% endalert %}
+{% alert class=info,close %}
+This is an alert. It'll has a close button.
+{% endalert %}</code></pre>
+<p>结果：</p>
+<div class="alert alert-success">
+<p>Success</p>
+
+</div><div class="alert alert-error">
+<p>Error</p>
+
+</div><div class="alert alert-info">
+<p>Info</p>
+
+</div><div class="alert ">
+<p>Message</p>
+
+</div><div class="alert ">
+<h4 id="title_0.0.0.1">Alert Title</h4>
+<p>This is alert message</p>
+
+</div><div class="alert alert-info">
+<button class="close" data-dismiss="alert">&times;</button>
+<p>This is an alert. It'll has a close button.</p>
+
+</div>
+<h2 id="title_1.3">行内标记</h2>
+<h3 id="title_1.3.13">强调</h3>
+<p>有以下几种强调方式：</p>
+<pre class="prettyprint linenums"><code>单星号 = *斜体*
+单下划线 = _斜体_
+双星号 = **加粗**
+双下划线 = __加粗__
+三星号 = ***粗斜***
+三下划线 = ___粗斜___
+双波浪线 = ~~中划线~~
+尖号 = ^上标文本^
+双逗号 = ,,下标文本,,
+倒单引号 = `代码`</code></pre>
+<p>结果：</p>
+<table class="table table-bordered">
+<tr><td>单星号/单下划线</td><td><em>斜体</em></td>
+</tr>
+<tr><td>双星号/双下划线</td><td><strong>加粗</strong></td>
+</tr>
+<tr><td>三星号/三下划线</td><td><strong><em>粗斜</em></strong></td>
+</tr>
+<tr><td>双波浪线</td><td><span style="text-decoration: line-through">中划线</span></td>
+</tr>
+<tr><td>尖号</td><td>文本^上标文本^</td>
+</tr>
+<tr><td>双逗号</td><td>文本,,下标文本,,</td>
+</tr>
+<tr><td>倒单引号</td><td>`代码`</td>
+</tr>
+
+</table>
+<h3 id="title_1.3.14">代码标记</h3>
+<p>可以使用 <code>&lt;code&gt;&lt;/code&gt;</code> 或 <code>`</code> 来引用行内的代码。如：</p>
+<pre class="prettyprint linenums"><code>This is &lt;code&gt;test&lt;/code&gt; and `test`.</code></pre>
+<p>结果：</p>
+<p>This is <code>test</code> and <code>test</code>.</p>
+<h3 id="title_1.3.15">行内HTML标记</h3>
+<p>可以在行内直接使用HTML标记，如：</p>
+<pre class="prettyprint linenums"><code>这是 &lt;b&gt;行内&lt;/b&gt; 标记。</code></pre>
+<p>结果：</p>
+<p>这里 <b>行内</b> 标记。</p>
+<h3 id="title_1.3.16">链接</h3>
+<p>Markdown支持 <em>行内</em> 和 <em>参考</em> 两种定义方式。Uliwebzone扩展了直接识别链接的处理。</p>
+<h4 id="title_1.3.16.3">行内形式</h4>
+<p>如：</p>
+<pre class="prettyprint linenums"><code>This is [an example](http://example.com/ "Title") inline link.
+
+[This link](http://example.net/) has no title attribute.</code></pre>
+<p>结果为：</p>
+<p>This is <a href="http://example.com/" title="Title">an example</a> inline link.</p>
+<p><a href="http://example.net/">This link</a> has no title attribute.</p>
+<p>这种定义方式，首先要定义一个方括号，方括号内是链接显示的文本。后面跟着一个括号，是它对应的链接地址。同时还可以在后面跟一个 title 信息。</p>
+<h4 id="title_1.3.16.4">参考定义</h4>
+<p>先如下定义：</p>
+<pre class="prettyprint linenums"><code>This is [an example][id] reference-style link.</code></pre>
+<p>然后在文章的任意位置定义：</p>
+<pre class="prettyprint linenums"><code>[id]: http://example.com/  "Optional Title Here"</code></pre>
+<p>结果：</p>
+<p>This is <a href="http://example.com/" title="Optional Title Here">an example</a>
+ reference-style link.</p>
+<p>这种定义方式与行内方式不同之处在于，方括号后面的括号改为另一个方括号，其中跟着引用的id标识。 在文章的其它定义id标识信息，格式为：</p>
+<ul>
+<li>方括号，里面输入连结入标识</li>
+<li>接着一个冒号</li>
+<li>接着一个以上的空白或 tab</li>
+<li>URL地址</li>
+<li>可选地 title 內容，可以用单引号、双引号或是括号包围</li>
+</ul>
+<p>下面几种形式都是相同的：</p>
+<pre class="prettyprint linenums"><code>[foo]: http://example.com/  "Optional Title Here"
+[foo]: http://example.com/  'Optional Title Here'
+[foo]: http://example.com/  (Optional Title Here)</code></pre>
+<h3 id="title_1.3.17">图片</h3>
+<p>图片的写法和链接差不多，就是在前面多加一个 <code>!</code></p>
+<p>如：</p>
+<pre class="prettyprint linenums"><code>![Test](/uploads/tutorial/10/ed7e964fcf1311e1b58bdd53d280702b.png)</code></pre>
+<p>结果：</p>
+<p><img src="/uploads/tutorial/10/ed7e964fcf1311e1b58bdd53d280702b.png" alt="Test"/>
+</p>
+<h3 id="title_1.3.18">直接链接</h3>
+<p>可以直接写一个链接或使用 <code>&lt;</code> 和 <code>&gt;</code> 包括链接，如：</p>
+<pre class="prettyprint linenums"><code>这是 http://google.com 的地址
+
+这是 &lt;http://google.com&gt; 的地址</code></pre>
+<p>结果：</p>
+<p>这是 <a href="http://google.com">http://google.com</a> 的地址</p>
+<p>这是 <a href="<http://google.com>"><http://google.com></a> 的地址</p>
+<h2 id="title_1.4">字符转义</h2>
+<p>有些特殊符号如果要转义，可以在前面使用 <code>\</code> ,如：</p>
+<pre class="prettyprint linenums"><code>\\   反斜线
+\`   反引号
+\*   星号
+\_   底线
+\{\}  大括号
+\[\]  方括号
+\(\)  括号
+\#   井字号
+\+   加号
+\-   減号
+\.   英文句号
+\!   感叹号</code></pre>
+<p>结果：</p>
+<ul>
+<li>\   反斜线</li>
+<li>`   反引号</li>
+<li>*   星号</li>
+<li>_   底线</li>
+<li>{}  大括号</li>
+<li>[]  方括号</li>
+<li>()  括号</li>
+<li>#   井字号</li>
+<li>+   加号</li>
+<li>-   減号</li>
+<li>.   英文句号</li>
+<li>!   感叹号</li>
+</ul>

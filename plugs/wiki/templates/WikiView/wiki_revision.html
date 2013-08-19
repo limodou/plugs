@@ -3,42 +3,98 @@
 {{block content_main}}
 {{include "WikiView/inc_wiki_nav.html"}}
 
-<div class="content-outter">
+<div class="content-outter" id="wiki">
 
-<div class="wiki-header">
-{{make_nav(wiki.name)}}
-<h1><a href="{{=url_for('plugs.wiki.views.WikiView.wiki_page', pagename=wiki.name)}}">{{=wiki.name}}</a></h1>
+<div class="top clearfix">
+    <h3><a href="/wiki/{{=wiki.name}}">{{=unicode(wiki)}}</a></h3>
+    {{include "WikiView/inc_wiki_search.html"}}
 </div>
 
-<form action="{{=url_for('plugs.wiki.views.WikiView.wiki_diff', pagename=wiki.name)}}" method="GET">
-<table class="table">
+<div class="wiki-header">
+{{make_nav(wiki.name, '_History_')}}
+</div>
+
+<form action="/wiki/{{=wiki.name}}" method="GET">
+<input type="hidden" name="action" value="diff"/>
+<table class="table" id="revisions">
 <thead>
-<tr><th>#Rev</th>
-<th>Date</th>
-<th><input type="submit" class="btn btn-mini btn-primary" value="Compare"/></th>
-<th>Modified User</th>
-<th>Actions</th></tr>
+<tr>
+    <th>#{{=_('Rev')}}</th>
+    <th>{{=_('Date')}}</th>
+    <th>{{=_('Modified User')}}</th>
+    <th>{{=_('Actions')}}</th>
+    <th><input type="submit" class="btn btn-mini btn-primary" value="{{=_('Compare')}}"/></th>
+</tr>
 </thead>
 <tbody>
-{{i = 0}}
-{{for item in changeset:}}
-    {{i += 1}}
-    <tr>
-    <td>{{=item.revision}}</td>
-    <td>{{=item.modified_time and item.modified_time.strftime('%Y-%m-%d %H:%M:%S')}}</td>
-    <td>
-        <input type="radio" name="rev1" value="{{=item.revision}}"{{if i==2:}} checked{{pass}}>
-        <input type="radio" name="rev2" value="{{=item.revision}}"{{if i==1:}} checked{{pass}}>
-    </td>
-    <td>{{=unicode(item.editor) or 'uliwiki'}}</td>
-    <td>
-        <a href="{{=url_for('plugs.wiki.views.WikiView.wiki_page', pagename=wiki.name)}}?rev={{=item.revision}}">View</a> 
-        {{if i!=1 and can_revert:}}<a href="{{=url_for('plugs.wiki.views.WikiView.wiki_revert', pagename=wiki.name)}}?rev={{=item.revision}}">Revert</a>{{pass}}
-    </td>
-    </tr>
-{{pass}}
 </tbody>
 </table>
 </form>
+
+<div class="next"></div>
 </div>
+
+<script type="text/javascript">
+var OnRevert = function(){
+    return confirm("{{=_('Do you really want to revert this version?')}}");
+};
+</script>
+
+<script>
+var can_revert = {{=json_dumps(can_revert)}};
+
+function get_page(page){
+    $.get('/wiki/{{=wiki.name}}?action=get_revision&page='+page).done(function(r){
+        var body = $('#revisions').find('tbody');
+        $.each(r.changeset, function(index, v){
+            var revert_txt = '';
+            if (can_revert){
+                if (page == 1 && index == 0) revert_txt = '';
+                else revert_txt = '<a href="/wiki/{{=wiki.name}}?action=revert&rev=' + v.revision + '" onclick="return OnRevert()">{{=_('Revert')}}</a>';
+            }
+            var tr = '<tr>' + 
+                '<td>' + v.revision + '</td>' +
+                '<td>' + v.modified_time + '</td>' +
+                '<td>' + v.editor + '</td>' +
+                '<td>' + 
+                    '<a href="/wiki/{{=wiki.name}}?action=view&rev=' + v.revision + '">{{=_('View')}}</a> ' + 
+                    revert_txt + 
+                '</td>' +
+                '<td>' +
+                    '<input type="radio" name="rev1" value="' + v.revision + '">' +
+                    '<input type="radio" name="rev2" value="' + v.revision + '">' +
+                '</td>' + 
+                '</tr>';
+            body.append(tr);
+        });
+        var rev1 = $('[name="rev1"]');
+        if(rev1.find('[name="rev1"]:checked').size()==0){
+            if(rev1.size() > 1)
+                $(rev1.get(1)).prop('checked', true);
+            else
+                $(rev1.get(0)).prop('checked', true);
+        }
+        if($('[name="rev2"]:checked').size() == 0){
+            $('[name="rev2"]:first').prop('checked', true);
+        }
+        
+        //add next button
+        if (r.next){
+            $('.next').html('<a class="btn" href="#" data-page="' +
+            (page+1) +
+            '">{{=unicode(_("View next %d revisions")) % settings.WIKI.WIKI_REVISION_NUM}}</a>');
+        }else{
+            $('.next').html('');
+        }
+    });
+}
+$(function(){
+    get_page(1);
+    $('#wiki').on('click', '.next a', function(e){
+        e.preventDefault();
+        var page = $(this).data('page');
+        get_page(page);
+    });
+});
+</script>
 {{end}}

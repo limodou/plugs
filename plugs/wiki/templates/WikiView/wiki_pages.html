@@ -1,20 +1,25 @@
 {{extend "wiki_layout.html"}}
 
 {{block content_main}}
-{{include "WikiView/inc_wiki_nav.html"}}
+{{#include "WikiView/inc_wiki_nav.html"}}
 
-<div class="content-outter">
+<div class="content-outter" id="wiki">
+
+<div class="top clearfix">
+    <h3>{{=_('Pages')}}</h3>
+    {{include "WikiView/inc_wiki_search.html"}}
+</div>
 
 <div class="wiki-header">
 
-{{make_nav('Pages')}}
+{{#make_nav('_Pages_')}}
 
 </div>
 
 <div id="wiki-content">
     <ul>
     {{for obj in objects:}}
-        <li><a href="/wiki/{{=obj.name}}">{{=obj.name}}</a></li>
+        <li><a href="/wiki/{{=obj.name}}">{{=obj.name}}{{if obj.subject:}}({{=obj.subject}}){{pass}}</a></li>
     {{pass}}
     </ul>
 </div>

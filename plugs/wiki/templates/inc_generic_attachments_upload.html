@@ -1,0 +1,170 @@
+{{##
+slug could be string or object
+
+Usage:
+
+{{include "inc_generic_attachments.html"}}
+
+{{attachments_upload(slug)}}
+##}}
+
+{{use "jquery", ui=True}}
+{{use "jqupload"}}
+{{use "jqutils"}}
+{{use "jqimgzoom"}}
+{{use "jsreader"}}
+{{use "zeroclipboard"}}
+
+<style>
+span.deletefile {padding:2px;}
+span.deletefile:hover {
+background-color:#ccc;
+cursor:pointer;
+}
+</style>
+{{
+import os
+def is_image(filename):
+    ext = os.path.splitext(filename)[1]
+    if ext.lower() in ['.jpg', '.bmp', '.png', '.ico']:
+        return True
+    pass
+pass
+
+def attachments_upload(slug, table):}}
+<div class="control-group">
+    <label class="control-label" for="input_file">{{=_("Uploaded Files")}}: </label>
+    <div class="controls">
+      <ul class="attachments unstyled" id="attachments">
+        {{ Attachments = functions.get_model('generic_attachment')
+        delete_url = '/generic_attachments/delete/'
+        if isinstance(slug, (str, unicode)):
+            query = Attachments.filter(Attachments.c.slug==slug)
+            upload_url = url_for('generic_upload_file', slug=slug, table=table)
+        else:
+            query = Attachments.content_object.filter(slug)
+            upload_url = url_for('generic_upload_file', table=table, id=slug.id)
+        pass}}
+        {{for f in query:}}
+            {{url = functions.get_url(f.filepath, title=f.filename, query_para={'alt':f.filename}, _class='filedown')}}
+            <li><i class="icon-file"></i>{{<<url}}
+                (由{{=unicode(f.submitter)}}于{{=f.created_date}}上传) 
+                <a href="#" class="deletefile" title="{{=_('Delete File')}}" rel="{{=f.id}}">删除</a>
+                <a href="#" class="copy" data-clipboard-text="[[{{if is_image(f.filename):}}image:{{pass}}{{<<functions.get_href(f.filepath, alt=f.filename)}}|{{=f.filename}}]]">拷贝文本</a>
+            </li>
+        {{pass}}
+        
+      </ul>
+      
+      <input id="input_file" type="file" name="fileupload" multiple title="{{=_('You can select multiple files at the same time')}}"></input><br/>
+      <div class="alert alert-success">
+          <a class="close" data-dismiss="alert" href="#">&times;</a>
+          <p>向编辑窗口插入图片只要拖动要插入的图片到编辑窗口中即可。在支持HTML5文件拖拽的浏览器上可以拷贝或拖拽文件到当前页面，图片会自动上传。</p>
+      </div>
+      <ul id="album_images" class="thumbnails">
+      </ul>
+      
+      <script>
+          $(function () {
+              
+              //创建zeroclipboard对象
+              var clip = new ZeroClipboard($('.copy'), {
+                moviePath: "/static/zeroclipboard/ZeroClipboard.swf",
+                forceHandCursor:true
+                }
+              );
+            
+            clip.on('mouseover', function(client, args){
+                $(this).tooltip('destroy').tooltip({title:'点击拷贝到剪贴板', 
+                    trigger:'manual', 
+                    delay:{show:10, hide:500},
+                    placement:'bottom'
+                    }).tooltip('show');
+            });
+            clip.on('mouseout', function(client, args){
+                $(this).tooltip('hide');
+            });
+            clip.on('complete', function (client, args ) {
+                $(this).tooltip('destroy').tooltip({title:'拷贝完成',
+                    trigger:'manual', 
+                    delay:{show:10, hide:500},
+                    placement:'bottom'
+                }).tooltip('show');
+            });
+            
+              
+              //上传文件
+              $('#input_file').fileupload({
+                  dataType: 'json',
+                  url: '{{<<upload_url}}',
+                  done: function (e, data) {
+                      if(data.result.success){
+                          var image = data.result.is_image ? 'image:' : '';
+                          var li = $('<li><i class="icon-file"></i>'+
+                            data.result.url+
+                            '(由' + data.result.submitter + '于' + data.result.created_date + '上传) ' +
+                            '<a href="#" class="deletefile" title="删除文件" rel="'+data.result.id+'">删除</a> ' +
+                            '<a href="#" class="copy" data-clipboard-text="[['+
+                            image+data.result.href+'|'+data.result.filename +
+                            ']]' + '">拷贝文本</a>' +
+                            '</li>'
+                            );
+
+                          $('#attachments').append(li);
+                          clip.glue(li.find('a.copy'))
+                      }else if(data.result.error){
+                          $('#attachments').append('<font color="red">'+data.result.error+'</font>');
+                      }
+                  }
+              });
+            //删除文件
+            $('a.deletefile').live('click', function(e){
+                e.preventDefault();
+                var $this = $(this);
+                var url = '{{<<delete_url}}'+$this.attr('rel');
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    success: function(data){
+                        if (data.success){
+                            $this.parent().remove();
+                        }
+                    }
+                    
+                });
+            });
+            
+            //处理图片拷贝
+            if(window.FileReader){
+                $('#copy_image').show();
+                var opts = {
+                    readAsMap:{'image/*': 'DataURL'},
+                    dragClass:'dragging',
+                    on:{
+                        loadend:function(e, file){
+                            var arr = e.target.result.split(",");
+                            {{upload_img_url = url_for('generic_upload_img')}}
+                            {{if isinstance(slug, (str, unicode)):}}
+                            var data = {'data':arr[1], 'filename':file.name, 'slug':'{{=slug}}','table':'{{=table}}'}; // raw base64
+                            {{else:}}
+                            var data = {'data':arr[1], 'filename':file.name, 'id':{{=slug.id}},'table':'{{=table}}'};
+                            {{pass}}
+                            $.post('{{=upload_img_url}}',
+                                data,
+                                function(data){
+                                    if(data.success){
+                                        $('#attachments').append('<li><i class="icon-file"></i>'+data.url+'<span class="deletefile" title="删除文件" rel="'+data.id+'">&times;</span></li>');
+                                    }
+                                }
+                            );
+                        }
+                    }
+                }
+                $("body").fileClipboard(opts);
+            }
+            
+          });
+      </script>
+    </div>
+</div>
+{{pass}}

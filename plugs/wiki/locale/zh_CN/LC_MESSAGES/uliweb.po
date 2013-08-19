@@ -1,0 +1,123 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.2\n"
+"POT-Creation-Date: 2013-07-13 20:58\n"
+"PO-Revision-Date: 2013-08-16 11:55+0800\n"
+"Last-Translator: limodou <limodou@gmail.com>\n"
+"Language-Team: uliweb <limodou@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Generated-By: pygettext.py 1.6\n"
+"X-Poedit-Language: Chinese\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: apps\wiki\settings.ini:10
+msgid "Home"
+msgstr "首页"
+
+#: apps\wiki\settings.ini:11
+msgid "History"
+msgstr "历史"
+
+#: apps\wiki\settings.ini:12
+#: apps\wiki\templates\WikiView\wiki_pages.html:6
+msgid "Pages"
+msgstr "页面集"
+
+#: apps\wiki\settings.ini:17
+msgid "Read"
+msgstr "查看"
+
+#: apps\wiki\settings.ini:18
+#: apps\wiki\templates\WikiView\wiki_edit.html:14
+msgid "Write"
+msgstr "编辑"
+
+#: apps\wiki\settings.ini:19
+msgid "Delete"
+msgstr "删除"
+
+#: apps\wiki\settings.ini:20
+#: apps\wiki\templates\WikiView\wiki_revision.html:30
+msgid "Revert"
+msgstr "恢复"
+
+#: apps\wiki\settings.ini:21
+msgid "Admin"
+msgstr "管理"
+
+#: apps\wiki\templates\WikiView\wiki_edit.html:16
+msgid "Preview"
+msgstr "预览"
+
+#: apps\wiki\templates\WikiView\wiki_revision.html:12
+msgid "Rev"
+msgstr "版本"
+
+#: apps\wiki\templates\WikiView\wiki_revision.html:14
+msgid "Date"
+msgstr "日期"
+
+#: apps\wiki\templates\WikiView\wiki_revision.html:16
+msgid "Modified User"
+msgstr "修改人"
+
+#: apps\wiki\templates\WikiView\wiki_revision.html:18
+msgid "Actions"
+msgstr "操作"
+
+#: apps\wiki\templates\WikiView\wiki_revision.html:20
+msgid "Compare"
+msgstr "比较"
+
+#: apps\wiki\views.py:211
+msgid "You have no right to access the page."
+msgstr "你没有访问该页面的权限。"
+
+#: apps\wiki\views.py:496
+msgid "You have no right to change the acl info."
+msgstr "你没有修改 acl 信息的权限。"
+
+#: apps\wiki\views.py:557
+#: apps\wiki\views.py:577
+msgid "The page %s is not existed, please check!"
+msgstr "页面 %s 不存在，请检查！"
+
+#: apps\wiki\templates\WikiView\wiki_revision.html:22
+msgid "Do you really want to revert this version?"
+msgstr "你确认要恢复当前版本？"
+
+#: apps\wiki\templates\WikiView\wiki_revision.html:34
+msgid "View"
+msgstr "查看"
+
+#: apps\wiki\templates\WikiView\wiki_revision.html:36
+msgid "View next %d revisions"
+msgstr "查看下面 %d 个版本"
+
+#: apps\wiki\templates\inc_generic_attachments_upload.html:47
+msgid "Delete File"
+msgstr "删除文件"
+
+#: apps\wiki\settings.ini:13
+msgid "Source"
+msgstr "源码"
+
+#: apps\wiki\templates\inc_generic_attachments_upload.html:60
+msgid "You can select multiple files at the same time"
+msgstr "你可以一次选择多个文件"
+
+#: apps\wiki\templates\inc_generic_attachments_upload.html:25
+msgid "Uploaded Files"
+msgstr "已经上传的文件"
+
+#: apps\wiki\forms.py:7
+msgid "Save"
+msgstr "保存"
+

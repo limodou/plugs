@@ -1,9 +1,11 @@
+#wiki .nav a, #wiki-content a, .place a{color:#52a8ee;}
 .wiki-header {position:relative;}
+.wiki-header a{font-weight:bold;text-decoration: none;}
 .wiki-header h1 {background-color: whitesmoke;padding:15px;line-height:36px;
 border-bottom:5px solid #999;}
-.wiki-actions {position:absolute; right:5px;bottom:5px; text-align:right; margin: 2px; padding:1px; }
+.wiki-actions {position:absolute; right:5px;bottom:0px; text-align:right; margin: 2px; padding:1px; }
 #wiki-sidebar {}
-#wiki {}
+#wiki {color:#333;}
 #wiki-message {background-color:#eee8aa; margin: 0; padding:4px}
 div.contents.topic {float:right; border:1px solid #dedede;padding:5px 20px 5px 5px; margin:5px; background-color:#FFF8AF;}
 div.document tt.docutils.literal {border:1px solid #dedede;background-color:#A4FF9F;}
@@ -11,5 +13,73 @@ div.document pre {overflow:auto;}
 
 #wiki-content h2{border-bottom: 1px solid #ddd;}
 #wiki-content h1 {line-height:80px;}
-#wiki-content {font-family: "PT Serif",Georgia,Times,"Times New Roman",serif; font-size:1.2em;line-height:1.4em;}
-.wiki-info {font-size:12px;}
+#wiki-content {font-family: "PT Serif",Georgia,Times,"Times New Roman",serif; font-size:1.2em;
+line-height:1.6em;}
+#wiki-content a.outter{
+background: url(images/external-link-ltr-icon.png) center right no-repeat;
+padding-right: 13px;
+}
+#wiki-content a.anchor {
+    color: #ccc;
+    font-size: 1em;
+    margin-left: 6px;
+    padding: 0 4px 0 4px;
+    text-decoration: none;
+    border: none;
+    background:none;
+}
+#wiki-content a.anchor:hover {
+    color: #c60f0f;
+    border: none;
+}
+
+.wiki-info {font-size:12px; margin-bottom:15px;}
+.place{background:url(images/place.png) 0 0 no-repeat; padding-left:20px; height:17px; margin-bottom:6px; overflow:hidden}
+.place span{font-weight:bold; font-size:14px}
+.content-outter {border:1px solid #e0e0e0; padding:13px 30px 40px 30px;background-color:#fff;}
+.nav-tabs>li>a {
+padding: 0 20px 0 20px;
+line-height: 36px;
+height: 36px;
+border: 1px solid transparent;
+-webkit-border-radius: 0;
+-moz-border-radius: 0;
+border-radius: 0;
+font-size:14px;
+}
+.mute {color:#999;}
+#wiki .top{ margin-bottom:18px;}
+#wiki .top h3{ float:left;}
+#wiki .search{ width:342px; height:31px; float:right;}
+#wiki .search input{ height:18px; width:246px;-moz-border-radius: 0px;border-radius: 0px;}
+#wiki .search button{ width:77px; height:27px; border:none; background-color:#56c5fc; float:right; color:#fff; font-weight:bold; }
+
+.wiki-container .content-outter{min-height:700px}
+
+#wiki .floatleft {margin:4px;float:left;clear:left;padding-right: 20px;}
+#wiki .floatright {margin:4px;float:right;clear:right;padding-left: 20px;}
+#wiki .floatcenter {margin:4px;text-align:center;}
+
+#wiki-content h1, #wiki-content h2, #wiki-content h3, #wiki-content h4, 
+#wiki-content h5, #wiki-content h6 {clear:both;}
+#wiki-content h2,h3{margin-top:30px;}
+#wiki-content .footnotes {margin-top:15px; padding-top:15px;border-top:2px solid #ddd;}
+#toc {margin-top:15px;margin-bottom:15px;}
+#toc table{border:1px solid #ddd; background-color:#f8f8f8;}
+#toc .toctopic{text-align:center;font-weight:bold;font-size:14px;font-family:"微软雅黑";margin-top:10px;}
+#toc .tocnumber {font-family:"PT Serif",Georgia,Times,"Times New Roman",serif;}
+#toc ul{list-style-type:none;margin:4px 16px 14px 16px;}
+#toc ul li{list-style-type:none;}
+.wiki-preview {background: url(images/preview.png) repeat;}
+#wiki .next {text-align:center;}
+#wiki .btn-add {display: inline-block;height:18px;width:19px;background: url(images/add.png)}
+#wiki .btn-add:hover {background: url(images/add-gray.png)}
+#wiki .btn-addchild {display: inline-block;height:18px;width:19px;background: url(images/addchild.png)}
+#wiki .btn-addchild:hover {background: url(images/addchild-gray.png)}
+#wiki .btn-delete {display: inline-block;height:18px;width:19px;background: url(images/delete.png)}
+#wiki .btn-delete:hover {background: url(images/delete-gray.png)}
+#wiki .btn-edit {display: inline-block;height:18px;width:19px;background: url(images/edit.png)}
+#wiki .btn-edit:hover {background: url(images/edit-gray.png)}
+#wiki .btn-code {display: inline-block;height:18px;width:19px;background: url(images/code.png)}
+#wiki .btn-code:hover {background: url(images/code-gray.png)}
+#wiki .totop {margin-top:30px;}

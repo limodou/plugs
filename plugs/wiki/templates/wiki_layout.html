@@ -1,7 +1,15 @@
 {{extend "layout.html"}}
 
+{{block menu}}
+{{menu('wiki')}}
+{{end}}
+
 {{block content}}
 {{link "wiki/wiki.css"}}
-{{include "bootstrap/inc_full_fluid.html"}}
+<div class="container wiki-container">
+    {{block content_main}}
+    {{end}}
+</div>
+
 {{end}}
 

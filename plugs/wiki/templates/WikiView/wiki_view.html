@@ -1,0 +1,102 @@
+{{extend "wiki_layout.html"}}
+
+{{block content_main}}
+{{include "WikiView/inc_wiki_nav.html"}}
+{{use "jqhotkeys"}}
+{{use "prettify"}}
+
+<div class="content-outter" id="wiki">
+
+<div class="top clearfix">
+    <h3>{{=unicode(wiki)}}</h3>
+    {{include "WikiView/inc_wiki_search.html"}}
+</div>
+
+<div class="wiki-header">
+
+    {{make_nav(wiki.name)}}
+
+    <div class="wiki-actions">
+        <a href="/wiki?action=edit" id="btnAdd" title="添加新页面 (按 A 键可以直接编辑)">
+            <span class="btn-add"></span>
+        </a>
+        {{if permissions.get('write'):}}
+        <a href="/wiki/{{=wiki.name}}/?action=edit" id="btnAddChild" title="添加子页面 (按 C 键可以直接编辑)">
+            <span class="btn-addchild"></span>
+        </a>
+        <a href="/wiki/{{=wiki.name}}?action=edit" id="btnEdit" title="编辑页面 (按 E 键可以直接编辑)">
+            <span class="btn-edit"></span>
+        </a>
+        {{pass}}
+        {{if permissions.get('delete'):}}
+        <a href="/wiki/{{=wiki.name}}?action=delete" onclick="return OnDelete()" title="删除页面">
+            <span class="btn-delete"></span>
+        </a>
+        {{pass}}
+    </div>
+</div>
+
+<script type="text/javascript">
+var OnDelete = function(){
+    return confirm("确认要删除当前页面吗(此操作不可恢复)？");
+};
+</script>
+{{if revision:}}
+    <div class="alert">
+        你所查看的版本为 #{{=revision}} 于 {{=rev_time}} 修改. 
+        访问最新 <a href="/wiki/{{=wiki.name}}">版本</a>
+    </div>
+{{pass}}
+<div id="wiki-content" class="clearfix">
+
+{{if wiki.modified_user:}}
+{{from uliweb.utils.timesince import timesince}}
+<div class="wiki-info">
+<span class="mute">
+    最后修改由 {{=unicode(wiki.modified_user)}}， {{=timesince(wiki.modified_time)}}， 
+    最新版本为：{{=last_rev}}， 
+    阅读次数 {{=wiki.hits}}
+    </span>
+</div>
+{{pass}}
+
+{{if page_args.get('toc')=='1':}}<div id="toc"></div>{{pass}}
+
+{{<< content}}
+
+<div class="totop"><a href="#" class="btn btn-mini">回到顶部</a></div>
+</div>
+</div>
+
+<script>
+$(function(){
+    // make code pretty
+    window.prettyPrint && prettyPrint()
+
+    //绑定按键处理
+    function bind_key(el, key){
+        $(document).bind(key, function(){
+            if($(el).size() > 0)
+                $(el)[0].click();
+        });
+    }
+    bind_key('#btnEdit', 'keydown.e');
+    bind_key('#btnAdd', 'keydown.a');
+    bind_key('#btnAddChild', 'keydown.c');
+    
+    if ($('#toc').size() > 0){
+        $('#wiki-content').find('h1,h2,h3,h4,h5,h6').bind('click', function(e){
+            $("html, body").animate({  
+                scrollTop: $('#toc').offset().top + "px"  
+            }, {  
+                duration: 500,  
+                easing: "swing"  
+            });  
+        }).css('cursor', 'pointer');
+    }
+    
+});
+</script>
+
+{{include "WikiView/inc_wiki_toc.html"}}
+{{end}}

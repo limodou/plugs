@@ -314,8 +314,8 @@ class WikiView(object):
                     find = True
             #add other type extention
             else:
-                if d['type'] in settings.get_var('WIKI_ACL_TYPES'):
-                    func = import_attr(settings.get_var('WIKI_ACL_TYPES')[d['type']])
+                if d['type'] in settings.get_var('WIKI/WIKI_ACL_TYPES', {}):
+                    func = import_attr(settings.get_var('WIKI/WIKI_ACL_TYPES')[d['type']])
                     if func(user, d['name']):
                         find = True
                     

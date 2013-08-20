@@ -104,7 +104,7 @@ text-align:center;
   overflow:auto;
 }
 
-.outter{
+div.outter{
   background-color: #fff;
   padding: 10px 20px 20px 20px;
   -webkit-border-radius: 0 0 6px 6px;

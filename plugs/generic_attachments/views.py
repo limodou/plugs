@@ -153,8 +153,8 @@ def postimage():
             f.content_object = (table, id)
         f.save()
         url = fileserving.get_url(filename, alt=f.filename, _class='filedown')
-        href = fileserving.get_href(filename, title=form.fileupload.data.filename, query_para={'alt':f.filename})
-        return json({'success':True, 'filename':request.values.get('filename'), 
-            'url':url, 'href':href, 'is_image':is_image(form.fileupload.data.filename),
+        href = fileserving.get_href(filename, title=f.filename, query_para={'alt':f.filename})
+        return json({'success':True, 'filename':f.filename, 
+            'url':url, 'href':href, 'is_image':is_image(f.filename),
             'id':f.id, 'created_date':str(f.created_date)})
   

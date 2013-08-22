@@ -134,7 +134,8 @@ def attachments_upload(slug, table):}}
                   url: '{{<<upload_url}}',
                   done: function (e, data) {
                       if(data.result.success){
-                          $('#attachments').append(get_content(data.result));
+                          var li = get_content(data.result);
+                          $('#attachments').append(li);
                           clip.glue(li.find('a.copy'))
                       }else if(data.result.error){
                           $('#attachments').append('<font color="red">'+data.result.error+'</font>');
@@ -177,7 +178,9 @@ def attachments_upload(slug, table):}}
                                 data,
                                 function(data){
                                     if(data.success){
-                                        $('#attachments').append(get_content(data));
+                                        var li = get_content(data);
+                                        $('#attachments').append(li);
+                                        clip.glue(li.find('a.copy'))
                                     }
                                 }
                             );

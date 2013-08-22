@@ -12,6 +12,30 @@
 
 <div class="content-outter" id="wiki">
 
+{{if conflict:}}
+<div class="alert alert-danger" id="message">
+    <b>注意：</b>已经有人正在进行此页面的编辑，建议稍后再编辑，否则有可能造成编辑的
+    内容互相覆盖。
+    <a id="btnConfirm" href="#" class="btn btn-primary">继续编辑</a>
+    <a href="/wiki/{{=wiki.name}}" class="btn">放弃</a>
+</div>
+{{pass}}
+
+<script>
+    $(function(){
+        $('#btnConfirm').click(function(e){
+            e.preventDefault();
+            $.post('/wiki/{{=wiki.name}}?action=update_editor').success(function(r){
+                if(r.success){
+                    $('#message').remove();
+                }else{
+                    show_message(r.message, 'error');
+                }
+            });
+        });
+    });
+</script>
+
 <div class="top clearfix">
     <h3><a href="/wiki/{{=wiki.name}}">{{=unicode(wiki)}}</a></h3>
 </div>

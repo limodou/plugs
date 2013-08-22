@@ -4,13 +4,9 @@ from uliweb import expose, functions
 from __init__ import AttachmentsFileServing
 from werkzeug.exceptions import Forbidden
 
-def is_image(filename):
-    ext = os.path.splitext(filename)[1]
-    if ext.lower() in ['.jpg', '.bmp', '.png', '.ico']:
-        return True
-    
 def uploadfile():
     from uliweb.form import Form, FileField
+    from uliweb.utils.image import test_image
     
     fileserving = AttachmentsFileServing()
     
@@ -37,18 +33,25 @@ def uploadfile():
         else:
             path = dir
         filename = fileserving.save_file(os.path.join(path, form.fileupload.data.filename), form.fileupload.data.file)
+        is_image = test_image(filename)
+        if is_image and settings.get_var('Generic_Attachment_FileServing/THUMBNAIL_PROCESS'):
+            thumbnail, _ = thumbnail_image(functions.get_filename(filename, filesystem=True), filename, settings.get_var('Generic_Attachment_FileServing/IMAGE_THUMBNAIL_SIZE'))
+            thumbnail_url = functions.get_href(thumbnail)
+        else:
+            thumbnail = ''
+            thumbnail_url = ''
         f = Attachment(filepath=filename, filename=form.fileupload.data.filename, 
-            submitter=request.user.id)
+            submitter=request.user.id, is_image=is_image, thumbnail_path=thumbnail)
         if slug:
             f.slug = slug
         else:
             f.content_object = (table, id)
         f.save()
-        url = fileserving.get_url(filename, title=form.fileupload.data.filename, query_para={'alt':f.filename}, _class='filedown')
+        url = fileserving.get_url(filename, title=f.filename, query_para={'alt':f.filename}, _class='filedown')
         href = fileserving.get_href(filename, alt=f.filename)
-        return json({'success':True, 'filename':form.fileupload.data.filename, 
+        return json({'success':True, 'filename':f.filename, 
             'url':url, 'href':href, 'id':f.id, 'submitter':unicode(request.user),
-            'is_image':is_image(form.fileupload.data.filename),
+            'is_image':is_image, 'thumbnail_url':thumbnail_url,
             'created_date':str(f.created_date)}, content_type="text/html;charset=utf-8")
     else:
         #如果校验失败，则再次返回Form，将带有错误信息
@@ -141,20 +144,24 @@ def postimage():
             
         fobj = StringIO(base64.b64decode(request.params.get('data')))
         filename = functions.save_file(path, fobj)
-#        rfilename, thumbnail = thumbnail_image(functions.get_filename(filename, filesystem=True), filename, settings.get_var('Generic_Attachment_FileServing/IMAGE_THUMBNAIL_SIZE'))
-#        thumbnail_url = functions.get_href(thumbnail)
-#        url = functions.get_href(filename)
-        
-        f = Attachment(filepath=filename, filename=request.values.get('filename'), 
-            submitter=request.user.id)
+        if settings.get_var('Generic_Attachment_FileServing/THUMBNAIL_PROCESS'):
+            thumbnail, _ = thumbnail_image(functions.get_filename(filename, filesystem=True), filename, settings.get_var('Generic_Attachment_FileServing/IMAGE_THUMBNAIL_SIZE'))
+            thumbnail_url = functions.get_href(thumbnail)
+        else:
+            thumbnail = ''
+            thumbnail_url = ''
+        fname = os.path.splitext(os.path.basename(filename))[0].split(',')[-1][:8]
+        f = Attachment(filepath=filename, filename=fname, is_image=True,
+            submitter=request.user.id, thumbnail_path=thumbnail)
         if slug:
             f.slug = slug
         else:
             f.content_object = (table, id)
         f.save()
-        url = fileserving.get_url(filename, alt=f.filename, _class='filedown')
+        url = fileserving.get_url(filename, title=f.filename, alt=f.filename, _class='filedown')
         href = fileserving.get_href(filename, title=f.filename, query_para={'alt':f.filename})
-        return json({'success':True, 'filename':f.filename, 
-            'url':url, 'href':href, 'is_image':is_image(f.filename),
-            'id':f.id, 'created_date':str(f.created_date)})
+        return json({'success':True, 'filename':f.filename, 'submitter':unicode(request.user),
+            'url':url, 'href':href, 'is_image':f.is_image,
+            'id':f.id, 'created_date':str(f.created_date), 'thumbnail_url':thumbnail_url,
+            })
   

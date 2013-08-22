@@ -463,11 +463,21 @@ class WikiView(object):
                 wiki = self.model(name=pagename, creator=request.user, modified_user=request.user)
                 wiki.save()
             
+            conflict = False
+            #check if there is someone is changing the wiki page
+            if wiki.start_time and (date.now() - wiki.start_time).seconds < settings.get_var('WIKI/WIKI_EDIT_CHECK_TIMEDELTA') and wiki._cur_user_ != request.user.id:
+                conflict = True
+            else:
+                #record user and edit begin time
+                wiki.cur_user = request.user.id
+                wiki.start_time = date.now()
+                wiki.save()
+            
             data = wiki.to_dict()
             data['name'] = page
             form.bind(data)
             
-            return {'form':form, 'wiki':wiki}
+            return {'form':form, 'wiki':wiki, 'conflict':conflict}
         
         elif request.method == 'POST':
             form.wiki = wiki
@@ -490,8 +500,22 @@ class WikiView(object):
                 wiki.name = form.name.data
                 if parent:
                     wiki.name = parent + '/' + form.name.data
+                    
+                #check if there is already same named page existed
+                page = self.model.get(self.model.c.name==wiki.name)
+                if page:
+                    if not page.enabled:
+                        page.delete()
+
                 wiki.subject = form.subject.data or ''
                 wiki.enabled = True
+                
+                #process cur_user and start_time, clear when the cur_user is
+                #request.user
+                if wiki._cur_user_ and wiki._cur_user_ == request.user.id:
+                    wiki.cur_user = None
+                    wiki.start_time= None
+                    
                 wiki.save()
                 wiki.new_revision()
                 
@@ -503,7 +527,23 @@ class WikiView(object):
                 
                 return redirect(url_for(self.__class__.wiki, pagename=wiki.name))
             else:
-                return {'form':form, 'wiki':wiki}
+                return {'form':form, 'wiki':wiki, 'conflict':conflict}
+            
+    def _wiki_update_editor(self, pagename):
+        """
+        更新当前页面的编辑用户及时间
+        """
+        wiki = self.model.get(self.model.c.name == pagename)
+        if wiki:
+            #check read permission
+            self._check_permission('edit', wiki, page=wiki)
+            
+            wiki.cur_user = request.user.id
+            wiki.start_time = date.now()
+            wiki.save()
+            return json({'success':True})
+        else:
+            return json({'success':False, 'message':'页面不存在'})
             
     def _delete_wikipage(self, wiki):
         self.changeset.filter(self.changeset.c.wiki == wiki.id).remove()
@@ -627,8 +667,6 @@ class WikiView(object):
         
         User = functions.get_model('user')
         user = User.get(User.c.username == request.POST.get('username'))
-        if not user:
-            return json({'success':False, 'message':'用户不存在'})
         
         wiki = self.model.get(self.model.c.name == pagename)
         wiki.acl = request.POST.get('acl')

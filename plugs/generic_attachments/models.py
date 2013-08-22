@@ -8,6 +8,9 @@ from uliweb import functions
 class Generic_Attachment(Model):
     filepath = Field(FILE, verbose_name=_('Filepath'))
     filename  = Field(str, verbose_name=_('Filename'), max_length=255)
+    is_image = Field(bool, verbose_name=_('Is Image'))
+    thumbnail_path = Field(FILE, verbose_name=_('Filepath'))
+    
     content_object = GenericReference(verbose_name=_('Related Object'))
     submitter = Reference('user', verbose_name=_('Submitter'))
     created_date = Field(datetime.datetime, verbose_name=_('Created Date'), auto_now_add=True)

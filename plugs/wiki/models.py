@@ -13,6 +13,8 @@ class WikiPage(Model):
     acl = Field(TEXT)
     hits = Field(int, verbose_name='Hit counts')
     enabled = Field(bool)
+    cur_user = Reference('user')
+    start_time = Field(datetime.datetime)
     
     def new_revision(self):
         '''Create a new ChangeSet with the old content.'''

@@ -11,15 +11,23 @@ Usage:
 {{use "jquery", ui=True}}
 {{use "jqupload"}}
 {{use "jqutils"}}
-{{use "jqimgzoom"}}
+{{use "magnific_popup"}}
 {{use "jsreader"}}
 {{use "zeroclipboard"}}
 
 <style>
-span.deletefile {padding:2px;}
-span.deletefile:hover {
-background-color:#ccc;
-cursor:pointer;
+#attachments a.image-link{
+text-decoration:none;
+}
+#attachments a.image-link img{
+cursor: -webkit-zoom-in;
+cursor: -moz-zoom-in;
+cursor: zoom-in;
+padding:2px;
+border:1px #ddd solid;
+}
+#attachments a.image-link img:hover {
+border-color:#00f;
 }
 </style>
 {{
@@ -46,8 +54,16 @@ def attachments_upload(slug, table):}}
             upload_url = url_for('generic_upload_file', table=table, id=slug.id)
         pass}}
         {{for f in query:}}
-            {{url = functions.get_url(f.filepath, title=f.filename, query_para={'alt':f.filename}, _class='filedown')}}
-            <li><i class="icon-file"></i>{{<<url}}
+            {{url = functions.get_url(f.filepath, title=f.filename, query_para={'alt':f.filename}, _class='filedown')
+            href=functions.get_href(f.filepath)}}
+            <li>{{if f.is_image and f.thumbnail_path:}}
+                <a href="{{=href}}" class="image-link" title="{{=f.filename}}" data-source="{{=href}}">
+                    <img src="{{=functions.get_href(f.thumbnail_path)}}"/>
+                </a>
+                {{else:}}
+                <i class="icon-file"></i>
+                {{pass}}
+            {{<<url}}
                 (由{{=unicode(f.submitter)}}于{{=f.created_date}}上传) 
                 <a href="#" class="deletefile" title="{{=_('Delete File')}}" rel="{{=f.id}}">删除</a>
                 <a href="#" class="copy" data-clipboard-text="[[{{if is_image(f.filename):}}image:{{pass}}{{<<functions.get_href(f.filepath, alt=f.filename)}}|{{=f.filename}}]]">拷贝文本</a>
@@ -92,25 +108,33 @@ def attachments_upload(slug, table):}}
                 }).tooltip('show');
             });
             
-              
+            function get_content(r){
+                var image = r.is_image ? 'image:' : '';
+                var icon;
+                if (image && r.thumbnail_url){
+                    icon = '<a href="'+r.href+'" class="image-link" title="'+
+                        r.filename+'" data-source="'+r.href+'"><img src="'+r.thumbnail_url+'"/></a> ';
+                }else{
+                    icon = '<i class="icon-file"></i> ';
+                }
+                var li = $('<li>'+icon+
+                  r.url+
+                  '(由' + r.submitter + '于' + r.created_date + '上传) ' +
+                  '<a href="#" class="deletefile" title="删除文件" rel="'+r.id+'">删除</a> ' +
+                  '<a href="#" class="copy" data-clipboard-text="[['+
+                  image+r.href+'|'+r.filename +
+                  ']]' + '">拷贝文本</a>' +
+                  '</li>'
+                  );
+                return li;
+            }
               //上传文件
               $('#input_file').fileupload({
                   dataType: 'json',
                   url: '{{<<upload_url}}',
                   done: function (e, data) {
                       if(data.result.success){
-                          var image = data.result.is_image ? 'image:' : '';
-                          var li = $('<li><i class="icon-file"></i>'+
-                            data.result.url+
-                            '(由' + data.result.submitter + '于' + data.result.created_date + '上传) ' +
-                            '<a href="#" class="deletefile" title="删除文件" rel="'+data.result.id+'">删除</a> ' +
-                            '<a href="#" class="copy" data-clipboard-text="[['+
-                            image+data.result.href+'|'+data.result.filename +
-                            ']]' + '">拷贝文本</a>' +
-                            '</li>'
-                            );
-
-                          $('#attachments').append(li);
+                          $('#attachments').append(get_content(data.result));
                           clip.glue(li.find('a.copy'))
                       }else if(data.result.error){
                           $('#attachments').append('<font color="red">'+data.result.error+'</font>');
@@ -153,7 +177,7 @@ def attachments_upload(slug, table):}}
                                 data,
                                 function(data){
                                     if(data.success){
-                                        $('#attachments').append('<li><i class="icon-file"></i>'+data.url+'<span class="deletefile" title="删除文件" rel="'+data.id+'">&times;</span></li>');
+                                        $('#attachments').append(get_content(data));
                                     }
                                 }
                             );
@@ -162,6 +186,38 @@ def attachments_upload(slug, table):}}
                 }
                 $("body").fileClipboard(opts);
             }
+            
+            //deal with thumbnail
+            $('#attachments').on('click', 'a.image-link', function(e){
+                e.preventDefault();
+                
+                var index = $('#attachments a.image-link').index(this);
+                $('#attachments').magnificPopup({
+                	delegate: 'a.image-link',
+                	type: 'image',
+                	closeOnContentClick: false,
+                	closeBtnInside: false,
+                	mainClass: 'mfp-with-zoom mfp-img-mobile',
+                	image: {
+                		verticalFit: true,
+                		titleSrc: function(item) {
+                			return item.el.attr('title') + ' &middot; <a class="image-source-link" href="'+item.el.attr('data-source')+'" target="_blank">image source</a>';
+                		}
+                	},
+                	gallery: {
+                		enabled: true
+                	},
+                	zoom: {
+                		enabled: true,
+                		duration: 300, // don't foget to change the duration also in CSS
+                		opener: function(element) {
+                			return element.find('img');
+                		}
+                	}
+                	
+                }).magnificPopup('open', index);
+                
+            });
             
           });
       </script>

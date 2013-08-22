@@ -18,6 +18,7 @@ Plugs Change Log
 * Add ZeroClipboard to `plugs.ui.jquery.ZeroClipboard`
 * Add d3 to `plugs.ui.d3`
 * Add staticize app to `plug.staticize` and modified wiki app
+* Add magnific_popup app to `plug.ui.jquery.magnific_popup` 
 
 0.1.4 Version
 -----------------

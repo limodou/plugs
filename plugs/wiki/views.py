@@ -527,6 +527,11 @@ class WikiView(object):
                 
                 return redirect(url_for(self.__class__.wiki, pagename=wiki.name))
             else:
+                conflict = False
+                #check if there is someone is changing the wiki page
+                if wiki.start_time and (date.now() - wiki.start_time).seconds < settings.get_var('WIKI/WIKI_EDIT_CHECK_TIMEDELTA') and wiki._cur_user_ != request.user.id:
+                    conflict = True
+                
                 return {'form':form, 'wiki':wiki, 'conflict':conflict}
             
     def _wiki_update_editor(self, pagename):

@@ -4,13 +4,14 @@ from uliweb.contrib.upload import FileServing
 from uliweb.utils.common import log
 
 class AttachmentsFileServing(FileServing):
+    default_config = 'Generic_Attachment_FileServing'
     options = {
-        'x_sendfile' : ('Generic_Attachment_FileServing/X_SENDFILE', None),
-        'x_header_name': ('Generic_Attachment_FileServing/X_HEADER_NAME', ''),
-        'x_file_prefix': ('Generic_Attachment_FileServing/X_FILE_PREFIX', '/files'),
-        'to_path': ('Generic_Attachment_FileServing/TO_PATH', './uploads'),
-        'buffer_size': ('Generic_Attachment_FileServing/BUFFER_SIZE', 4096),
-        '_filename_converter': ('Generic_Attachment_FileServing/FILENAME_CONVERTER', None),
+        'x_sendfile' : ('X_SENDFILE', None),
+        'x_header_name': ('X_HEADER_NAME', ''),
+        'x_file_prefix': ('X_FILE_PREFIX', '/files'),
+        'to_path': ('TO_PATH', './uploads'),
+        'buffer_size': ('BUFFER_SIZE', 4096),
+        '_filename_converter': ('FILENAME_CONVERTER', None),
     }
 
 def get_attachments(slug_or_obj):

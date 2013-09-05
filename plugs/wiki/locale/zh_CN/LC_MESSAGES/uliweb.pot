@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-08-16 11:54\n"
+"POT-Creation-Date: 2013-08-30 15:01\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,7 +40,7 @@ msgstr ""
 msgid "Read"
 msgstr ""
 
-#: apps\wiki\settings.ini:18 apps\wiki\templates\WikiView\wiki_edit.html:14
+#: apps\wiki\settings.ini:18 apps\wiki\templates\WikiView\wiki_edit.html:22
 msgid "Write"
 msgstr ""
 
@@ -57,7 +57,7 @@ msgstr ""
 msgid "Admin"
 msgstr ""
 
-#: apps\wiki\templates\WikiView\wiki_edit.html:16
+#: apps\wiki\templates\WikiView\wiki_edit.html:24
 msgid "Preview"
 msgstr ""
 
@@ -97,11 +97,11 @@ msgstr ""
 msgid "Uploaded Files"
 msgstr ""
 
-#: apps\wiki\templates\inc_generic_attachments_upload.html:47
+#: apps\wiki\templates\inc_generic_attachments_upload.html:62
 msgid "Delete File"
 msgstr ""
 
-#: apps\wiki\templates\inc_generic_attachments_upload.html:60
+#: apps\wiki\templates\inc_generic_attachments_upload.html:75
 msgid "You can select multiple files at the same time"
 msgstr ""
 
@@ -109,11 +109,15 @@ msgstr ""
 msgid "You have no right to access the page."
 msgstr ""
 
-#: apps\wiki\views.py:496
+#: apps\wiki\views.py:222
+msgid "You are not logged in. "
+msgstr ""
+
+#: apps\wiki\views.py:509
 msgid "You have no right to change the acl info."
 msgstr ""
 
-#: apps\wiki\views.py:557 apps\wiki\views.py:577
+#: apps\wiki\views.py:604 apps\wiki\views.py:624
 msgid "The page %s is not existed, please check!"
 msgstr ""
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.2\n"
 "POT-Creation-Date: 2013-07-13 20:58\n"
-"PO-Revision-Date: 2013-08-16 11:55+0800\n"
+"PO-Revision-Date: 2013-08-30 15:01+0800\n"
 "Last-Translator: limodou <limodou@gmail.com>\n"
 "Language-Team: uliweb <limodou@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -35,7 +35,7 @@ msgid "Read"
 msgstr "查看"
 
 #: apps\wiki\settings.ini:18
-#: apps\wiki\templates\WikiView\wiki_edit.html:14
+#: apps\wiki\templates\WikiView\wiki_edit.html:22
 msgid "Write"
 msgstr "编辑"
 
@@ -52,7 +52,7 @@ msgstr "恢复"
 msgid "Admin"
 msgstr "管理"
 
-#: apps\wiki\templates\WikiView\wiki_edit.html:16
+#: apps\wiki\templates\WikiView\wiki_edit.html:24
 msgid "Preview"
 msgstr "预览"
 
@@ -80,12 +80,12 @@ msgstr "比较"
 msgid "You have no right to access the page."
 msgstr "你没有访问该页面的权限。"
 
-#: apps\wiki\views.py:496
+#: apps\wiki\views.py:509
 msgid "You have no right to change the acl info."
 msgstr "你没有修改 acl 信息的权限。"
 
-#: apps\wiki\views.py:557
-#: apps\wiki\views.py:577
+#: apps\wiki\views.py:604
+#: apps\wiki\views.py:624
 msgid "The page %s is not existed, please check!"
 msgstr "页面 %s 不存在，请检查！"
 
@@ -101,7 +101,7 @@ msgstr "查看"
 msgid "View next %d revisions"
 msgstr "查看下面 %d 个版本"
 
-#: apps\wiki\templates\inc_generic_attachments_upload.html:47
+#: apps\wiki\templates\inc_generic_attachments_upload.html:62
 msgid "Delete File"
 msgstr "删除文件"
 
@@ -109,7 +109,7 @@ msgstr "删除文件"
 msgid "Source"
 msgstr "源码"
 
-#: apps\wiki\templates\inc_generic_attachments_upload.html:60
+#: apps\wiki\templates\inc_generic_attachments_upload.html:75
 msgid "You can select multiple files at the same time"
 msgstr "你可以一次选择多个文件"
 
@@ -120,4 +120,8 @@ msgstr "已经上传的文件"
 #: apps\wiki\forms.py:7
 msgid "Save"
 msgstr "保存"
+
+#: apps\wiki\views.py:222
+msgid "You are not logged in. "
+msgstr "你还没有登录。"
 

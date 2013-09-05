@@ -145,7 +145,7 @@ def postimage():
         fobj = StringIO(base64.b64decode(request.params.get('data')))
         filename = functions.save_file(path, fobj)
         if settings.get_var('Generic_Attachment_FileServing/THUMBNAIL_PROCESS'):
-            thumbnail, _ = thumbnail_image(functions.get_filename(filename, filesystem=True), filename, settings.get_var('Generic_Attachment_FileServing/IMAGE_THUMBNAIL_SIZE'))
+            thumbnail_path, thumbnail = thumbnail_image(functions.get_filename(filename, filesystem=True), filename, settings.get_var('Generic_Attachment_FileServing/IMAGE_THUMBNAIL_SIZE'))
             thumbnail_url = functions.get_href(thumbnail)
         else:
             thumbnail = ''

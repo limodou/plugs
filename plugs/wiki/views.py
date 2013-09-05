@@ -202,6 +202,9 @@ class WikiView(object):
         if user and user.is_superuser:
             return True
         
+        if not user:
+            err_msg = _("You are not logged in. ") + err_msg
+            
         if isinstance(acl, Model):
             acl = acl.acl
         else:
@@ -345,6 +348,7 @@ class WikiView(object):
     @expose('', defaults={'pagename':''})
     @expose('<path:pagename>')
     def wiki(self, pagename):
+        pagename = pagename.rstrip('/')
         action = request.GET.get('action', 'view')
         func_name = '_wiki_' + action
         func = getattr(self, func_name)
@@ -531,7 +535,6 @@ class WikiView(object):
                 #check if there is someone is changing the wiki page
                 if wiki.start_time and (date.now() - wiki.start_time).seconds < settings.get_var('WIKI/WIKI_EDIT_CHECK_TIMEDELTA') and wiki._cur_user_ != request.user.id:
                     conflict = True
-                
                 return {'form':form, 'wiki':wiki, 'conflict':conflict}
             
     def _wiki_update_editor(self, pagename):

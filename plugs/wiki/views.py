@@ -456,16 +456,14 @@ class WikiView(object):
                     return redirect(url_for(self.__class__.wiki, pagename=parent, action='edit'))
             
             #if no wiki page existed, then create one first, but will not create revision
+            #check if the wiki is not enabled then delete it first
+            if wiki and (not wiki.enabled or wiki.deleted):
+                self._delete_wikipage(wiki, real=True)
+                
+                wiki = self.model(name=pagename, creator=request.user, modified_user=request.user)
+            
             if not wiki:
                 wiki = self.model(name=pagename, creator=request.user, modified_user=request.user)
-                wiki.save()
-                
-            #check if the wiki is not enabled then delete it first
-            if not wiki.enabled:
-                self._delete_wikipage(wiki)
-                
-                wiki = self.model(name=pagename, creator=request.user, modified_user=request.user)
-                wiki.save()
             
             conflict = False
             #check if there is someone is changing the wiki page
@@ -475,7 +473,8 @@ class WikiView(object):
                 #record user and edit begin time
                 wiki.cur_user = request.user.id
                 wiki.start_time = date.now()
-                wiki.save()
+                
+            wiki.save()
             
             data = wiki.to_dict()
             data['name'] = page
@@ -506,10 +505,10 @@ class WikiView(object):
                     wiki.name = parent + '/' + form.name.data
                     
                 #check if there is already same named page existed
-                page = self.model.get(self.model.c.name==wiki.name)
+                page = self.model.get((self.model.c.name==wiki.name) & (self.model.c.id != wiki.id))
                 if page:
-                    if not page.enabled:
-                        page.delete()
+                    if not page.enabled or page.deleted:
+                        self._delete_wikipage(page, real=True)
 
                 wiki.subject = form.subject.data or ''
                 wiki.enabled = True
@@ -553,7 +552,10 @@ class WikiView(object):
         else:
             return json({'success':False, 'message':'页面不存在'})
             
-    def _delete_wikipage(self, wiki):
+    def _delete_wikipage(self, wiki, real=False):
+        """
+        real 表示是否真正删除
+        """
         self.changeset.filter(self.changeset.c.wiki == wiki.id).remove()
         Attachments = functions.get_model('generic_attachment')
         
@@ -562,7 +564,11 @@ class WikiView(object):
         #删除缓存文件
         self._del_cached_page_html(wiki.name)
         
-        wiki.delete()
+        if real:
+            delete_fieldname = None
+        else:
+            delete_fieldname = 'deleted'
+        wiki.delete(delete_fieldname=delete_fieldname)
         
     def _wiki_delete(self, pagename):
         from uliweb import request

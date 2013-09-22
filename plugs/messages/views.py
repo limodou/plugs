@@ -275,10 +275,12 @@ def messages_number():
 def post_save(sender, instance, created, data, old_data):
     from uliweb import request
     
-    _del_key(instance._user_)
+    if instance.send_flag == 'r':
+        _del_key(instance._user_)
     
 def pre_delete(sender, instance):
     from uliweb import request
     
-    _del_key(instance._user_)
+    if instance.send_flag == 'r':
+        _del_key(instance._user_)
     

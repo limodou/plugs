@@ -19,6 +19,7 @@ Plugs Change Log
 * Add d3 to `plugs.ui.d3`
 * Add staticize app to `plug.staticize` and modified wiki app
 * Add magnific_popup app to `plug.ui.jquery.magnific_popup` 
+* Add desktopnotify to `plug.ui.js.jsutils`
 
 0.1.4 Version
 -----------------

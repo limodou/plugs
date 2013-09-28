@@ -9,12 +9,8 @@
 var Notify = {
     icon : null,
     title : null, 
-    message: null,
-    
-    // Behavior Config. params
-    autoclose           : null,
-    
-    // internal variables
+    message : null,
+    autoclose : null,
     _type : '',
 
     isSupported : function () {
@@ -79,6 +75,7 @@ var Notify = {
             icon: message.icon || this.icon,
             title: message.title || this.title,
             message: message.message || this.message,
+            autoclose: message.autoclose || this.autoclose,
             onshow: message.onshow || function(){},
             onclick: message.onclick || function(){},
             onerror: message.onerror || function(){},
@@ -117,10 +114,10 @@ var Notify = {
                 if (this._type == 'webkit')
                     n.show();
 
-                if (this.autoclose) 
+                if (opts.autoclose) 
                     setTimeout(function () {
-                        Notif.wkNotif.cancel();
-                    }, this.autoclose * 1000);                      
+                        n.close();
+                    }, opts.autoclose * 1000);                      
             }
         }//End If
 

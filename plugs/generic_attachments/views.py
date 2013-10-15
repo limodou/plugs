@@ -6,7 +6,7 @@ from werkzeug.exceptions import Forbidden
 
 def uploadfile():
     from uliweb.form import Form, FileField
-    from uliweb.utils.image import test_image
+    from uliweb.utils.image import test_image, thumbnail_image
     
     fileserving = AttachmentsFileServing()
     

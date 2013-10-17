@@ -35,7 +35,7 @@ def uploadfile():
         filename = fileserving.save_file(os.path.join(path, form.fileupload.data.filename), form.fileupload.data.file)
         is_image = test_image(filename)
         if is_image and settings.get_var('Generic_Attachment_FileServing/THUMBNAIL_PROCESS'):
-            thumbnail, _ = thumbnail_image(functions.get_filename(filename, filesystem=True), filename, settings.get_var('Generic_Attachment_FileServing/IMAGE_THUMBNAIL_SIZE'))
+            thumbnail_path, thumbnail = thumbnail_image(functions.get_filename(filename, filesystem=True), filename, settings.get_var('Generic_Attachment_FileServing/IMAGE_THUMBNAIL_SIZE'))
             thumbnail_url = functions.get_href(thumbnail)
         else:
             thumbnail = ''

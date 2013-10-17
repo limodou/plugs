@@ -70,11 +70,11 @@ class Forum(Model):#论坛
             {'name': 'manager_only', 'width': 100},
         ]
     
-class SubForum(Model):
-    forum = Reference('forum', verbose_name='所属论坛', collection_name='forum_subs', required=True)
-    name = Field(str, verbose_name="名称", max_length=100, required=True)
-    order = Field(int, verbose_name="顺序", default=999)
-    managers = ManyToMany('user', verbose_name='管理员')
+#class SubForum(Model):
+#    forum = Reference('forum', verbose_name='所属论坛', collection_name='forum_subs', required=True)
+#    name = Field(str, verbose_name="名称", max_length=100, required=True)
+#    order = Field(int, verbose_name="顺序", default=999)
+#    managers = ManyToMany('user', verbose_name='管理员')
     
 class ForumTopicType(Model):
     forum = Reference('forum', verbose_name='所属论坛', collection_name='forum_topictypes', required=True)

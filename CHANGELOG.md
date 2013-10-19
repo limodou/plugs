@@ -20,6 +20,7 @@ Plugs Change Log
 * Add staticize app to `plug.staticize` and modified wiki app
 * Add magnific_popup app to `plug.ui.jquery.magnific_popup` 
 * Add desktopnotify to `plug.ui.js.jsutils`
+* Add menus app to `plugs.menus`
 
 0.1.4 Version
 -----------------

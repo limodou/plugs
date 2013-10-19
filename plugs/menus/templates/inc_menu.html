@@ -1,0 +1,34 @@
+{{use "jquery"}}
+{{link "menus/jquery.navgoco.css"}}
+{{link "menus/jquery.navgoco.js"}}
+
+{{def menu(name, active='', check=None, id='menus', _class=None):
+    out.write(functions.menu(name=name, active=active, check=check, id=id, _class=_class), escape=False)
+}}
+<script>
+$(function() {
+    // Initialize navgoco with default options
+    var menu = $("#{{=id}}");
+    menu.navgoco({
+        caret: '<span class="caret"></span>',
+        accordion: false,
+        openClass: 'open',
+        slide: {
+            duration: 400,
+            easing: 'swing'
+        }
+    });
+    //show active item
+    var active = menu.find('li.active');
+    var parents = active.parents('ul');
+    if (parents.size() > 0){
+        parents.splice(-1, 1);
+        $.each(parents, function(i, v){
+            menu.navgoco('toggle', true);
+        });
+    }
+    
+});
+</script>
+{{pass}}
+

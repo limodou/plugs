@@ -101,9 +101,10 @@ def after_init_apps(sender):
     
     load_menu(settings.MENUS.items())
     
-def default_validators(item):
+def default_validators(item, context):
     """
     Check role and permission
+    role and permission check result will be cached in context dict
     """
     from uliweb import functions, request
     
@@ -111,16 +112,93 @@ def default_validators(item):
     perms = item.get('permissions', [])
     if roles or perms:
         if roles:
-            flag = functions.has_role(request.user, *roles)
-            if flag:
-                return flag
+            con_roles = context.setdefault('roles', {})
+            for x in roles:
+                if x in con_roles:
+                    flag = con_roles[x]
+                else:
+                    flag = functions.has_role(request.user, x)
+                    con_roles[x] = flag
+                if flag:
+                    return flag
             
         if perms:
-            flag = functions.has_permission(request.user, *perms)
+            con_perms = context.setdefault('permissions', {})
+            for x in perms:
+                if x in con_perms:
+                    flag = con_perms[x]
+                else:
+                    flag = functions.has_permission(request.user, x)
+                    con_perms[x] = flag
             if flag:
                 return flag
     else:
         return True
+    
+def _validate(menu, context, validators=None):
+    from uliweb.utils.common import import_attr
+    
+    #validate permission
+    validators = validators or []
+    
+    check = menu.get('check')
+    if check and not isinstance(check, (list, tuple)):
+        check = [check]
+    else:
+        check = []
+    
+    validators = validators + check
+    
+    if validators:
+        flag = False
+        for v in validators:
+            if not v: continue
+            if isinstance(v, (str, unicode)):
+                func = import_attr(v)
+            else:
+                func = v
+            flag = func(menu, context)
+            if flag:
+                flag = True
+                break
+    else:
+        flag = True
+        
+    return flag
+    
+def navigation(name, active='', check=None, id=None, _class=None):
+    from uliweb import settings
+    
+    if check and not isinstance(check, (list, tuple)):
+        check = [check]
+    else:
+        check = []
+    validators = (settings.MENUS_CONFIG.validators or []) + list(check)
+    
+    return _navigation(name=name, active=active, validators=validators, id=id, _class=_class)
+    
+def _navigation(name, active='', validators=None, id=None, _class=None):
+    s = []
+    items = get_menu(name)
+    context = {}
+    
+    _id = (' id="%s"' % id) if id else ''
+    _cls = (' %s' % _class) if _class else ''
+    s.append('<ul class="nav%s"%s>\n' % (_cls, _id))
+    for j in items.get('subs', []):
+        flag = _validate(j, context, validators)
+        if not flag:
+            continue
+        
+        href = j.get('link', '#')
+        title = j.get('title', j['name'])
+        if j['name'] == active:
+            s.append('<li class="active"><a href="%s"><span>%s</span></a></li>\n' % (href, title))
+        else:
+            s.append('<li><a href="%s"><span>%s</span></a></li>\n' % (href, title))
+    s.append('</ul>\n')
+    
+    return ''.join(s)
     
 def menu(name, active='', check=None, id=None, _class=None):
     from uliweb import settings
@@ -139,29 +217,15 @@ def _menu(name, active='', validators=None, id=None, _class=None):
     :param active: something like "x/y/z"
     :param check: validate callback, basic validate is defined in settings
     """
-    from uliweb.utils.common import import_attr
-    
     validators = validators or []
 
     x = active.split('/')
     items = get_menu(name)
     s = []
+    context = {}
     
     def p(menus, index=0, tab=2):
-        #validate permission
-        if validators:
-            flag = False
-            for v in validators:
-                if isinstance(v, (str, unicode)):
-                    func = import_attr(v)
-                else:
-                    func = v
-                flag = func(menus)
-                if flag:
-                    flag = True
-                    break
-        else:
-            flag = True
+        flag = _validate(menus, context, validators)
             
         if not flag:
             return ''

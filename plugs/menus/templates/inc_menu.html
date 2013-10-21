@@ -2,6 +2,11 @@
 {{link "menus/jquery.navgoco.css"}}
 {{link "menus/jquery.navgoco.js"}}
 
+{{def navigation(active='', check=None, id=None, _class=None):
+    out.write(functions.navigation(name='MAIN', active=active, check=check, id=id, _class=_class), escape=False)
+pass
+}}
+
 {{def menu(name, active='', check=None, id='menus', _class=None):
     out.write(functions.menu(name=name, active=active, check=check, id=id, _class=_class), escape=False)
 }}

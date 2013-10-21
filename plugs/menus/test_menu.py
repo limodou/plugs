@@ -1,4 +1,4 @@
-from __init__ import load_menu, print_menu, _menu
+from __init__ import load_menu, print_menu, _menu, _navigation
 
 menus = {
     'home':{'title':'Test'},
@@ -11,7 +11,7 @@ menus = {
     'develop_tasks':{'parent':'event/tasks', 'title':'develop_tasks'},
 }
 
-def test_load_manu():
+def test_load_menu():
     """
     >>> x = load_menu(menus.items())
     >>> print_menu()
@@ -40,7 +40,7 @@ def test_menu():
     """
     >>> x = load_menu(menus.items())
     >>> print _menu('event')
-    <ul class="nav">
+    <ul class="menu">
       <li><a href="#">e2</a></li>
       <li><a href="#">e1</a></li>
       <li><a href="#">e3</a></li>
@@ -57,7 +57,7 @@ def test_menu_active():
     """
     >>> x = load_menu(menus.items())
     >>> print _menu('event', 'tasks/develop_tasks')
-    <ul class="nav">
+    <ul class="menu">
       <li><a href="#">e2</a></li>
       <li><a href="#">e1</a></li>
       <li><a href="#">e3</a></li>
@@ -69,7 +69,7 @@ def test_menu_active():
     </ul>
     <BLANKLINE>
     >>> print _menu('event', 'tasks/develop_tasks', id='menus', _class='test')
-    <ul class="nav test" id="menus">
+    <ul class="menu test" id="menus">
       <li><a href="#">e2</a></li>
       <li><a href="#">e1</a></li>
       <li><a href="#">e3</a></li>
@@ -82,3 +82,21 @@ def test_menu_active():
     <BLANKLINE>
     """
 
+def test_navigation():
+    """
+    >>> menus = {
+    ... 'main':{'subs':[
+    ...     {'name':'home', 'title':'Home'},
+    ...     {'name':'about', 'title':'About'},
+    ... ]}
+    ... }
+    >>> x = load_menu(menus.items())
+    >>> print _navigation('main', 'home')
+    <nav class="">
+    <ul>
+    <li><a href="#"><span>About</span></a></li>
+    <li class="active"><a href="#"><span>Home</span></a></li>
+    </ul>
+    </nav>
+    <BLANKLINE>
+    """

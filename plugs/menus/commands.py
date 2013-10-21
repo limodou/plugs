@@ -10,7 +10,7 @@ class MenuCommand(Command):
     
     def handle(self, options, global_options, *args):
         from uliweb import settings
-        from plugs.menus import print_menu
+        from . import print_menu
         import sys
         
         self.get_application(global_options)

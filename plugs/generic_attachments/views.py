@@ -1,7 +1,7 @@
 #coding=utf-8
 import os
 from uliweb import expose, functions
-from __init__ import AttachmentsFileServing
+from . import AttachmentsFileServing
 from werkzeug.exceptions import Forbidden
 
 def uploadfile():

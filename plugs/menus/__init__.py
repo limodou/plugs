@@ -7,6 +7,8 @@ def load_menu(menus):
     """
     Load menu definitions
     """
+    global __menus__
+
     __menus__.clear()
     _m = []
     
@@ -60,6 +62,8 @@ def load_menu(menus):
     return __menus__
 
 def get_menu(name):
+    global __menus__
+
     assert name
     
     path = name.split('/')
@@ -80,13 +84,19 @@ def get_menu(name):
         
     return items
     
-def print_menu(root=None):
+def print_menu(root=None, title=False):
+    global __menus__
+    
     items = __menus__
     if root:
         items = get_menu(root)
     
     def p(menus, tab=0):
-        print ' '*tab + menus['name']
+        print ' '*tab + menus['name'],
+        if title:
+            print '[' + menus.get('title', menus['name']) + ']'
+        else:
+            print
         for x in menus.get('subs', []):
             p(x, tab+4)
        

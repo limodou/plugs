@@ -92,11 +92,9 @@ def test_navigation():
     ... }
     >>> x = load_menu(menus.items())
     >>> print _navigation('main', 'home')
-    <nav class="">
-    <ul>
+    <ul class="nav">
     <li><a href="#"><span>About</span></a></li>
     <li class="active"><a href="#"><span>Home</span></a></li>
     </ul>
-    </nav>
     <BLANKLINE>
     """

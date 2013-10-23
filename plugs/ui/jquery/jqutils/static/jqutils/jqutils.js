@@ -376,7 +376,7 @@ var create_result_process = function(target, opt){
     }
 }
 
-var create_ajax_callback = function(options){
+var create_ajax_callback = function(target, options){
     return function(r){
         var opts = {
             field_prefix:'div_field_'
@@ -405,7 +405,7 @@ var create_ajax_callback = function(options){
                     });
                 }
             }else if(opts.message_type == 'tip'){
-                var t = $(this);
+                var t = $(target);
                 $('body').on('dialog2.beforeClose', t, function(e){
                     t.find('input, select, textarea').poshytip('hide');
                 });

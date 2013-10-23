@@ -1,0 +1,3 @@
+avalon.config({
+   interpolate: ["{%", "%}"]
+});

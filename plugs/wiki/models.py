@@ -5,16 +5,16 @@ class WikiPage(Model):
     name = Field(str, max_length=200, index=True, unique=True, required=True)
     subject = Field(str, max_length=255) #display name
     content = Field(TEXT)
-    creator = Reference('user')
+    creator = Reference('user', nullable=True)
     create_time = Field(datetime.datetime, auto_now_add=True)
-    modified_user = Reference('user')
+    modified_user = Reference('user', nullable=True)
     modified_time = Field(datetime.datetime, auto_now_add=True)
     deleted = Field(bool)
     acl = Field(TEXT)
     hits = Field(int, verbose_name='Hit counts')
     enabled = Field(bool)
-    cur_user = Reference('user')
-    start_time = Field(datetime.datetime)
+    cur_user = Reference('user', nullable=True)
+    start_time = Field(datetime.datetime, nullable=True)
     
     def new_revision(self):
         '''Create a new ChangeSet with the old content.'''
@@ -85,7 +85,7 @@ class WikiPage(Model):
         
 class WikiChangeSet(Model):
     wiki = Reference(WikiPage, collection_name='changeset')
-    editor = Reference('user')
+    editor = Reference('user', nullable=True)
     revision = Field(int)
     old_content = Field(TEXT)
     old_subject = Field(str, max_length=255)

@@ -43,9 +43,9 @@ class Forum(Model):#论坛
     num_posts = Field(int, verbose_name='文章总数')
 #    attachments = Field(FILE, verbose_name='附件', hint='文件大小不能超过2M，请注意文件大小')
 
-    last_reply_on = Field(datetime.datetime, verbose_name='最新回复时间')
-    last_post_user = Reference('user', verbose_name='最后回复人', collection_name="last_post_user_forums")
-    last_post = Field(int, verbose_name='最后发贴id')
+    last_reply_on = Field(datetime.datetime, verbose_name='最新回复时间', nullable=True)
+    last_post_user = Reference('user', verbose_name='最后回复人', collection_name="last_post_user_forums", nullable=True)
+    last_post = Field(int, verbose_name='最后发贴id', nullable=True)
     managers = ManyToMany('user', verbose_name='管理员')
 
     manager_only = Field(bool, verbose_name='是否只有管理员可以发贴')

@@ -118,6 +118,8 @@ class ForumView(object):
         """
         from uliweb.utils.generic import ListView
         
+        ForumTopicType = functions.get_model('forumtopictype')
+        
         cat = request.GET.get('category_id', 0)
         condition = self.model.c.category == int(cat)
         

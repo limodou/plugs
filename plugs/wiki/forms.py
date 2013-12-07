@@ -22,7 +22,11 @@ class WikiEdit(Form):
             
         #检查页面名称是否已经存在
         Wiki = functions.get_model('wikipage')
-        wiki = Wiki.get((Wiki.c.name==all_data.get('name')) & (Wiki.c.id!=self.wiki.id) & (Wiki.c.enabled==True) & (Wiki.c.deleted==False))
+        if self.parent:
+            pagename = self.parent + '/' + all_data['name']
+        else:
+            pagename = all_data['name']
+        wiki = Wiki.get((Wiki.c.name==pagename) & (Wiki.c.id!=self.wiki.id) & (Wiki.c.enabled==True) & (Wiki.c.deleted==False))
         if wiki:
             error['name'] = u'已经存在同名的页面，请换一个名字或者去同名页面进行修改'
         return error

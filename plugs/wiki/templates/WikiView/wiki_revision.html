@@ -44,7 +44,7 @@ var OnRevert = function(){
 var can_revert = {{=json_dumps(can_revert)}};
 
 function get_page(page){
-    $.get('/wiki/{{=wiki.name}}?action=get_revision&page='+page).done(function(r){
+    $.get(encodeURI('/wiki/{{=wiki.name}}?action=get_revision&page='+page)).done(function(r){
         var body = $('#revisions').find('tbody');
         $.each(r.changeset, function(index, v){
             var revert_txt = '';

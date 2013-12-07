@@ -1,5 +1,7 @@
 {{extend "wiki_layout.html"}}
 
+{{block title}}{{super}} - WIKI - {{=wiki.name}}{{end}}
+
 {{block content_main}}
 {{include "WikiView/inc_wiki_nav.html"}}
 {{use "jqhotkeys"}}
@@ -17,11 +19,13 @@
     {{make_nav(wiki.name)}}
 
     <div class="wiki-actions">
+        {{if create_new:}}
         <a href="/wiki?action=edit" id="btnAdd" title="添加新页面 (按 A 键可以直接编辑)">
             <span class="btn-add"></span>
         </a>
+        {{pass}}
         {{if permissions.get('write'):}}
-        <a href="/wiki/{{=wiki.name}}/?action=edit" id="btnAddChild" title="添加子页面 (按 C 键可以直接编辑)">
+        <a href="/wiki/{{=wiki.name}}?action=edit_child" id="btnAddChild" title="添加子页面 (按 C 键可以直接编辑)">
             <span class="btn-addchild"></span>
         </a>
         <a href="/wiki/{{=wiki.name}}?action=edit" id="btnEdit" title="编辑页面 (按 E 键可以直接编辑)">
@@ -93,6 +97,11 @@ $(function(){
                 easing: "swing"  
             });  
         }).css('cursor', 'pointer');
+        $('#wiki-content').find('h1,h2,h3,h4,h5,h6').hover(function(e){
+            $(this).find('a.anchor').css('color', '#c60f0f');
+        }, function(e){
+            $(this).find('a.anchor').css('color', 'white');
+        });
     }
     
 });

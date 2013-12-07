@@ -362,7 +362,7 @@ class WikiView(object):
         if not pagename:
             if 'pages' in request.GET:
                 response.template = 'WikiView/wiki_pages.html'
-                objects = self.model.filter(self.model.c.enabled==True).fields('name').order_by(self.model.c.name)
+                objects = self.model.filter(self.model.c.enabled==True).filter(self.model.c.deleted==False).fields('name').order_by(self.model.c.name)
                 
                 return {'objects':objects}
             
@@ -406,6 +406,7 @@ class WikiView(object):
             return {'wiki':wiki, 'content':content, 'revision':rev, 
                 'rev_time':rev_time, 'last_rev':last_rev,
                 'page_args':kwargs,
+                'create_new':self._check_permission('write', raise_exception=False),
                 'permissions':self._find_tree_permissions(['read', 'write', 'delete'], wiki, request.user)
                 }
         else:
@@ -420,11 +421,17 @@ class WikiView(object):
         content, kwargs = self._get_page_html(request.POST.get('content') or 'No conent')
         return json({'success':True, 'data':content, 'page_args':kwargs})
     
-    def _wiki_edit(self, pagename):
+    def _wiki_edit_child(self, pagename):
+        return self._wiki_edit(pagename, child=bool(pagename))
+    
+    def _wiki_edit(self, pagename, child=False):
         from uliweb import request, response
         from forms import WikiEdit
         from uliweb.utils.common import get_uuid
         from plugs.generic_attachments import enable_attachments
+        
+        #检查用户是否登录
+        functions.require_login()
         
         response.template = 'WikiView/wiki_edit.html'
         
@@ -432,15 +439,34 @@ class WikiView(object):
         #the form check will complain it an error
         if not pagename:
             pagename = ':NewPage'
+        page = pagename
 
-        wiki = self.model.get(self.model.c.name == pagename)
-        #check read permission
-        self._check_permission('write', wiki, page=wiki)
-
-        if '/' in pagename:
-            parent, page = pagename.rsplit('/', 1)
+        if child:
+            parent = pagename
+            page = pagename + '/:NewPage'
         else:
-            parent, page = '', pagename
+            if '/' in pagename:
+                parent = pagename.rsplit('/', 1)[0]
+            else:
+                parent = ''
+
+        if parent:
+            parent_page = self.model.get(self.model.c.name == parent)
+            
+            #检查父结点是否存在
+            if not parent_page or not parent_page.enabled or parent_page.deleted:
+                flash('父页面尚未创建，请先创建', 'error')
+                return redirect(url_for(self.__class__.wiki, pagename=parent, action='edit'))
+            
+        wiki = self.model.get(self.model.c.name == page)
+        if wiki and wiki.enabled and not wiki.deleted:
+            #check write permission
+            self._check_permission('write', wiki, page=wiki)
+        else:
+            if parent:
+                self._check_permission('write', parent_page, page=parent_page)
+            else:
+                self._check_permission('write')
         
         form = WikiEdit()
         WikiEdit.name.label = u'页面名称'
@@ -448,22 +474,15 @@ class WikiView(object):
             WikiEdit.name.label = u'页面名称 %s/' % parent
             
         if request.method == 'GET':
-            #检查父结点是否存在
-            if parent:
-                obj = self.model.get(self.model.c.name==parent)
-                if not obj or not obj.enabled:
-                    flash('父页面尚未创建，请先创建', 'error')
-                    return redirect(url_for(self.__class__.wiki, pagename=parent, action='edit'))
-            
             #if no wiki page existed, then create one first, but will not create revision
             #check if the wiki is not enabled then delete it first
             if wiki and (not wiki.enabled or wiki.deleted):
                 self._delete_wikipage(wiki, real=True)
                 
-                wiki = self.model(name=pagename, creator=request.user, modified_user=request.user)
+                wiki = self.model(name=page, creator=request.user, modified_user=request.user)
             
             if not wiki:
-                wiki = self.model(name=pagename, creator=request.user, modified_user=request.user)
+                wiki = self.model(name=page, creator=request.user, modified_user=request.user)
             
             conflict = False
             #check if there is someone is changing the wiki page
@@ -477,13 +496,14 @@ class WikiView(object):
             wiki.save()
             
             data = wiki.to_dict()
-            data['name'] = page
+            data['name'] = page.rsplit('/', 1)[-1]
             form.bind(data)
             
             return {'form':form, 'wiki':wiki, 'conflict':conflict}
         
         elif request.method == 'POST':
             form.wiki = wiki
+            form.parent = parent
             if form.validate(request.POST):
                 #check admin permission
                 old_acl, old_acl_lines, old_begin = find_acl(wiki.acl, settings.WIKI_ACL_ALIAS)

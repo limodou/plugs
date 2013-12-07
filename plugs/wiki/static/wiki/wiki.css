@@ -20,17 +20,13 @@ background: url(images/external-link-ltr-icon.png) center right no-repeat;
 padding-right: 13px;
 }
 #wiki-content a.anchor {
-    color: #ccc;
     font-size: 1em;
     margin-left: 6px;
     padding: 0 4px 0 4px;
     text-decoration: none;
     border: none;
     background:none;
-}
-#wiki-content a.anchor:hover {
-    color: #c60f0f;
-    border: none;
+    color: white;
 }
 
 .wiki-info {font-size:12px; margin-bottom:15px;}

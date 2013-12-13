@@ -1,4 +1,4 @@
-from __init__ import load_menu, print_menu, _menu, _navigation
+from __init__ import load_menu, print_menu, default_menu, default_navigation
 
 menus = {
     'home':{'title':'Test'},
@@ -39,7 +39,7 @@ def test_load_menu():
 def test_menu():
     """
     >>> x = load_menu(menus.items())
-    >>> print _menu('event')
+    >>> print default_menu('event')
     <ul class="menu">
       <li><a href="#">e2</a></li>
       <li><a href="#">e1</a></li>
@@ -56,7 +56,7 @@ def test_menu():
 def test_menu_active():
     """
     >>> x = load_menu(menus.items())
-    >>> print _menu('event', 'tasks/develop_tasks')
+    >>> print default_menu('event', 'tasks/develop_tasks')
     <ul class="menu">
       <li><a href="#">e2</a></li>
       <li><a href="#">e1</a></li>
@@ -68,7 +68,7 @@ def test_menu_active():
       </li>
     </ul>
     <BLANKLINE>
-    >>> print _menu('event', 'tasks/develop_tasks', id='menus', _class='test')
+    >>> print default_menu('event', 'tasks/develop_tasks', id='menus', _class='test')
     <ul class="menu test" id="menus">
       <li><a href="#">e2</a></li>
       <li><a href="#">e1</a></li>
@@ -91,10 +91,10 @@ def test_navigation():
     ... ]}
     ... }
     >>> x = load_menu(menus.items())
-    >>> print _navigation('main', 'home')
+    >>> print default_navigation('main', 'home')
     <ul class="nav">
-    <li><a href="#"><span>About</span></a></li>
-    <li class="active"><a href="#"><span>Home</span></a></li>
+      <li><a href="#">About</a></li>
+      <li class="active"><a href="#">Home</a></li>
     </ul>
     <BLANKLINE>
     """

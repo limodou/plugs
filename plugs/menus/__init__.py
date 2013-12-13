@@ -1,5 +1,6 @@
 from uliweb.utils.sorteddict import SortedDict
 from copy import deepcopy
+from uliweb.utils.common import import_attr
 
 __menus__ = SortedDict()
 
@@ -146,8 +147,6 @@ def default_validators(item, context):
         return True
     
 def _validate(menu, context, validators=None):
-    from uliweb.utils.common import import_attr
-    
     #validate permission
     validators = validators or []
     
@@ -185,29 +184,31 @@ def navigation(name, active='', check=None, id=None, _class=None):
         check = []
     validators = (settings.MENUS_CONFIG.validators or []) + list(check)
     
-    return _navigation(name=name, active=active, validators=validators, id=id, _class=_class)
+    _navigation = settings.MENUS_CONFIG.navigation_render or default_navigation
+    return import_attr(_navigation)(name=name, active=active, validators=validators, id=id, _class=_class)
     
-def _navigation(name, active='', validators=None, id=None, _class=None):
+def default_navigation(name, active='', validators=None, id=None, _class=None):
     s = []
-    items = get_menu(name)
-    context = {}
     
-    _id = (' id="%s"' % id) if id else ''
-    _cls = (' %s' % _class) if _class else ''
-    s.append('<ul class="nav%s"%s>\n' % (_cls, _id))
-    for j in items.get('subs', []):
-        flag = _validate(j, context, validators)
-        if not flag:
-            continue
-        
-        href = j.get('link', '#')
-        title = j.get('title', j['name'])
-        if j['name'] == active:
-            s.append('<li class="active"><a href="%s"><span>%s</span></a></li>\n' % (href, title))
+    for _t, y in iter_menu(name, active, validators):
+        index = y['index']
+        indent = ' '*index*2
+        if _t == 'item':
+            if y['active']:
+                s.extend([indent, '<li class="active"><a href="', y['link'], '">', y['title'], '</a>'])
+            else:
+                s.extend([indent, '<li><a href="', y['link'], '">', y['title'], '</a>'])
+        elif _t == 'begin':
+            _id = (' id="%s"' % id) if id else ''
+            _cls = (' %s' % _class) if _class else ''
+            s.append('<ul class="nav%s"%s>\n' % (_cls, _id))
+        elif _t == 'open':
+            pass
+        elif _t == 'close':
+            s.append('</li>\n')
         else:
-            s.append('<li><a href="%s"><span>%s</span></a></li>\n' % (href, title))
-    s.append('</ul>\n')
-    
+            s.extend([indent, '</ul>\n'])
+        
     return ''.join(s)
     
 def menu(name, active='', check=None, id=None, _class=None):
@@ -219,53 +220,82 @@ def menu(name, active='', check=None, id=None, _class=None):
         check = []
     validators = (settings.MENUS_CONFIG.validators or []) + list(check)
     
-    return _menu(name=name, active=active, validators=validators, id=id, _class=_class)
+    _menu = settings.MENUS_CONFIG.menu_render or default_menu
+    return import_attr(_menu)(name=name, active=active, validators=validators, id=id, _class=_class)
 
-def _menu(name, active='', validators=None, id=None, _class=None):
+def iter_menu(name, active='', validators=None):
+    x = active.split('/')
+    items = get_menu(name)
+    context = {}
+    
+    def p(menus, index=0):
+        
+        begin = False
+        
+        #process sub menus
+        for j in menus.get('subs', []):
+            flag = _validate(j, context, validators)
+                
+            if not flag:
+                continue
+            
+            if not begin:
+                yield 'begin', {'index':index}
+                begin = True
+                
+            yield 'open', {'index':index}
+            
+            if index < len(x):
+                _name = x[index]
+            else:
+                _name = ''
+            _active = True if _name and _name==j['name'] and index==len(x)-1 else False
+            link = j.get('link', '#')
+            title = j.get('title', j['name'])
+            
+            d = j.copy()
+            d.update({'active':_active, 'title':title, 'link':link, 'index':index+1})
+            yield 'item', d
+            
+            for y in p(j, index+1):
+                yield y
+            
+            yield 'close', {'index':index+1}
+        
+        if begin:
+            yield 'end', {'index':index}
+         
+    for m in p(items):
+        yield m
+    
+def default_menu(name, active='', validators=None, id=None, _class=None):
     """
     :param menu: menu item name
     :param active: something like "x/y/z"
     :param check: validate callback, basic validate is defined in settings
     """
-    validators = validators or []
-
-    x = active.split('/')
-    items = get_menu(name)
     s = []
-    context = {}
-    
-    def p(menus, index=0, tab=2):
-        flag = _validate(menus, context, validators)
-            
-        if not flag:
-            return ''
-            
-        if index < len(x):
-            _name = x[index]
-        else:
-            _name = ''
-        c = ' class="active"' if _name and _name==menus['name'] and index==len(x)-1 else ''
-        href = menus.get('link', '#')
-        title = menus.get('title', menus['name'])
-        s.append('%s<li%s><a href="%s">%s</a>' % (' '*tab, c, href, title))
-        
-        #process sub menus
-        subs = menus.get('subs', [])
-        if subs:
-            s.append('\n')
-            s.append('%s<ul>\n' % (' '*tab))
-            for i in subs:
-                p(i, index+1, tab+2)
-            s.append('%s</ul>\n' % (' '*tab))
-            s.append('%s</li>\n' % (' '*tab))
-        else:
+    for _t, y in iter_menu(name, active, validators):
+        index = y['index']
+        indent = ' '*index*2
+        if _t == 'item':
+            if y['active']:
+                s.extend([indent, '<li class="active"><a href="', y['link'], '">', y['title'], '</a>'])
+            else:
+                s.extend([indent, '<li><a href="', y['link'], '">', y['title'], '</a>'])
+        elif _t == 'open':
+            pass
+        elif _t == 'close':
             s.append('</li>\n')
-    
-    _id = (' id="%s"' % id) if id else ''
-    _cls = (' %s' % _class) if _class else ''
-    s.append('<ul class="menu%s"%s>\n' % (_cls, _id))
-    for j in items.get('subs', []):
-        p(j, tab=2)
-    s.append('</ul>\n')
+        elif _t == 'begin':
+            if index == 0:
+                _id = (' id="%s"' % id) if id else ''
+                _cls = (' %s' % _class) if _class else ''
+                s.append('<ul class="menu%s"%s>\n' % (_cls, _id))
+            else:
+                s.extend(['\n', indent, '<ul>\n'])
+        else:
+            s.extend([indent, '</ul>\n', indent])
     
     return ''.join(s)
+    

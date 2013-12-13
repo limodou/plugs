@@ -41,6 +41,10 @@
 			//if we are on h1, 2, 3...
 			tagNumber = ( cacheHN.get(0).tagName ).substr(1);
             
+            for (j=parseInt(tagNumber)+1; j<=parseInt(previous); j++){
+                cur_number[j.toString()] = 0;
+            }
+            
             //calculate tocnumber
             if (!cur_number[tagNumber]){
                 cur_number[tagNumber] = 1;

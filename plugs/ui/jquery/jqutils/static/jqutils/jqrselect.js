@@ -12,7 +12,7 @@
         _create: function() {
             var self = this,
                 select = this.element.hide(),
-                display = select.attr('alt'),
+                display = select.attr('alt') || '',
                 title = select.attr('title') || 'Search Result',
                 url = '';
                 this.value = {'element':select.val(), 'input':display};

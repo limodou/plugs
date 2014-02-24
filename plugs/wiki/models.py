@@ -84,7 +84,7 @@ class WikiPage(Model):
         return doc
         
 class WikiChangeSet(Model):
-    wiki = Reference(WikiPage, collection_name='changeset')
+    wiki = Reference('wikipage', collection_name='changeset')
     editor = Reference('user', nullable=True)
     revision = Field(int)
     old_content = Field(TEXT)

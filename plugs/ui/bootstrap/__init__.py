@@ -32,8 +32,8 @@ def create_pagination(url, total, page, rows, length=None,
     begin = max(1, end - length + 1)
     buf = []
     buf.append('<ul>')
-    total_message = total_message.replace('$pages', str(pages))
-    total_message = total_message.replace('$total', str(total))
+    total_message = total_message.replace('$[pages]', str(pages))
+    total_message = total_message.replace('$[total]', str(total))
     buf.append('<li class="disabled total"><a href="#">%s</a></li>' % total_message)
     if pages and (begin != 1):
         buf.append('<li class="first"><a href="%s">%s</a></li>' % (get_url(1), first))

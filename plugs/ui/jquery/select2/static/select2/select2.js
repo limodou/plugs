@@ -2165,7 +2165,8 @@
                 if (this.select) this.postprocessResults();
             }
             selected.remove();
-            this.triggerChange({ removed: data });
+            //2014-3-7 by lyh don't remove option
+            //this.triggerChange({ removed: data });
         },
 
         // multi

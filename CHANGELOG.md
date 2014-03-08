@@ -1,6 +1,12 @@
 Plugs Change Log
 =====================
 
+0.1.6 Version
+-----------------
+* Fix select2 clone version deal with multi unselect bug
+* Upgrade avalon to 1.2.3
+
+
 0.1.5 Version
 -----------------
 
@@ -18,7 +24,7 @@ Plugs Change Log
 * Add ZeroClipboard to `plugs.ui.jquery.ZeroClipboard`
 * Add d3 to `plugs.ui.d3`
 * Add staticize app to `plug.staticize` and modified wiki app
-* Add magnific_popup app to `plug.ui.jquery.magnific_popup` 
+* Add magnific_popup app to `plug.ui.jquery.magnific_popup`
 * Add desktopnotify to `plug.ui.js.jsutils`
 * Add menus app to `plugs.menus`
 

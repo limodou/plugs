@@ -17,7 +17,7 @@
     </div>
     <div class="span5">
         <div class="box-body">
-            {{embed view}}
+            {{<< view}}
             {{if can_modify:}}
             <div class="box-bottom">
             <a class="btn btn-green" href="{{=url_for('plugs.user_admin.views_admin.UserView.edit')}}">{{=_('Edit')}}</a>

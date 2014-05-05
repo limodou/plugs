@@ -280,9 +280,9 @@ def default_menu(name, active='', validators=None, id=None, _class=None):
         indent = ' '*index*2
         if _t == 'item':
             if y['active']:
-                s.extend([indent, '<li class="active"><a href="', y['link'], '">', y['title'], '</a>'])
+                s.extend([indent, '<li class="active"><a href="', y['link'], '">', str(y['title']), '</a>'])
             else:
-                s.extend([indent, '<li><a href="', y['link'], '">', y['title'], '</a>'])
+                s.extend([indent, '<li><a href="', y['link'], '">', str(y['title']), '</a>'])
         elif _t == 'open':
             pass
         elif _t == 'close':

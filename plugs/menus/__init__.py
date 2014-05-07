@@ -291,7 +291,7 @@ def default_menu(name, active='', validators=None, id=None, _class=None):
             if index == 0:
                 _id = (' id="%s"' % id) if id else ''
                 _cls = (' %s' % _class) if _class else ''
-                s.append('<ul class="menu%s"%s>\n' % (_cls, _id))
+                s.append('<ul class="plugs-menu%s"%s>\n' % (_cls, _id))
             else:
                 s.extend(['\n', indent, '<ul>\n'])
         else:

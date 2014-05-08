@@ -1,7 +1,7 @@
 {{extend 'user_admin_layout.html'}}
 
 {{block sub_menu}}
-{{sub_menu(menu_items, 'user', 'information')}}
+{{menu('sidemenu','user/information')}}
 {{end}}
 
 {{block content_main}}
@@ -9,7 +9,7 @@
 <div class="box col_12 center">
     <h2>{{=_('User Information Edit')}}</h2>
     <div class="box-body">
-        {{embed form}}
+        {{<< form}}
     </div>
 </div>
 {{end}}

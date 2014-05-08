@@ -1,1 +1,12 @@
 {{extend "layout.html"}}
+
+{{block menu}}
+{{menu('admin')}}
+{{end}}
+
+{{block content_sidebar}}
+{{include "inc_menu.html"}}
+{{block sub_menu}}
+{{menu('sidemenu')}}
+{{end sub_menu}}
+{{end content_sidebar}}

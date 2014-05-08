@@ -1,7 +1,7 @@
 {{extend 'user_admin_layout.html'}}
 
 {{block sub_menu}}
-{{sub_menu(menu_items, 'user_admin', 'users')}}
+{{menu('sidemenu','user_admin/users')}}
 {{end}}
 
 {{block content_tool}}
@@ -15,7 +15,7 @@
 
 <div class="content">
     <div class="query">
-        {{embed query_form}}
+        {{<< query_form}}
     </div>
     {{table_id='users_manage'}}
     {{include "inc_table.html"}}

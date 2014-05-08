@@ -1,8 +1,8 @@
 /*
- * jQuery Navgoco Menus Plugin v0.1.5 (2013-09-07)
+ * jQuery Navgoco Menus Plugin v0.2.1 (2014-04-11)
  * https://github.com/tefra/navgoco
  *
- * Copyright (c) 2013 Chris T (@tefra)
+ * Copyright (c) 2014 Chris T (@tefra)
  * BSD - https://github.com/tefra/navgoco/blob/master/LICENSE-BSD
  */
 (function($) {
@@ -56,33 +56,45 @@
 				}
 			});
 
-			if (self.options.caret) {
-				self.$el.find("li:has(ul) > a").append(self.options.caret);
-			}
-
+			var caret = $('<span></span>').prepend(self.options.caretHtml);
 			var links = self.$el.find("li > a");
-			links.on('click', function(event) {
+			self._trigger(caret, false);
+			self._trigger(links, true);
+			self.$el.find("li:has(ul) > a").prepend(caret);
+		},
+		/**
+		 * Add the main event trigger to toggle menu items to the given sources
+		 * @param {Element} sources
+		 * @param {Boolean} isLink
+		 */
+		_trigger: function(sources, isLink) {
+			var self = this;
+			sources.on('click', function(event) {
 				event.stopPropagation();
-				var sub = $(this).next();
+				var sub = isLink ? $(this).next() : $(this).parent().next();
+				var isAnchor = false;
+				if (isLink) {
+					var href = $(this).attr('href');
+					isAnchor = href === undefined || href === '' || href === '#';
+				}
 				sub = sub.length > 0 ? sub : false;
 				self.options.onClickBefore.call(this, event, sub);
-				if (sub) {
+
+				if (!isLink || sub && isAnchor) {
 					event.preventDefault();
 					self._toggle(sub, sub.is(":hidden"));
 					self._save();
-				} else {
-					if (self.options.accordion) {
-						var allowed = self.state = self._parents($(this));
-						self.$el.find('ul').filter(':visible').each(function() {
-							var sub = $(this),
-								idx = sub.attr('data-index');
+				} else if (self.options.accordion) {
+					var allowed = self.state = self._parents($(this));
+					self.$el.find('ul').filter(':visible').each(function() {
+						var sub = $(this),
+							idx = sub.attr('data-index');
 
-							if (!allowed.hasOwnProperty(idx)) {
-								self._toggle(sub, false);
-							}
-						});
-						self._save();
-					}
+						if (!allowed.hasOwnProperty(idx)) {
+							self._toggle(sub, false);
+						}
+					});
+					self._save();
 				}
 				self.options.onClickAfter.call(this, event, sub);
 			});
@@ -234,6 +246,7 @@
 		destroy: function() {
 			$.removeData(this.$el);
 			this.$el.find("li:has(ul) > a").unbind('click');
+			this.$el.find("li:has(ul) > a > span").unbind('click');
 		}
 	};
 
@@ -280,7 +293,7 @@
 	 * @type {Object}
 	 */
 	$.fn.navgoco.defaults = {
-		caret: '<span class="caret"></span>',
+		caretHtml: '',
 		accordion: false,
 		openClass: 'open',
 		save: true,

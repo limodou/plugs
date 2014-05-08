@@ -14,22 +14,14 @@ pass
 $(function() {
     // Initialize navgoco with default options
     var menu = $("#{{=id}}");
-    menu.navgoco({
-        caret: '<span class="caret"></span>',
-        accordion: false,
-        openClass: 'open',
-        slide: {
-            duration: 400,
-            easing: 'swing'
-        }
-    });
+    menu.navgoco();
     //show active item
     var active = menu.find('li.active');
     var parents = active.parents('ul');
     if (parents.size() > 0){
         parents.splice(-1, 1);
         $.each(parents, function(i, v){
-            menu.navgoco('toggle', true);
+            menu.navgoco('toggle', true, $(v).data('index'));
         });
     }
     

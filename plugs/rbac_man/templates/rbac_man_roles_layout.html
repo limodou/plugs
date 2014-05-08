@@ -4,6 +4,9 @@
 {{menu('admin')}}
 {{end}}
 
+{{block content_sidebar}}
+{{include "inc_menu.html"}}
 {{block sub_menu}}
-{{sub_menu(menu_items, 'user_admin', 'permissions')}}
-{{end}}
+{{menu('sidemenu','user_admin/roles')}}
+{{end sub_menu}}
+{{end content_sidebar}}

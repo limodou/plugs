@@ -1,5 +1,9 @@
 {{extend "rbac_man_roles_layout.html"}}
 
+{{block sub_menu}}
+{{menu('sidemenu','user_admin/roles')}}
+{{end sub_menu}}
+
 {{block content_main}}
 {{use "jquery", css_only=True}}
 {{use "jqutils", ajaxForm=True}}

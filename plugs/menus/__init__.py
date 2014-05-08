@@ -228,7 +228,7 @@ def iter_menu(name, active='', validators=None):
     items = get_menu(name)
     context = {}
     
-    def p(menus, index=0):
+    def p(menus, active, index=0):
         
         begin = False
         
@@ -249,7 +249,7 @@ def iter_menu(name, active='', validators=None):
                 _name = x[index]
             else:
                 _name = ''
-            _active = True if _name and _name==j['name'] and index==len(x)-1 else False
+            _active = active == j['id']
             link = j.get('link', '#')
             title = j.get('title', j['name'])
             
@@ -257,7 +257,7 @@ def iter_menu(name, active='', validators=None):
             d.update({'active':_active, 'title':title, 'link':link, 'index':index+1})
             yield 'item', d
             
-            for y in p(j, index+1):
+            for y in p(j, active, index+1):
                 yield y
             
             yield 'close', {'index':index+1}
@@ -265,7 +265,7 @@ def iter_menu(name, active='', validators=None):
         if begin:
             yield 'end', {'index':index}
          
-    for m in p(items):
+    for m in p(items, active):
         yield m
     
 def default_menu(name, active='', validators=None, id=None, _class=None):

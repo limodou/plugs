@@ -7,7 +7,7 @@
 pass
 }}
 
-{{def menu(name, active='', check=None, id='menus', _class=None):
+{{def sidemenu(name, active='', check=None, id='menus', _class=None):
     out.write(functions.menu(name=name, active=active, check=check, id=id, _class=_class), escape=False)
 }}
 <script>
@@ -28,4 +28,3 @@ $(function() {
 });
 </script>
 {{pass}}
-

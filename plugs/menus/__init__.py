@@ -1,8 +1,12 @@
-from uliweb.utils.sorteddict import SortedDict
+import os
 from copy import deepcopy
+from uliweb.utils.sorteddict import SortedDict
 from uliweb.utils.common import import_attr
 
 __menus__ = SortedDict()
+_menu_order = 9000
+
+class MenuException(Exception): pass
 
 def load_menu(menus):
     """
@@ -12,17 +16,22 @@ def load_menu(menus):
 
     __menus__.clear()
     _m = []
+    _menu_names = set() #each menu item should has unique name
     
     def _iter_menus(m, parent=''):
         """
         make menu tree to plat list
         """
+        global _menu_order
+
         for i in m:
             _p = i.get('parent') or parent
-            _m.append((_p, i.get('order', 900), i))
+            #if no order existed, then use defined order by default
+            _m.append((_p, i.get('order', _menu_order), i))
+            _menu_order += 1
             name = i['name']
             subs = i.get('subs', [])
-            _iter_menus(subs, name)
+            _iter_menus(subs, os.path.join(parent, name).replace('\\', '/'))
             i['subs'] = []
     
     def _f(menus):
@@ -32,9 +41,9 @@ def load_menu(menus):
             yield x
     
     _iter_menus(_f(menus))
-    
+
     _m.sort()
-    
+
     #rebuild menu tree
     stack = [('', None)]
     while len(stack) > 0:
@@ -44,14 +53,14 @@ def load_menu(menus):
         while i<len(_m):
             _p, _, mitem = _m[i]
             is_path = '/' in _p
-            if _p == parent or (is_path and pitem and pitem.get('id')==_p):
+            if _p == parent or (is_path and pitem and pitem.get('id').endswith(_p)):
                 name = mitem['name']
                 if not parent:
                     __menus__[name] = mitem
                     _id = name
                 else:
                     pitem['subs'].append(mitem)
-                    _id = _p + '/' + name
+                    _id = pitem.get('id') + '/' + name
                 mitem['id'] = _id
                 stack.append((name, mitem))
                 find = True
@@ -85,7 +94,7 @@ def get_menu(name):
         
     return items
     
-def print_menu(root=None, title=False):
+def print_menu(root=None, title=False, verbose=False):
     global __menus__
     
     items = __menus__
@@ -94,10 +103,17 @@ def print_menu(root=None, title=False):
     
     def p(menus, tab=0):
         print ' '*tab + menus['name'],
-        if title:
-            print '[' + menus.get('title', menus['name']) + ']'
+        if title or verbose:
+            txt = '[' + menus.get('title', menus['name']) + ']'
         else:
-            print
+            txt = ''
+        if verbose:
+            d = SortedDict()
+            for x in ['id', 'link']:
+                if menus.get(x):
+                    d[x] = menus.get(x)
+            txt += ' {%s}' % (','.join(['%s="%s"' % (x, y) for x, y in d.items()]))
+        print txt
         for x in menus.get('subs', []):
             p(x, tab+4)
        
@@ -249,7 +265,7 @@ def iter_menu(name, active='', validators=None):
                 _name = x[index]
             else:
                 _name = ''
-            _active = active == j['id']
+            _active = active == j['id'].split(name+'/')[-1]
             link = j.get('link', '#')
             title = j.get('title', j['name'])
             

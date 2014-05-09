@@ -5,6 +5,7 @@ Plugs Change Log
 -----------------
 * Fix select2 clone version deal with multi unselect bug
 * Upgrade avalon to 1.2.3
+* Improve menus process, and refacotr apps's menu to it
 
 
 0.1.5 Version

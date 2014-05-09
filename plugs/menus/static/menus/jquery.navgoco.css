@@ -31,9 +31,11 @@
 }
 
 .plugs-menu li > a > span {
-    float: right;
+    position: absolute;
+    left:2px;
     font-size: 19px;
     font-weight: bolder;
+    margin-right:8px;
 }
 
 .plugs-menu li > a:hover > span {
@@ -48,12 +50,12 @@
 }
 
 .plugs-menu a:hover, .plugs-menu > li > a:hover {
-    background-color: #5D5D5D;
-    color: #f5f5f5;
+    background-color: #9EC2FF;
+    color: #000000;
 }
 
 .plugs-menu  li.active > a  {
-    background-color: #4D90FE;
+    background-color: #0088CC;
     color:#ffffff;
 }
 
@@ -61,10 +63,13 @@
     font-size: 12px;
     line-height: 18px;
     padding: 2px 10px;
+    position: relative;
+    padding-left: 20px;
 }
 
 .plugs-menu > li > a {
     font-size: 14px;
     line-height: 20px;
     padding: 4px 10px;
+    padding-left: 20px;
 }

@@ -1,0 +1,172 @@
+/*basic*/
+.gantt .gantgrid {height:300px;}
+.gantt .panel{margin-top:0px; margin-bottom:0px;}
+.gantt .panel-body{border:0}
+.gantt .layout-split-west{border-right:5px solid #eee}
+.gantt .mmGrid .mmg-bodyWrapper {overflow-x:scroll;overflow-y:auto}
+/*.gantt .gantttree-panel .mmGrid .mmg-bodyWrapper {overflow-y:hidden;}*/
+.gantt .datagrid-view2 .datagrid-body{overflow-x:scroll}
+.gantt .gantttree-panel .datagrid-view2 .datagrid-body{overflow-y:hidden}
+.gantt .navigation{float:right;padding-right:100px;padding-top:10px}
+.gantt .gantt-today-marker{position:absolute;top:0;border-right:1px solid #fff;border-left:1px solid #f00;width:0px;height:100%;}
+.gantt .gantt-today-marker div{width:26px;padding:2px;color:#fff;background-color:red}
+.grantt-toolbar {margin-bottom:5px;}
+
+/*grid*/
+.gantt .datagrid-row{height:24px;}
+.gantt .datagrid-sort-icon{display:none}
+.gantt .datagrid-header-row{height:31px;}
+.gantt tr.datagrid-header-row td{border-right:0px;background:url('../img/fullmonitor/gridline.gif') repeat-y right top}
+.gantt tr.datagrid-header-row .day-header{margin:-5px -4px;}
+.gantt tr.datagrid-header-row .day-header-one{margin-bottom:-5px;padding-top:2px;float:left;width:24px;height:28px;text-align:center;background:url('../img/fullmonitor/gridline.gif') repeat-y right top}
+.gantt tr.datagrid-row td{border-right:0px;background:url('../img/fullmonitor/gridline.gif') repeat-y right top}
+.gantt.gantt-scale-day .gantttree-panel tr.datagrid-row td{background:url('img/fullmonitor/gridline.gif') repeat-y right top}
+.gantt.gantt-scale-day tr.datagrid-row td{background:url('../img/fullmonitor/gridbox.gif') repeat-x;border:0px}
+.gantt.gantt-scale-day .ganttgrid-panel .datagrid-row{height:24px;}
+.gantt.gantt-scale-day .gantttree-panel .datagrid-row{height:24px;background-image:url(../img/fullmonitor/gridhline.gif);background-repeat:repeat-x;}
+.gantt.gantt-scale-day .gantttree-panel tr.datagrid-row td{background:url('../img/fullmonitor/gridline.gif') repeat-y right top;border:0px}
+
+.gantt.gantt-scale-week .gantttree-panel tr.datagrid-row td{background:url('img/fullmonitor/gridline.gif') repeat-y right top}
+.gantt.gantt-scale-week tr.datagrid-row td{background:url('../img/fullmonitor/gridbox.gif') repeat-x;border:0px}
+.gantt.gantt-scale-week .ganttgrid-panel .datagrid-row{height:24px;}
+.gantt.gantt-scale-week .gantttree-panel .datagrid-row{height:24px;background-image:url(../img/fullmonitor/gridhline.gif);background-repeat:repeat-x;}
+.gantt.gantt-scale-week .gantttree-panel tr.datagrid-row td{background:url('../img/fullmonitor/gridline.gif') repeat-y right top;border:0px}
+
+
+/*theme*/
+.ganttBar {fill: #33b5e5;opacity: 0.7;}
+.ganttBar.red {fill: #f00;opacity: 0.7;}
+.ganttBar.green {fill: #0f0;opacity: 0.7;}
+.ganttBar {fill: #33b5e5;opacity: 0.7;}
+.ganttBar:hover {fill: #0D15CF;}
+.finish-ganttBar {fill:#666;}
+.milestone {fill: #33b5e5;}
+.milestone.red {fill: #f00;}
+.milestone.green {fill: #0f0;}
+.milestone:hover {fill: #0D15CF;}
+line.xline {
+    stroke: lightgrey;
+    opacity: 0.7;
+    stroke-width: 1px;
+}
+rect.xbox {
+    stroke: lightgrey;
+    fill: lightgrey;
+    opacity: 0.7;
+    stroke-width: 1px;
+}
+.node .left-angle, .node .right-angle {stroke-width:0px;}
+g.lines .line {fill:none;stroke:black;opacity:0.7;}
+g.lines .triangle {stroke:black;opacity:0.7;}
+
+div.gantt-tooltip {
+position: absolute;
+text-align: left;
+width: 200px;
+height: 60px;
+padding: 4px;
+font-size: 12px;
+background: #ffd;
+border: 1px solid #ccc;
+border-radius: 4px;
+pointer-events: none;
+z-index:10;
+overflow: hidden;
+white-space: nowrap;
+text-overflow: ellipsis;
+-o-text-overflow: ellipsis;
+-ms-text-overflow: ellipsis;
+}
+
+/*icons*/
+.gantt .mmGrid .tree-req, .tree-req{background-image:url(../img/fullmonitor/icons/req.png); background-position:0 0}
+.gantt .mmGrid .tree-project, .tree-project{background-image:url(../img/fullmonitor/icons/assm.png); background-position:0 0}
+.gantt .mmGrid .tree-phase, .tree-phase{background-image:url(../img/fullmonitor/icons/mtask.png); background-position:0 0}
+.gantt .mmGrid .tree-craft, .tree-craft{background-image:url(../img/fullmonitor/icons/stask.png); background-position:0 0}
+
+
+.gantt .mmGrid .mmg-headWrapper {border-top:0}
+.gantt .mmGrid {font-size:12px;}
+.gantt .mmGrid tr td a.expander{top:3px;}
+
+.gantt .mmGrid tr.collapsed td a.expander {
+  background:url('img/tree_icons.png') no-repeat 0px 0px;
+}
+
+.gantt .mmGrid tr.expanded td a.expander {
+  background:url('img/tree_icons.png') no-repeat -18px 0px;
+}
+
+.gantt .mmGrid .tree-icon {
+  position: absolute;
+  left:0px;
+  top:3px;
+  width:16px;
+  height:16px;
+  vertical-align: middle;
+  overflow: hidden;
+  border:0px solid red;
+}
+
+.gantt .mmGrid .mmgantt-date-cell{
+    float:left;
+    text-align:center;
+    font-weight:normal;
+    width: 26px;
+    background: url('img/gridline.gif') repeat-y right top;
+    height:28px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+}
+
+.gantt .mmgantt-date-row{
+    height:28px;
+    border-bottom:1px solid #ccc;
+}
+
+.gantt td{height:24px;}
+.ganttgrid-panel .mmGrid .mmg-headWrapper .mmg-head th{padding:0px;}
+.ganttgrid-panel .mmGrid .mmg-bodyWrapper .mmg-body td{
+    padding:0px 5px;
+    background: url('img/gridbox.gif') repeat-x 0 2px;
+}
+
+.mmGrid .tree-folder {
+  background: url('img/tree_icons.png') no-repeat -208px 0;
+}
+.mmGrid .tree-folder-open {
+  background: url('img/tree_icons.png') no-repeat -224px 0;
+}
+.mmGrid .tree-file {
+  background: url('img/tree_icons.png') no-repeat -240px 0;
+}
+
+.gantt.gantt-scale-week .mmg-head th .mmg-headWrapper{height:80px;line-height:80px;}
+.gantt.gantt-scale-week .mmg-head th .mmg-headWrapper .mmg-title{height:80px;}
+.gantt.gantt-scale-week .mmg-head th .mmg-titleWrapper{height:80px;line-height:80px;}
+.gantt.gantt-scale-week .mmg-head th .mmg-titleWrapper .mmg-title{height:80px;}
+.gantt.gantt-scale-day .mmg-head th .mmg-headWrapper{height:80px;line-height:80px;}
+.gantt.gantt-scale-day .mmg-head th .mmg-headWrapper .mmg-title{height:80px;}
+.gantt.gantt-scale-day .mmg-head th .mmg-titleWrapper{height:80px;line-height:80px;}
+.gantt.gantt-scale-day .mmg-head th .mmg-titleWrapper .mmg-title{height:80px;}
+.gantt.gantt-scale-month .mmg-head th .mmg-headWrapper{height:55px;line-height:55px;}
+.gantt.gantt-scale-month .mmg-head th .mmg-headWrapper .mmg-title{height:55px;}
+.gantt.gantt-scale-month .mmg-head th .mmg-titleWrapper{height:55px;line-height:55px;}
+.gantt.gantt-scale-month .mmg-head th .mmg-titleWrapper .mmg-title{height:55px;}
+.gantt.gantt-scale-month2div .mmg-head th .mmg-headWrapper{height:80px;line-height:80px;}
+.gantt.gantt-scale-month2div .mmg-head th .mmg-headWrapper .mmg-title{height:80px;}
+.gantt.gantt-scale-month2div .mmg-head th .mmg-titleWrapper{height:80px;line-height:80px;}
+.gantt.gantt-scale-month2div .mmg-head th .mmg-titleWrapper .mmg-title{height:80px;}
+.gantt.gantt-scale-month3div .mmg-head th .mmg-headWrapper{height:80px;line-height:80px;}
+.gantt.gantt-scale-month3div .mmg-head th .mmg-headWrapper .mmg-title{height:80px;}
+.gantt.gantt-scale-month3div .mmg-head th .mmg-titleWrapper{height:80px;line-height:80px;}
+.gantt.gantt-scale-month3div .mmg-head th .mmg-titleWrapper .mmg-title{height:80px;}
+
+
+.gantt .gantttree-panel .mmg-titleWrapper{text-align:center;}
+.gantt .mmg-title{font-weight:normal;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis;-ms-text-overflow: ellipsis;}
+.gantt.gantt-scale-day .gantttree-panel .mmg-title{font-weight:normal;padding-top:25px;}
+.gantt.gantt-scale-week .gantttree-panel .mmg-title{font-weight:normal;padding-top:25px;}
+.gantt.gantt-scale-month .gantttree-panel .mmg-title{font-weight:normal;padding-top:20px;}

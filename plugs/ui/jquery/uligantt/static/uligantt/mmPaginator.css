@@ -1,0 +1,145 @@
+.mmPaginator {
+    margin: 5px 0;
+    white-space: nowrap;
+}
+
+.mmPaginator .totalCountLabel{
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    margin: 0 5px 0 0;
+    padding: 1px 0 0 0;
+    line-height: 1.5;
+    vertical-align: top;
+}
+.mmPaginator .totalCountLabel span{
+    color: #b00;
+    font-weight: bold;
+}
+
+.mmPaginator .pageList{
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    margin: 0 5px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.mmPaginator .pageList li{
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    margin: 0 2px;
+    padding: 0 6px;
+    background: #fff;
+    border: 1px solid #ccc;
+    line-height: 1.5;
+    vertical-align: top;
+
+}
+
+.mmPaginator .pageList li.active{
+    background: none;
+    padding-top: 1px;
+    border: 0;
+}
+
+.mmPaginator .pageList li.disable a{
+    color: #333;
+    cursor: default;
+}
+
+.mmPaginator .pageList li.disable{
+    background: #efefef;
+}
+
+.mmPaginator .pageList li.disable a{
+    color: #333;
+    cursor: default;
+}
+
+.mmPaginator .pageList li a{
+    color: #b00;
+    text-align: center;
+    cursor: pointer;
+}
+
+.mmPaginator .pageList li a.head{
+
+}
+
+.mmPaginator .pageList li a.headDisable{
+
+}
+
+.mmPaginator .pageList li a.prev{
+
+}
+
+.mmPaginator .pageList li a.prevDisable{
+
+}
+
+.mmPaginator .pageList li a.next{
+
+}
+
+.mmPaginator .pageList li a.nextDisable{
+
+}
+
+.mmPaginator .pageList li a.tail{
+
+}
+
+.mmPaginator .pageList li a.tailDisable{
+
+}
+
+.mmPaginator .pageList li a.current{
+
+}
+
+.mmPaginator .pageList li a.skip{
+
+}
+
+.mmPaginator .limit{
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    line-height: 1.5;
+    vertical-align: top;
+}
+
+.mmPaginator .limit select{
+    border: 1px solid #ccc;
+    padding: 1px;
+    width: auto;
+    height: auto;
+    margin: 0;
+    line-height: 1.5;
+    font-size: 1em;
+}
+
+.mmPaginator .mmBtn {
+    margin-left:4px;
+    padding:2px 6px;
+    cursor:pointer;
+    border:1px solid transparent;
+    position:absolute;
+    right:30px;
+}
+
+.mmPaginator .mmBtn:hover {
+    border:1px solid #7eabcd;
+    filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=white,endcolorstr=#bbcef6,gradientType=0);
+    -ms-filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=white,endcolorstr=#bbcef6,gradientType=0);/*IE8*/	
+    background:#ccc; /* 一些不支持背景渐变的浏览器 */  
+    background:-moz-linear-gradient(top, white, rgba(187,206,246, 0.5));  
+    background:-webkit-linear-gradient(top, white, rgba(187,206,246, 0.5));  
+    background:-o-linear-gradient(top, white, rgba(187,206,246, 0.5)); 
+}
+
+

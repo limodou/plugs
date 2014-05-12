@@ -1,0 +1,135 @@
+{{use "jquery"}}
+{{use "jqutils"}}
+{{use "mmgrid"}}
+{{link "uligantt/mmPaginator.css"}}
+{{link "uligantt/mmPaginator.js"}}
+{{from uliweb.core.js import json_dumps}}
+{{use "jqblockui"}}
+{{use "jqhotkeys"}}
+{{from uliweb.utils.common import get_uuid}}
+{{token = get_uuid()}}
+
+{{#param: table_id, query_form, table}}
+<table id="{{=table_id}}"></table>
+<div id="pg" style="text-align: right;"></div>
+
+<script type="text/javascript">
+
+var times = 0;
+    function check_download(){
+        $.get('/check_download', {token:'{{=token}}'}).success(function(data){
+            if(data.url){
+                $.unblockUI({fadeOut:200});
+                $.download(data.url);
+            }else{
+                times++;
+                if (times > {{=settings.ASYNC_DOWNLOAD.timeout}}){
+                    show_message('处理时间过长，如有需要请与管理员联系', 'error')
+                    $.unblockUI({fadeOut:200});
+                    return;
+                }
+                else{
+                    setTimeout(check_download, 1000);
+                }
+            }
+        });
+    }
+
+    function create_table(url, download, options){
+        var query_string = $.query_string.set('data', '').toString();
+        var settings = {
+            pagination:true,
+            singleSelect: true,
+            rownumbers:true,
+            
+            nowrap: true,
+            indexCol: true,
+            multiSelect: false,
+            method:'get',
+            nameField:'field',
+            root: 'rows',
+            width:'auto',
+            height:450,
+            url:url + query_string,
+            remoteSort:true,
+            cols:{{if defined('view'):}}
+                {{=json_dumps(view.get_columns(False))}}
+            {{else:}}
+                {{=json_dumps(table.get_columns(False))}}
+            {{pass}},
+            idField:'id',
+            filename: 'download.xls',
+            filename_alt: 'download.xls'
+        }
+        if (options){
+            $.extend( settings, options );
+        }
+        var pageopts = {
+            totalCountName: 'total',
+            limitParamName: 'limit'
+        }
+        if (settings.pageopts)
+            $.extend( pageopts, settings.pageopts);
+        if (settings.pageSize)
+            pageopts.limit = settings.pageSize;
+        if (settings.pageList)
+            pageopts.limitList = settings.pageList;
+        if (settings.infinite)
+            pageopts.infinite = settings.infinite;
+            
+        var pg;
+        if(settings.pagination){
+            pg = $('<div class="mm-pagination" style="text-align: left;"></div>');
+            $('#{{=table_id}}').after(pg);
+            settings.plugins = [pg.mmPaginator(pageopts)];
+        }
+        if(settings.singleSelect !== undefined)
+            settings.multiSelect = settings.singleSelect;
+        if(settings.rownumbers !== undefined)
+            settings.indexCol = settings.rownumbers;
+            
+        var mmg = $('#{{=table_id}}').mmGrid(settings);
+        
+        if (download){
+            if (!pg){
+                pg = $('<div class="mmPagination" style="text-align: left;"></div>');
+                $('#{{=table_id}}').after(pg);
+            }
+            var btn = $('<span class="mmBtn"><i class="icon-download"></i>下载数据</span>');
+            pg.append(btn);
+            btn.on('click', function(e){
+                var query_string = $.query_string.remove('data').set('download', '').toString();
+                {{if settings.ASYNC_DOWNLOAD.enable:}}
+                $.post('/download', {'url':url+query_string, filename:settings.filename, alt:encodeURIComponent(settings.filename_alt), token:'{{=token}}'}).success(function(data){
+                    if(data.success){
+                        $.blockUI({ css: { 
+                                 border: 'none', 
+                                 padding: '15px', 
+                                 backgroundColor: '#000', 
+                                 '-webkit-border-radius': '5px', 
+                                 '-moz-border-radius': '5px', 
+                                 opacity: .5, 
+                                 color: '#fff'
+                                },
+                                message:'正在处理请稍候...'
+                                });
+                        times = 0;
+                        check_download();
+                    }else{
+                        show_message(data.message, 'error');
+                    }
+                });
+                {{else:}}
+                $.download(url + query_string);
+                {{pass}}
+            });
+            
+            $(document).bind('keydown.d', function(){
+                btn[0].click();
+            });
+            
+        }
+        
+        return mmg;
+    }
+</script>

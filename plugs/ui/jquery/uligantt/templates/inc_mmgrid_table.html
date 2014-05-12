@@ -3,11 +3,11 @@
 {{use "mmgrid"}}
 {{link "uligantt/mmPaginator.css"}}
 {{link "uligantt/mmPaginator.js"}}
-{{from uliweb.core.js import json_dumps}}
 {{use "jqblockui"}}
 {{use "jqhotkeys"}}
 {{from uliweb.utils.common import get_uuid}}
 {{token = get_uuid()}}
+{{table_id = 'table_%s' % get_uuid()[:6]}}
 
 {{#param: table_id, query_form, table}}
 <table id="{{=table_id}}"></table>

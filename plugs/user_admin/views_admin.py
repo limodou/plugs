@@ -322,4 +322,19 @@ def users_search():
         return json(result)
     else:
         return json([])
-            
+
+@expose('/usergroups/search')
+def usergroups_search():
+    from uliweb.orm import get_model
+    
+    UserGroup = get_model('usergroup')
+    v_field = request.values.get('label', 'title')
+    if request.values.get('term'):
+        result = []
+        name = request.values.get('term')
+        for x in UserGroup.filter(UserGroup.c.name.like('%'+name+'%')):
+            title = x.name
+            result.append({'id':x.id, v_field:title})
+        return json(result)
+    else:
+        return json([])

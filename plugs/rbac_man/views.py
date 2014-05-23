@@ -161,7 +161,31 @@ class RoleView(object):
             if hasattr(user, 'nickname'):
                 userdata['nickname'] = user.nickname
             return json({'success':True, 'data':userdata, 'message':"The user %s added to role %s successfully" % (user.username, role.name)})
-            
+    
+    def addusergroup(self):
+        UserGroup = get_model('usergroup')
+        Role = get_model('role')
+        
+        group_id = request.POST.get('group_id')
+        role_id = request.POST.get('role_id')
+        usergroup = UserGroup.get(int(group_id))
+        role = Role.get(int(role_id))
+        print group_id,usergroup.name
+        print role_id,role.name
+        
+        if not usergroup:
+            return json({'success':False, 'message':"Can't find the usergroup id %s" % user_id})
+        if not role:
+            return json({'success':False, 'message':"Can't find the role id %s" % role_id})
+        if role.usergroups.has(usergroup):
+            return json({'success':False, 'message':"The usergroups %s has already existed in role %s" % (user.username, role.name)})
+        else:
+            role.usergroups.add(usergroup)
+            usergroupdata = {'usergroupname':usergroup.name, 'id':usergroup.id}
+            print {'success':True, 'data':usergroupdata, 'message':"The usergroup %s added to role %s successfully" % (usergroup.name, role.name)}
+            return json({'success':True, 'data':usergroupdata, 'message':"The usergroup %s added to role %s successfully" % (usergroup.name, role.name)})
+        
+    
     def deluser(self):
         User = get_model('user')
         Role = get_model('role')
@@ -179,7 +203,26 @@ class RoleView(object):
             return json({'success':True, 'message':"The user %s has been delete from role %s successfully." % (user.username, role.name)})
         else:
             return json({'success':False, 'message':"The user %s is not existed in role %s successfully." % (user.username, role.name)})
-   
+    
+    def delusergroup(self):
+        UserGroup = get_model('usergroup')
+        Role = get_model('role')
+        
+        usergroup_id = request.POST.get('usergroup_id')
+        role_id = request.POST.get('role_id')
+        usergroup = UserGroup.get(int(usergroup_id))
+        role = Role.get(int(role_id))
+        
+        if not usergroup:
+            return json({'success':False, 'message':"Can't find the user id %s" % usergroup_id})
+        if not role:
+            return json({'success':False, 'message':"Can't find the role id %s" % role_id})
+        if role.usergroups.has(usergroup):
+            role.usergroups.remove(usergroup)
+            return json({'success':True, 'message':"The usergroup %s has been delete from role %s successfully." % (usergroup.name, role.name)})
+        else:
+            return json({'success':False, 'message':"The usergroup %s is not existed in role %s successfully." % (usergroup.name, role.name)})
+    
     def addperm(self):
         Perm = get_model('permission')
         Role = get_model('role')

@@ -16,7 +16,7 @@
             <ul class="breadcrumb">
               <li><a href="{{=url_for('plugs.forums.views.ForumView.admin')}}">返回版块</a></li>
                 <span class="divider">/</span>
-              <li class="active">当前版块:{{=unicode(category)}}</li>
+              <li class="active">当前版块:{{=unicode(forum_category)}}</li>
             </ul>
         </div>
         <div class="line">
@@ -115,7 +115,7 @@ var app = angular.module('ForumAdminApp', []).config(function ($interpolateProvi
 }); 
 
 function adminCtrl($scope, $rootScope) {
-    $.get('/forum/admin/forums/query?category_id={{=category.id}}')
+    $.get('/forum/admin/forums/query?category_id={{=forum_category.id}}')
         .success(function(data, status, headers, config){
             $scope.forums = data.rows;
             $scope.$apply();
@@ -141,7 +141,7 @@ function adminCtrl($scope, $rootScope) {
         var dialog = $('<div id="add_object"></div>').dialog2(
             {
                 autoFocus:false, 
-                url:'/forum/admin/forums/add?category={{=category.id}}',
+                url:'/forum/admin/forums/add?category={{=forum_category.id}}',
                 ajaxFormOptions: {
                     onSuccess: common_ajaxForm_success({
                         success:function(data){

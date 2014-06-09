@@ -108,7 +108,7 @@ class ForumView(object):
         cat = request.GET.get('category_id', 0)
         Category = get_model('forumcategory')
         obj = Category.get(int(cat))
-        return {'category':obj}
+        return {'forum_category':obj}
         
     @expose('admin/forums/query')
     @decorators.check_role('superuser')

@@ -1,4 +1,4 @@
-def call(app, var, env, plugins=None, js=True, responsive=False, version=None):
+def call(app, var, env, plugins=None, version=None):
     from uliweb import settings
     
     plugins = plugins or []
@@ -8,22 +8,13 @@ def call(app, var, env, plugins=None, js=True, responsive=False, version=None):
     a.append('bootstrap/asset/html5.js')
     a.append('<![endif]-->')
     a.append('bootstrap/%s/bootstrap.min.css' % version)
-    if responsive or settings.UI_CONFIG.bootstrap_responsive:
-        a.append('bootstrap/%s/bootstrap-responsive.min.css' % version)
-    
-    jquery = False
-    jquery_ui = False
+    a.append('bootstrap/%s/bootstrap-responsive.min.css' % version)
+
     for x in plugins:
         a.append('bootstrap/%s/js/bootstrap-%s.js' % (version, x))
-        jquery = True
-        if x in ['pagination']:
-            jquery_ui = True
-            
-    if js:
-        jquery = True
-        a.append('bootstrap/%s/js/bootstrap.min.js' % version)
+
+    a.append('bootstrap/%s/js/bootstrap.min.js' % version)
       
     d = {'toplinks':a, 'depends':[]}
-    if jquery:
-        d['depends'] = [('jquery', {'ui':jquery_ui}), 'json2']
+    d['depends'] = ['jquery', 'json2']
     return d

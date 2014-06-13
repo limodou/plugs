@@ -8,7 +8,7 @@ def call(app, var, env, plugins=None, version=None):
     a.append('bootstrap/asset/html5.js')
     a.append('<![endif]-->')
     a.append('bootstrap/%s/bootstrap.min.css' % version)
-    a.append('bootstrap/%s/bootstrap-responsive.min.css' % version)
+#    a.append('bootstrap/%s/bootstrap-responsive.min.css' % version)
 
     for x in plugins:
         a.append('bootstrap/%s/js/bootstrap-%s.js' % (version, x))

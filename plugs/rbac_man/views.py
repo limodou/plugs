@@ -121,7 +121,6 @@ class RoleView(object):
         user_ids = user_ids.split(',')
         
         error_users = []
-        print user_ids
         for user_id in user_ids:
             if user_id != '':
                 user = User.get(User.c.username == user_id)
@@ -170,8 +169,6 @@ class RoleView(object):
         role_id = request.POST.get('role_id')
         usergroup = UserGroup.get(int(group_id))
         role = Role.get(int(role_id))
-        print group_id,usergroup.name
-        print role_id,role.name
         
         if not usergroup:
             return json({'success':False, 'message':"Can't find the usergroup id %s" % user_id})

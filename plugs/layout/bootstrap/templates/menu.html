@@ -1,12 +1,32 @@
 {{use "jquery", css_only=True}}
 {{
 def menu(current='home', menus=None):
-    for id, caption, link in menus or settings.LAYOUT.MENUS:
-        if id == current:
-            out.write('<li class="active"><a href="%s"><span>%s</span></a></li>' % (link, caption), escape=False)
+    for x in menus or settings.LAYOUT.MENUS:
+        if isinstance(x, dict) and x.get('subs', None):
+            out.write('<li class="dropdown%s">' % (' active' if x.get('name', '') == current else '') , escape=False)
+            out.write('<a class="dropdown-toggle" id="dLabel_%s" role="button" data-target="#" data-toggle="dropdown" href="#"><span>%s<b class="caret"></b></span></a>' % (x.get('name', ''), x.get('title', '')), escape=False)
+            out.write('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel_%s">' % (x.get('name', '')), escape=False)
+            for esub in x.get('subs', None):
+                if id == current:
+                    out.write('<li class="active"><a href="%s">%s</a></li>' % (esub.get('link', ''), esub.get('title', '')), escape=False)
+                else:
+                    out.write('<li><a href="%s">%s</a></li>' % (esub.get('link', ''), esub.get('title', '')), escape=False)
+                pass
+            pass
+            out.write('</ul>', escape=False)
         else:
-            out.write('<li><a href="%s"><span>%s</span></a></li>' % (link, caption), escape=False)
+            if isinstance(x, dict):
+                id, caption, link = x.get('name', ''), x.get('title', ''), x.get('link', '')
+            else:
+                id, caption, link = x
+            pass
+            if id == current:
+                out.write('<li class="active"><a href="%s"><span>%s</span></a>' % (link, caption), escape=False)
+            else:
+                out.write('<li><a href="%s"><span>%s</span></a>' % (link, caption), escape=False)
+            pass
         pass
+        out.write('</li>', escape=False)
     pass
 pass
 

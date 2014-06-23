@@ -7,7 +7,7 @@ def menu(current='home', menus=None):
             out.write('<a class="dropdown-toggle" id="dLabel_%s" role="button" data-target="#" data-toggle="dropdown" href="#"><span>%s<b class="caret"></b></span></a>' % (x.get('name', ''), x.get('title', '')), escape=False)
             out.write('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel_%s">' % (x.get('name', '')), escape=False)
             for esub in x.get('subs', None):
-                if id == current:
+                if esub.get('name', '') == current:
                     out.write('<li class="active"><a href="%s">%s</a></li>' % (esub.get('link', ''), esub.get('title', '')), escape=False)
                 else:
                     out.write('<li><a href="%s">%s</a></li>' % (esub.get('link', ''), esub.get('title', '')), escape=False)

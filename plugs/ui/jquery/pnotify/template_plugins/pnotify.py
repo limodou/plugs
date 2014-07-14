@@ -1,4 +1,4 @@
-def call(app, var, env, version='1.2.0'):
+def call(version='1.2.0'):
     from uliweb import settings
     
     version = settings.UI_CONFIG.get('pnotify_version', '')

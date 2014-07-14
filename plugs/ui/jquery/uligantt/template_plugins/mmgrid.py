@@ -1,4 +1,4 @@
-def call(app, var, env, pagination=True, treegrid=True):
+def call(pagination=True, treegrid=True):
     a = []
     a.append('uligantt/mmGrid.css')
     a.append('uligantt/mmGrid.js')

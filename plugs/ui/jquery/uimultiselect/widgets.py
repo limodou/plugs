@@ -10,11 +10,7 @@ class UIMultiSelectField(SelectField):
         self.selected_list = selected_list
         
     def html(self, data, py=True):
-        return self.pre_html() + super(UIMultiSelectField, self).html(data, py) + self.post_html()
-    
-    def pre_html(self):
-        return '''{{use "jquery", css_only=True}}
-{{use "uimultiselect"}}'''
+        return super(UIMultiSelectField, self).html(data, py) + self.post_html()
     
     def post_html(self):
         return """<script>

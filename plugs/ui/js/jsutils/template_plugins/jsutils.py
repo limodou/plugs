@@ -1,4 +1,4 @@
-def call(app, var, env, plugins=None):
+def call(plugins=None):
     a = []
     a.append('jsutils/jsutils.js')
     return {'toplinks':a}

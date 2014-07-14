@@ -1,4 +1,4 @@
-def call(app, var, env, theme=['twitter', 'yellow', 'yellowsimple']):
+def call(theme=['twitter', 'yellow', 'yellowsimple']):
     a = []
     for t in theme:
         a.append('poshytip/tip-%s/tip-%s.css' % (t, t))

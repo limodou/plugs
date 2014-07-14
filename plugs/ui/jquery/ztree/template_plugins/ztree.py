@@ -1,4 +1,4 @@
-def call(app, var, env, plugins=None, version=None, all=True):
+def call(plugins=None, version=None, all=True):
     from uliweb import settings
     
     plugins = plugins or []

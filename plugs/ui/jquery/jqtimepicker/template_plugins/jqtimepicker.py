@@ -1,4 +1,4 @@
-def call(app, var, env, locale=None):
+def call(locale=None):
     a = []
     depends = [('jquery', {'ui':True})]
     a.append('jqtimepicker/jquery-ui-timepicker-addon.css')

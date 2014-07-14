@@ -1,4 +1,4 @@
-def call(app, var, env):
+def call():
     a = []
     a.append('treetable/jquery.treeTable.css')
     a.append('treetable/jquery.treeTable.js')

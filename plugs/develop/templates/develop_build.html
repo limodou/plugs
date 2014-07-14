@@ -1,15 +1,15 @@
 {{extend "develop_layout.html"}}
-{{block nav_menu}}
-{{from plugs.develop.menu import menu}}
-{{<< menu('Build')}}
+
+{{block menu}}
+{{navigation(active='build', _class='nav-tabs')}}
 {{end}}
-{{block content}}
-{{use "mootools"}}
+
+{{block content_main}}
 {{link "css/tabs.css"}}
 {{link "js/clientcide-tabswap.js"}}
 {{link "css/develop.css"}}
 {{link "js/Fx.Slide.js"}}
-<div id="build-container">
+<div id="content-outter">
     <ul class="tabSet">
         <li class="on"><a>Generic</a></li>
         <li class="off"><a>App Configure</a></li>

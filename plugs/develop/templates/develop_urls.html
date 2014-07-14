@@ -1,10 +1,12 @@
 {{extend "develop_layout.html"}}
-{{block nav_menu}}
-{{from plugs.develop.menu import menu}}
-{{<< menu('Urls')}}
+
+{{block menu}}
+{{navigation(active='urls', _class='nav-tabs')}}
 {{end}}
-{{block content}}
-<table>
+
+{{block content_main}}
+<div class="content-outter">
+<table class="table">
     <tbody>
     <tr><th>URL</th><th>View Functions</th></tr>
     {{for rule, methods, endpoint in urls:}}
@@ -12,4 +14,5 @@
     {{pass}}
     </tbody>
 </table>
+</div>
 {{end}}

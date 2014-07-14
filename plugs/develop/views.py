@@ -5,17 +5,14 @@ from uliweb.utils.common import log
 from uliweb.utils.common import pkg, is_pyfile_exist
 
 @expose('/develop')
-@bind_menu('Settings', weight=10)
 def develop_index():
     return {}
 
 @expose('/develop/appsinfo')
-@bind_menu('Apps Info', weight=20)
 def develop_appsinfo():
     return {'apps':application.apps}
 
 @expose('/develop/urls')
-@bind_menu('Urls', weight=30)
 def develop_urls():
     from uliweb.core.SimpleFrame import url_map
     
@@ -31,7 +28,6 @@ def develop_urls():
     return {'urls':u}
 
 @expose("/develop/global")
-@bind_menu('View Global', weight=40)
 def develop_globals():
 #    glob = globals()
 #    glo = [ (key,glob[key]) for key in glob.keys() if callable(glob[key]) ]
@@ -44,9 +40,8 @@ def develop_globals():
 from uliweb.utils.pyini import Ini
 import os
 
-@expose("/develop/build")
-@bind_menu('Build')
-def develop_build():
+#@expose("/develop/build")
+def _develop_build():
     from uliweb.utils.common import pkg
     
     import uliweb.core.SimpleFrame as sf

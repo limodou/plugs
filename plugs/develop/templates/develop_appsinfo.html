@@ -1,11 +1,12 @@
 {{extend "develop_layout.html"}}
-{{block nav_menu}}
-{{from plugs.develop.menu import menu}}
-{{<< menu('Apps Info')}}
+
+{{block menu}}
+{{navigation(active='appsinfo', _class='nav-tabs')}}
 {{end}}
-{{block content}}
-<div>
-<table>
+
+{{block content_main}}
+<div class="content-outter">
+<table class="table table-border">
     <tbody>
     <tr><th>App Name</th><th>Information</th></tr>
     {{for p in apps:}}

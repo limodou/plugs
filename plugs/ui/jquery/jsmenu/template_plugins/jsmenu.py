@@ -1,4 +1,4 @@
-def call(app, var, env):
+def call():
     a = []
     a.append('jsmenu/menu.css')
     a.append('jsmenu/menu.js')

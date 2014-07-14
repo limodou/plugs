@@ -1,4 +1,4 @@
-def call(app, var, env, theme='Default'):
+def call(theme='Default'):
     a = []
     a.append('syntaxhighlighter/styles/shCore.css')
     a.append('syntaxhighlighter/styles/shTheme%s.css' % theme)

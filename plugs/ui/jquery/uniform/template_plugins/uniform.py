@@ -1,4 +1,4 @@
-def call(app, var, env):
+def call():
     a = []
     a.append('uniform/css/uniform.default.css')
     a.append('uniform/jquery.uniform.min.js')

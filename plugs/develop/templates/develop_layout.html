@@ -1,5 +1,15 @@
-{{extend "yaml_base_layout.html"}}
-{{block topnav}}
+{{extend "layout_container.html"}}
+
+{{block content}}
+{{include "bootstrap/inc_full.html"}}
 {{end}}
-{{block title}}Uliweb Develop Interface{{end}}
-{{block header}}<h1>Uliweb Develop Interface</h1>{{end}}
+
+{{block nav}}
+  {{include "inc_menu.html"}}
+  {{block menu}}
+    {{navigation(_class='nav-tabs')}}
+  {{end}}
+{{end}}
+
+{{block user_info}}
+{{end}}

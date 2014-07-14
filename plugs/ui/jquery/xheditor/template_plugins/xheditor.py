@@ -1,4 +1,4 @@
-def call(app, var, env):
+def call():
     from uliweb import settings
     
     version = settings.UI_CONFIG.xheditor_version

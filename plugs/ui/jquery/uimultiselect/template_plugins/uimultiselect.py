@@ -1,4 +1,4 @@
-def call(app, var, env):
+def call():
     a = []
     a.append('uimultiselect/jquery.multiselect.css')
     a.append('uimultiselect/jquery.multiselect.min.js')

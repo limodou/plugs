@@ -1,4 +1,4 @@
-def call(app, var, env):
+def call():
     a = []
     a.append('fancybox/jquery.fancybox.css')
     a.append('fancybox/jquery.fancybox.min.js')

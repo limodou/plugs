@@ -1,4 +1,4 @@
-def call(app, var, env, version=None):
+def call(version=None):
     from uliweb import settings
     
     a = []

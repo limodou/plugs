@@ -1,4 +1,4 @@
-def call(app, var, env, version=None, ui=False, theme='redmond', css_only=False):
+def call(version=None, ui=False, theme='redmond', css_only=False):
     from uliweb import settings
     
     a = []

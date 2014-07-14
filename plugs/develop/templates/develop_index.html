@@ -1,10 +1,11 @@
 {{extend "develop_layout.html"}}
-{{block nav_menu}}
-{{from plugs.develop.menu import menu}}
-{{<< menu('Settings')}}
+
+{{block menu}}
+{{navigation(active='settings', _class='nav-tabs')}}
 {{end}}
-{{block content}}
-<div>
+
+{{block content_main}}
+<div class="content-outter">
 <pre>
 {{=str(settings)}}
 </pre>

@@ -1,12 +1,13 @@
 {{extend "develop_layout.html"}}
-{{block nav_menu}}
-{{from plugs.develop.menu import menu}}
-{{<< menu("View Global")}}
+
+{{block menu}}
+{{navigation(active='globals', _class='nav-tabs')}}
 {{end}}
-{{block content}}
-<p>This page will display all available objects which can be used in a view function.</p>
-<div>
-<table>
+
+{{block content_main}}
+<div class="content-outter">
+<p class="alert alert-info">This page will display all available objects which can be used in a view function.</p>
+<table class="table">
     <tbody>
         <tr><th>Global</th><th> Value</th></tr>
         {{for key,value in glo.items():}}
@@ -19,3 +20,4 @@
         {{pass}}
     </tbody>
 </table>
+{{end}}

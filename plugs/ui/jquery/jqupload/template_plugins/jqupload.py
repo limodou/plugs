@@ -1,4 +1,4 @@
-def call(app, var, env):
+def call():
     a = []
     a.append('jqupload/jquery.iframe-transport.js')
     a.append('jqupload/jquery.fileupload.js')

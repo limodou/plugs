@@ -1,4 +1,4 @@
-def call(app, var, env):
+def call():
     a = []
     a.append('uligantt/d3.min.js')
     a.append('uligantt/jquery.cookie.js')

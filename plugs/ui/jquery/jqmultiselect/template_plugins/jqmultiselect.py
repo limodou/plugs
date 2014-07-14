@@ -1,4 +1,4 @@
-def call(app, var, env):
+def call():
     a = []
     a.append('jqmultiselect/css/ui.multiselect.css')
     a.append('jqmultiselect/js/plugins/localisation/jquery.localisation.min.js')

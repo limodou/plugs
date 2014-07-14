@@ -1,4 +1,4 @@
-def call(app, var, env, version2=False):
+def call(version2=False):
     a = []
     a.append('jqutils/jqrmselect.css')
     if version2:

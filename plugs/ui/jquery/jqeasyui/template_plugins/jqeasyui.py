@@ -1,4 +1,4 @@
-def call(app, var, env, theme='simple'):
+def call(theme='simple'):
     a = []
     a.append('jqeasyui/themes/%s/easyui.css' % theme)
     a.append('jqeasyui/themes/icon.css')

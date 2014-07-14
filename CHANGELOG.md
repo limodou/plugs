@@ -1,6 +1,23 @@
 Plugs Change Log
 =====================
 
+0.2 Version
+-----------------
+
+* Compatiable with uliweb 0.4 version
+* Refactor develop app with bootstrap theme and jquery, disable build function
+* Refactor template_plugins call() signature
+* Remove `use multiselect` from uimultiselect, so you should use `inc_multiselect.html` first in template file
+* Remove slickgrid, smartpaginator, mootools, yaml
+
+0.1.7 Version
+-----------------
+
+* Add bootstrap 2.3.2 version
+* Fix menus bug
+* Add uligantt
+* Add usergroup
+
 0.1.6 Version
 -----------------
 * Fix select2 clone version deal with multi unselect bug

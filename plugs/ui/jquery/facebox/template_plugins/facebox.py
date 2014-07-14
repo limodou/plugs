@@ -1,4 +1,4 @@
-def call(app, var, env):
+def call():
     a = []
     a.append('facebox/facebox.css')
     a.append('facebox/facebox.js')

@@ -1,4 +1,4 @@
-def call(app, var, env, ajaxForm=False, hoverIntent=False, spin=False):
+def call(ajaxForm=False, hoverIntent=False, spin=False):
     a = []
     depends = [('jquery', {'ui':True})]
     a.append('jqutils/jqutils.css')

@@ -1,4 +1,4 @@
-def call(app, var, env):
+def call():
     a = []
     a.append('jqcombobox/css/sexy-combo.css')
     a.append('jqcombobox/css/sexy/sexy.css')

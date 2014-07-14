@@ -1,4 +1,4 @@
-def call(app, var, env, theme="bootstrap"):
+def call(theme="bootstrap"):
     a = []
     depends = [('jquery', {'ui':True})]
     a.append('tablefixedheader/jquery.fixheadertable.css')

@@ -31,7 +31,7 @@
             </table>
             <a class="btn btn-primary" href="{{=url_for('plugs.rbac_man.views.RoleView.edit', id=object.id)}}">编辑</a>
             {{if not object.reserve:}}
-                <a class="btn btn-blue" href="/config/roles/delete/{{=object.id}}">{{=_('Delete')}}</a>
+                <a class="btn btn-blue" href="/admin/roles/delete/{{=object.id}}">{{=_('Delete')}}</a>
             {{pass}}
         </div>
         <hr/>

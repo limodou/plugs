@@ -179,9 +179,7 @@ class RoleView(object):
         else:
             role.usergroups.add(usergroup)
             usergroupdata = {'usergroupname':usergroup.name, 'id':usergroup.id}
-            print {'success':True, 'data':usergroupdata, 'message':"The usergroup %s added to role %s successfully" % (usergroup.name, role.name)}
             return json({'success':True, 'data':usergroupdata, 'message':"The usergroup %s added to role %s successfully" % (usergroup.name, role.name)})
-        
     
     def deluser(self):
         User = get_model('user')

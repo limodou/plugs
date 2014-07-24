@@ -386,7 +386,7 @@ class WikiView(object):
             
             #处理阅读次数
             key = '__wikivisited__:%s:%d' % (request.remote_addr, wiki.id)
-            cache = function('get_cache')()
+            cache = functions.get_cache()
             v = cache.get(key, None)
             if not v:
                 self.model.filter(self.model.c.id==int(wiki.id)).update(hits=self.model.c.hits+1)

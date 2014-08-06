@@ -1,4 +1,5 @@
 from uliweb.form import SelectField
+import uliweb
 
 class UIMultiSelectField(SelectField):
     def __init__(self, label='', default=None, choices=None, required=False, 
@@ -10,7 +11,13 @@ class UIMultiSelectField(SelectField):
         self.selected_list = selected_list
         
     def html(self, data, py=True):
-        return super(UIMultiSelectField, self).html(data, py) + self.post_html()
+        if uliweb.version < '0.4':
+            pre_html = '''{{use "jquery", css_only=True}}
+{{use "uimultiselect"}}'''
+        else:
+            pre_html = ''
+
+        return pre_html + super(UIMultiSelectField, self).html(data, py) + self.post_html()
     
     def post_html(self):
         return """<script>

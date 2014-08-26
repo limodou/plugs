@@ -9,6 +9,7 @@ Plugs Change Log
 * Refactor template_plugins call() signature
 * Remove `use multiselect` from uimultiselect, so you should use `inc_multiselect.html` first in template file
 * Remove slickgrid, smartpaginator, mootools, yaml
+* Upgrade avalon to 1.3.4
 
 0.1.7 Version
 -----------------

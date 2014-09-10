@@ -10,6 +10,8 @@ Plugs Change Log
 * Remove `use multiselect` from uimultiselect, so you should use `inc_multiselect.html` first in template file
 * Remove slickgrid, smartpaginator, mootools, yaml
 * Upgrade avalon to 1.3.4
+* Refactor layout variable in generic app with `generic_layout.html`, so if you want to
+  change layout you should create new `generic_layout.html` to overwrite default layout tempalte.
 
 0.1.7 Version
 -----------------

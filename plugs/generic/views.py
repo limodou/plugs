@@ -19,8 +19,16 @@ def get_url(suffix, restful=False):
             else:
                 return "%s/%s/%s" % (suffix, action, id)
     return _f
-    
-def generic_list(model=None, get_url=get_url, layout=None, 
+
+def render_template(template, layout='', vars=None, env=None):
+    from uliweb import application as app
+
+    vars = vars or {}
+    env = env or app.get_view_env()
+    loader = app.template_loader
+    return loader.load(template, layout=layout).generate(vars, env)
+
+def generic_list(model=None, get_url=get_url, layout='layout.html',
     template=None, key_field='id', add_button_text=None, view=None, data=None, 
     json_result=True, pagination=True, rows=10):
     from uliweb.utils.generic import ListView
@@ -60,18 +68,19 @@ def generic_list(model=None, get_url=get_url, layout=None,
         result = view.run(head=True, body=False)
         if isinstance(result, dict):
             template = template or 'generic_list.html'
-            response.template = template
-            
+
             data = data or {}
-            result['table_id'] = _id
+            result['layout'] = layout
             result['get_url'] = get_url
             result['add_button_text'] = add_button_text or _('New')
             if json_result:
                 result['table'] = view
             result.update(data)
-        return result
+            return render_template(template, layout, result)
+        else:
+            return result
     
-def generic_add(model=None, get_url=get_url,
+def generic_add(model=None, get_url=get_url, layout='layout.html',
     template=None, title=None, view=None, data=None):
     from uliweb.utils.generic import AddView
     from uliweb import response
@@ -97,9 +106,11 @@ def generic_add(model=None, get_url=get_url,
         result['get_url'] = get_url
         result['title'] = title
         result.update(data)
-    return result
+        return render_template(template, layout, result)
+    else:
+        return result
     
-def generic_view(model=None, id=None, obj=None, get_url=get_url,
+def generic_view(model=None, id=None, obj=None, get_url=get_url, layout='layout.html',
     template=None, title=None, view=None, data=None):
     from uliweb.utils.generic import DetailView
     from uliweb import error, response
@@ -127,9 +138,11 @@ def generic_view(model=None, id=None, obj=None, get_url=get_url,
         result['title'] = title
         result['obj_id'] = id
         result.update(data)
-    return result
+        return render_template(template, layout, result)
+    else:
+        return result
     
-def generic_edit(model=None, id=None, obj=None, get_url=get_url,
+def generic_edit(model=None, id=None, obj=None, get_url=get_url, layout='layout.html',
     template=None, title=None, view=None, data=None):
     from uliweb.utils.generic import EditView
     from uliweb import response
@@ -157,7 +170,9 @@ def generic_edit(model=None, id=None, obj=None, get_url=get_url,
         result['title'] = title
         result['obj_id'] = id
         result.update(data)
-    return result
+        return render_template(template, layout, result)
+    else:
+        return result
     
 def generic_delete(model=None, id=None, obj=None, get_url=get_url, view=None):
     from uliweb.utils.generic import DeleteView
@@ -175,6 +190,7 @@ def generic_delete(model=None, id=None, obj=None, get_url=get_url, view=None):
     
 class View(object):
     model = None
+    layout = 'layout.html'
     key_field = 'id'
     add_button_text = _('New')
     pagination = True
@@ -197,22 +213,22 @@ class View(object):
         return 'generic_%s.html' % action
     
     def list(self):
-        return generic_list(self.model,
+        return generic_list(self.model, layout=self.layout, 
             template=self._get_template('list'),
             get_url=self._get_url, key_field=self.key_field, 
             add_button_text=self.add_button_text, json_result=True,
             rows=self.rows)
             
     def add(self):
-        return generic_add(self.model, get_url=self._get_url,
+        return generic_add(self.model, get_url=self._get_url, layout=self.layout,
             template=self._get_template('add'), title=self._get_title)
             
     def edit(self, id):
-        return generic_edit(self.model, id=id, get_url=self._get_url,
+        return generic_edit(self.model, id=id, get_url=self._get_url, layout=self.layout,
             template=self._get_template('edit'), title=self._get_title)
     
     def view(self, id):
-        return generic_view(self.model, id=id, get_url=self._get_url,
+        return generic_view(self.model, id=id, get_url=self._get_url, layout=self.layout,
             template=self._get_template('view'), title=self._get_title)
         
     def delete(self, id):

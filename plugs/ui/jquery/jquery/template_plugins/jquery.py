@@ -9,6 +9,9 @@ def call(version=None, ui=False, theme='redmond', css_only=False):
         return {'toplinks':['jquery/ui/css/%s/jquery-ui-%s.custom.css' % (theme, ui_version)]}
     if version:
         a.append('jquery/jquery-%s.min.js' % version)
+        _v = map(int, version.split('.'))
+        if _v > [1, 9]:
+            a.append('jquery/jquery-migrate-1.2.1.min.js')
     if ui:
         a.append('jquery/ui/css/%s/jquery-ui-%s.custom.css' % (theme, ui_version))
         a.append('jquery/jquery-%s.min.js' % version)

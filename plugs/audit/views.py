@@ -1,9 +1,8 @@
 #coding=utf-8
-from uliweb import expose
+from uliweb import expose, functions
 
 def __begin__():
-    from uliweb import function
-    return function('has_login')()
+    return functions.require_login()
 
 def get_audit_list(c):
     from uliweb.utils.generic import ListView

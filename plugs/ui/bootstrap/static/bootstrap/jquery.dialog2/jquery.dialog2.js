@@ -221,7 +221,10 @@
                         click: function(event) {
                             // simulate click on the original button
                             // to not destroy any event handlers
-                            button.click();
+                            if ($.nodeName(button[0], 'a'))
+                                button[0].click();
+                            else
+                                button.click();
 
                             if (button.is(".close-dialog")) {
                                 dialog.close();

@@ -26,7 +26,7 @@ def call(version=None, ui=False, theme='redmond', css_only=False):
         else:
             a.append('jquery/ui/%s/css/%s/jquery-ui-%s.custom.css' % (ui_version, theme, ui_version))
             a.append('jquery/jquery-%s.min.js' % version)
-            a.append('jquery/ui/%s/js/jquery-ui-%s.custom.min.js' % ui_version)
+            a.append('jquery/ui/%s/js/jquery-ui-%s.custom.min.js' % (ui_version, ui_version))
             a.append('jquery/ui/%s/js/jquery.ui.datepicker.zh.js' % ui_version)
         
     if settings.UI_CONFIG.jquery_bootstrap:

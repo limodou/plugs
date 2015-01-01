@@ -95,10 +95,12 @@ class UserView(object):
                 if user_id:
                     user = User.get(User.c.username == form.username.data)
                     user.set_password(form.password.data)
+                    user.save()
                     flash(_('Password saved successfully.'))
                     return redirect('/login?next=/')
                 else:
                     request.user.set_password(form.password.data)
+                    request.user.save()
                     flash(_('Password saved successfully.'))
                     return {'form':form, 'ok':True}
             else:
@@ -225,6 +227,7 @@ class UsersManageView(object):
         
         def post_save(obj, data):
             obj.set_password(settings.USER_ADMIN.DEFAULT_PASSWORD)
+            obj.save()
             
         if request.user.is_superuser:
             view = AddView('user', partial(get_url, 'view'), 
@@ -292,6 +295,7 @@ class UsersManageView(object):
         if request.user.is_superuser:
             user = User.get(int(id))
             user.set_password(settings.PARA.DEFAULT_PASSWORD)
+            user.save()
             flash(_('Password reset successfully.'))
             return redirect(request.referrer)
         else:

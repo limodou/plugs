@@ -6,7 +6,7 @@
 
 {{block content_tool}}
 {{if request.user.is_superuser or request.user.is_manager:}}
-    <a class="btn btn-blue" href="/users/add">{{=_('Click here to add new user.')}}</a>
+    <a class="btn btn-blue" href="{{=url_for('plugs.user_admin.views_admin.UsersManageView.add')}}">{{=_('Click here to add new user.')}}</a>
 {{pass}}
 {{end}}
 

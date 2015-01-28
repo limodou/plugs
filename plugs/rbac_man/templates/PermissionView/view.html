@@ -17,14 +17,14 @@
             <table class="table table-bordered">
                 {{<< view.body}}
             </table>
-            <a class="btn btn-primary" href="/admin/permissions/edit/{{=object.id}}">{{=_('Edit')}}</a>
-            <a class="btn btn-danger" href="/admin/permissions/delete/{{=object.id}}">{{=_('Delete')}}</a>
+            <a class="btn btn-primary" href="{{=url_for('plugs.rbac_man.views.PermissionView.edit',id=object.id)}}">{{=_('Edit')}}</a>
+            <a class="btn btn-danger" href="{{=url_for('plugs.rbac_man.views.PermissionView.delete',id=object.id)}}">{{=_('Delete')}}</a>
         </div>
         <div class="panel-content">
             <h2 class="line">{{=_('Roles')}}</h2>
             <div id="permission-roles">
             {{for r in object.perm_roles.order_by('name'):}}
-                <li class="rounded"><img src="/static/images/cross_grey_small.png" rel="{{=object.id}}_{{=r.id}}"/><span class="role-name" title="{{=r.description}}">{{=r.name}}</span></li>
+                <li class="rounded"><img src="{{=url_for_static('images/cross_grey_small.png')}}" rel="{{=object.id}}_{{=r.id}}"/><span class="role-name" title="{{=r.description}}">{{=r.name}}</span></li>
             {{pass}}
             </div>
             <div class="separate">
@@ -43,7 +43,7 @@
         var role_id = ids[1];
         $.ajax({
             type: 'POST',
-            url: '/admin/permissions/delrole',
+            url: '{{=url_for("plugs.rbac_man.views.PermissionView.delrole")}}',
             data: {perm_id:perm_id, 'role_id':role_id},
             dataType: 'json',
             success: function(r){
@@ -58,7 +58,7 @@
     }
     
     $(function(){
-        simple_select2('#perm-role', {ajax:{url:'/admin/roles/search'}, width:'200px', dataLabel:'title'});
+        simple_select2('#perm-role', {ajax:{url:'{{=url_for("plugs.rbac_man.views.RoleView.search")}}'}, width:'200px', dataLabel:'title'});
 
         $('#permission-roles img').click(del_role);
         $('#role-add').click(function(){
@@ -67,13 +67,13 @@
             }else{
                 $.ajax({
                     type: 'POST',
-                    url: '/admin/permissions/addrole',
+                    url: '{{=url_for("plugs.rbac_man.views.PermissionView.addrole")}}',
                     data: {role_id:$('#perm-role').val(), 'perm_id':{{=object.id}}},
                     dataType: 'json',
                     success: function(r){
                         if(r.success){
                             show_message(r.message);
-                            var e = $(template('<li class="rounded"><img src="/static/images/cross_grey_small.png" rel="{{=object.id}}_${id}"/><span class="role-name">${name}</span></li>', r.data));
+                            var e = $(template('<li class="rounded"><img src="{{=url_for_static('images/cross_grey_small.png')}}" rel="{{=object.id}}_${id}"/><span class="role-name">${name}</span></li>', r.data));
                             e.appendTo($('#permission-roles')).effect('highlight', 5000);
                             e.find('img').click(del_role);
                             $('.rselect').rselect('clear');

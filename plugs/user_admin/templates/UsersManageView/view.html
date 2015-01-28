@@ -20,12 +20,12 @@
             {{<< view}}
             <div style="padding:5px;">
             {{if request.user.is_superuser:}}
-            <a class="btn btn-green" href="/users/edit/{{=object.id}}">{{=_('Edit')}}</a>
+            <a class="btn btn-green" href="{{=url_for('plugs.user_admin.views_admin.UsersManageView.edit',id=object.id)}}">{{=_('Edit')}}</a>
             {{elif object.id==request.user.id:}}
-            <a class="btn btn-green" href="/user/edit">{{=_('Edit')}}</a>
+            <a class="btn btn-green" href="{{=url_for('plugs.user_admin.views_admin.UserView.edit')}}">{{=_('Edit')}}</a>
             {{pass}}
             {{if request.user.is_superuser:}}
-            <a class="btn btn-blue" href="/users/delete/{{=object.id}}" onclick="return confirm('{{=_('Do you really wnat to delete the user?')}}');">{{=_('Delete')}}</a>
+            <a class="btn btn-blue" href="{{=url_for('plugs.user_admin.views_admin.UsersManageView.delete',id=object.id)}}" onclick="return confirm('{{=_('Do you really wnat to delete the user?')}}');">{{=_('Delete')}}</a>
             {{pass}}
             </div>
         </div>

@@ -4,7 +4,7 @@
 {{use "jquery"}}
 
 {{if request.user.is_superuser:}}
-    <a class="btn btn-blue" href="/admin/roles/add">点击这里增加新角色</a>
+    <a class="btn btn-blue" href="{{=url_for('plugs.rbac_man.views.RoleView.add')}}">点击这里增加新角色</a>
 {{pass}}
 
 <div class="content">

@@ -463,7 +463,7 @@ class ForumView(object):
             return username
         
         def userimage(value, obj):
-            get_user_image = function('get_user_image')
+            get_user_image = functions.get_user_image
             try:
                 url = get_user_image(obj.posted_by)
             except NotFound:
@@ -536,7 +536,7 @@ class ForumView(object):
             pagination=False,
             fields_convert_map=fields_convert_map)
         key = '__topicvisited__:forumtopic:%s:%s:%s' % (request.remote_addr, forum_id, topic_id)
-        cache = function('get_cache')()
+        cache = functions.get_cache()
         v = cache.get(key, None)
         if not v:
             Topic.filter(Topic.c.id==int(topic_id)).update(num_views=Topic.c.num_views+1)
@@ -571,21 +571,7 @@ class ForumView(object):
             'has_email':bool(request.user and request.user.email), 
             'page':pageno+1, 'pagination':pagination,
             'posts':posts, 'sub_posts':sub_posts}
-#        if 'data' in request.values:
-#            return json({'post1':view1.json(),'post2':view2.json()})
-#        else:
-##            key = '__topicvisited__:forumtopic:%d:%s:%s' % (request.user.id, forum_id, topic_id)
-#            key = '__topicvisited__:forumtopic:%s:%s:%s' % (request.remote_addr, forum_id, topic_id)
-#            cache = function('get_cache')()
-#            v = cache.get(key, None)
-#            if not v:
-#                Topic.filter(Topic.c.id==int(topic_id)).update(num_views=Topic.c.num_views+1)
-#                cache.set(key, 1, settings.get_var('PARA/FORUM_USER_VISITED_TIMEOUT'))
-#
-#            slug = uuid.uuid1().hex
-#            topic = Topic.get(int(topic_id))
-#            return {'forum':forum, 'topic':topic, 'slug':slug, 'has_email':bool(request.user and request.user.email), 'page':pageno+1}
-    
+
     def get_post_content(self, post_id):
         """
         获得某个post的内容，用于动态删除和恢复中
@@ -622,7 +608,6 @@ class ForumView(object):
             data['floor'] = (do_(select([func.max(Post.c.floor)], Post.c.topic==int(topic_id))).scalar() or 0) + 1
             
         def post_save(obj, data):
-            from uliweb import functions
             from uliweb.utils.common import Serial
             from uliweb.mail import Mail
             
@@ -718,7 +703,6 @@ class ForumView(object):
             data['floor'] = (do_(select([func.max(Post.c.floor)], Post.c.parent==post.id)).scalar() or 0) + 1
             
         def post_save(obj, data):
-            from uliweb import functions
             from uliweb.utils.common import Serial
             from uliweb.mail import Mail
             

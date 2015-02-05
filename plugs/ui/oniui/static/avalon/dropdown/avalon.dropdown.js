@@ -322,6 +322,10 @@ define(["avalon",
             };
             vm._keydown = function(event) {
 
+                if(vmodel.keyboardEvent === false) {
+                    return;
+                }
+
                 //如果是单选下拉框，可以通过键盘移动
                 if (!vmodel.multiple) {
                     var index = vmodel.activeIndex || 0,
@@ -718,7 +722,7 @@ define(["avalon",
         textFiled: "text", //@config 模型数据项中对应显示text的字段,可以传function，根据数据源对text值进行格式化
         valueField: "value", //@config 模型数据项中对应value的字段
         value: [], //@config 设置组件的初始值
-        label: null, //@config 设置组件的提示文案，可以是一个字符串，也可以是一个对象
+        label: "", //@config 设置组件的提示文案，可以是一个字符串，也可以是一个对象
         multiple: false, //@config 是否为多选模式
         listClass: "",   //@config 列表添加自定义className来控制样式
         title: "",
@@ -734,7 +738,8 @@ define(["avalon",
         onHide: null,    //@config 下拉框隐藏的回调函数
         onChange: null,  //@config value改变时的回调函数
         $hasDuplex: false, 
-        multipleChange: false, 
+        multipleChange: false,
+        keyboardEvent: true,  //@config 是否支持键盘事件
         /**
          * @config 模板函数,方便用户自定义模板
          * @param str {String} 默认模板

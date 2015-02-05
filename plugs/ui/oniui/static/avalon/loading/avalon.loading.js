@@ -6,7 +6,7 @@
 </p>
  */
 define(["avalon", "text!./avalon.loading.html", "text!./avalon.loading.bar.html", "css!./avalon.loading.css", "css!../chameleon/oniui-common.css"], function(avalon, template, ballTemplate) {
-    var widgetCount = 0, 
+    var widgetCount = 0,
         isIE = navigator.userAgent.match(/msie/ig) || ("ActiveXObject" in window),
         _key = (99999 - Math.random() * 10000) >> 0,
         templateCache = {},
@@ -34,7 +34,7 @@ define(["avalon", "text!./avalon.loading.html", "text!./avalon.loading.bar.html"
             type = type
             item = item.split("{{MS_WIDGET_DIVIDER}}")
             templateCache[type] = {
-                "svg": item[1],
+                "svg": item[1] || item[0],
                 "vml": item[0]
             }
         }
@@ -80,14 +80,14 @@ define(["avalon", "text!./avalon.loading.html", "text!./avalon.loading.bar.html"
                 "y": (radiusInner - radiusOut) * (Math.sin(angel) - 1),
                 "r": radiusInner,
                 "begin": [interval * loop / 1000, "s"].join("")
-            }) 
+            })
             vmodel.opacities.push((loop / count).toFixed(2))
         }
     }, function(vmodel, ele, tagList, callback) {
         // only for ie
         if(!isIE && (vmodel.type !== "ticks") && vmodel.type != "spinning-spin") return
         var tagList = Array.isArray(tagList) ? tagList : ["circle", "oval"]
-            , tag = vmodel.svgSupport ? tagList[0] : tagList[1] 
+            , tag = vmodel.svgSupport ? tagList[0] : tagList[1]
             , ele = ele.getElementsByTagName(tag)
             , len = ele.length, index = len, eles = [], flag
         avalon.each(ele, function(i, item) {
@@ -112,7 +112,7 @@ define(["avalon", "text!./avalon.loading.html", "text!./avalon.loading.bar.html"
                     index = -1
                 }
             }
-        } 
+        }
         // share for type=ball and type=spokes
         return function() {
             // 顺时针
@@ -223,7 +223,7 @@ define(["avalon", "text!./avalon.loading.html", "text!./avalon.loading.bar.html"
             vmodel.svgDur = interval * count / 1000 + "s"
             var step = 360 / count
             return function(loop) {
-                vmodel.data.push({     
+                vmodel.data.push({
                     "begin": [interval * loop / 1000, "s"].join(""),
                     "rotate": ["rotate(", loop * step, " ", [w / 2, w / 2].join(" ") + ")"].join("")
                 })
@@ -327,6 +327,13 @@ define(["avalon", "text!./avalon.loading.html", "text!./avalon.loading.bar.html"
     }, function(vmodel, ele) {
         return _config["ball"].effect(vmodel, ele, ["path", "arc"])
     })
+    // 注册自定义图片
+    addType("img", {
+        src: "./images/loading_camel.gif",//@config type=img，loading效果的gif图片
+        width: 52,//@config type=img，loading效果宽度
+        height: 39,//@config type=img，loading效果高度
+        miao: 0
+    }, void 0, void 0)
     var svgSupport = !!document.createElementNS && !!document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect
     var widget = avalon.ui.loading = function(element, data, vmodels) {
 
@@ -368,20 +375,18 @@ define(["avalon", "text!./avalon.loading.html", "text!./avalon.loading.bar.html"
                 vmodel.width = vmodel.width == false ? vmodel.height : vmodel.width
                 vmodel.height = vmodel.height == false ? vmodel.width : vmodel.height
                 // 计算绘图数据
-                var loop = 0, drawer = vmodel.drawer(vmodel)
-                while(loop < vmodel.count && drawer) {
-                    drawer(loop)
-                    loop++
+                if(vmodel.drawer) {
+                    var loop = 0, drawer = vmodel.drawer(vmodel)
+                    while(loop < vmodel.count && drawer) {
+                        drawer(loop)
+                        loop++
+                    }
                 }
                 elementParent.appendChild(avalon.parseHTML(vmodel.template.replace("{{MS_WIDGET_HTML}}", html).replace("{{MS_WIDGET_ID}}", vmodel.$loadingID)))
-                if (continueScan) {
-                    continueScan()
-                } else {
-                    avalon.log("avalon请尽快升到1.3.7+")
-                    avalon.scan(element, [vmodel].concat(vmodels))
-                    if (typeof options.onInit === "function") {
-                        options.onInit.call(element, vmodel, options, vmodels)
-                    }
+                avalon.log("avalon请尽快升到1.3.7+")
+                avalon.scan(elementParent, [vmodel].concat(vmodels))
+                if (typeof options.onInit === "function") {
+                    options.onInit.call(element, vmodel, options, vmodels)
                 }
                 vmodel._effect()
             }
@@ -439,7 +444,7 @@ define(["avalon", "text!./avalon.loading.html", "text!./avalon.loading.bar.html"
                 vmodel._effect()
             }
         })
-      
+
         widgetCount++
 
         return vmodel

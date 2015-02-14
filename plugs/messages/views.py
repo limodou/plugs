@@ -12,7 +12,7 @@ def _del_key(user_id):
     cache = functions.get_cache()
     cache.delete(_get_key(user_id))
 
-@expose('/messages')
+@expose('/admin/messages')
 class MessageView(object):
     
     def __init__(self):

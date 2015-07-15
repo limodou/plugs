@@ -7,7 +7,7 @@ def call(version=None):
         a.append('select2/%s/select2.css' % version)
         a.append('select2/%s/select2.js' % version)
     elif version[0] == '4':
-        a.append('select2/%s/css/select2.css' % version)
-        a.append('select2/%s/js/select2.js' % version)
+        a.append('select2/%s/css/select2.min.css' % version)
+        a.append('select2/%s/js/select2.full.min.js' % version)
 
     return {'toplinks':a, 'depends':['jquery']}

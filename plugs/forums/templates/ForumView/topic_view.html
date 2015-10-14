@@ -1,6 +1,6 @@
 {{extend "forums_layout.html"}}
 
-{{block title}}{{super}} - {{=forum.name}} - {{=topic.subject}}{{end}}
+{{block title}}{{=forum.name}} - {{=topic.subject}}{{end}}
 
 {{block forum_nav}}
     <ul class="breadcrumb">
@@ -36,7 +36,7 @@
                     </div>
                     <div class="body">
                         <div class="header">
-                            由 <span class="user">{{<< post.posted_by}}</span> 回复于 
+                            {{=_('By')}} <span class="user">{{<< post.posted_by}}</span> {{=_('replied at')}}
                             <span class="date">{{= post.created_on}}</span>
                         </div>
                         <div class="post_content" data-content="{{=post.id}}">

@@ -4,7 +4,7 @@
 {{menu('forums')}}
 {{end}}
 
-{{block title}}{{super}} - 论坛{{end}}
+{{block title}}{{=_('Forum')}}{{end}}
 
 {{block content}}
 {{use "jquery"}}
@@ -14,7 +14,7 @@
     {{block forum_nav}}
     {{##<ul class="breadcrumb">
       <li>
-        <a href="{{=url_for('plugs.forums.views.ForumView.list')}}" class="home" title="首页">论坛首页</a>
+        <a href="{{=url_for('plugs.forums.views.ForumView.list')}}" class="home" title="Home">Forum</a>
       </li>
     </ul>
     ##}}

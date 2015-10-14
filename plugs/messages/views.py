@@ -1,6 +1,7 @@
 #coding=utf-8
 from uliweb import expose, functions, settings
 from uliweb.orm import get_model
+from uliweb.i18n import ugettext_lazy as _
 
 def __begin__():
     return functions.require_login()
@@ -96,7 +97,7 @@ class MessageView(object):
             obj.delete()
             return json({'success':True})
         else:
-            return json({'success':False, 'error':'你无权处理或记录没找到'})
+            return json({'success':False, 'error':_('你无权处理或记录没找到')})
 
     def read_all(self):
         self.model.filter((self.model.c.read_flag==False) & (self.model.c.user==request.user.id) & (self.model.c.send_flag=='r')).update(read_flag=True)
@@ -115,9 +116,9 @@ class MessageView(object):
         if send_flag == 'r':
             return redirect(url_for(MessageView.list))
         else:
-            return redirect(url_for(MessageView.sended_list))
+            return redirect(url_for(MessageView.sent))
         
-    def send(self):
+    def compose(self):
         from forms import SendMessageForm
         from uliweb.core.html import Tag
         from sqlalchemy.sql import select,func
@@ -138,7 +139,7 @@ class MessageView(object):
                     
                     functions.send_message(request.user, user, text2html(form.message.data))
                 flash(_('Send message successful!'))
-                return redirect(url_for(MessageView.sended_list))
+                return redirect(url_for(MessageView.sent))
             else:
                 #process select values
                 choices = []
@@ -192,7 +193,7 @@ class MessageView(object):
         view = DetailView(self.model, obj=obj, fields=fields, layout=layout)
         return view.run()
    
-    def sended_list(self):
+    def sent(self):
         from uliweb import request
         from uliweb.utils.generic import ListView
         from uliweb.utils.common import get_choice

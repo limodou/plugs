@@ -272,7 +272,7 @@
         , limitLabel: '每页{0}条'
         , totalCountLabel: '共<span>{0}</span>条记录'
         , limit: undefined
-        , limitList: [20, 30, 40, 50]
+        , limitList: [10, 20, 30, 40, 50]
         , infinite: false  //无限分页，要与mmPaginator配合
     };
 

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-10-11 13:57\n"
+"POT-Creation-Date: 2015-09-20 18:30\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,413 +16,715 @@ msgstr ""
 "Generated-By: pygettext.py 1.6\n"
 
 
-#: plugs\admin\settings.ini:2
-msgid "Admin objects manage"
-msgstr ""
-
-#: plugs\admin\settings.ini:3
-msgid "Admin objects list"
-msgstr ""
-
-#: plugs\admin\settings.ini:4
-msgid "Admin object add"
-msgstr ""
-
-#: plugs\admin\settings.ini:5
-msgid "Admin object edit"
-msgstr ""
-
-#: plugs\admin\settings.ini:6
-msgid "Admin object view"
-msgstr ""
-
-#: plugs\admin\settings.ini:7
-msgid "Admin object delete"
-msgstr ""
-
-#: plugs\audit\models.py:9
+#: plugs/audit/models.py:11
 msgid "OperationTable"
 msgstr ""
 
-#: plugs\audit\models.py:10
+#: plugs/audit/models.py:12
 msgid "Title"
 msgstr ""
 
-#: plugs\audit\models.py:12
+#: plugs/audit/models.py:14
 msgid "ModifiedContent"
 msgstr ""
 
-#: plugs\audit\models.py:13
+#: plugs/audit/models.py:15
 msgid "OriginalContent"
 msgstr ""
 
-#: plugs\audit\models.py:14
-msgid "ModifiedFlag"
-msgstr ""
-
-#: plugs\audit\models.py:15
-msgid "ModifiedDate"
-msgstr ""
-
-#: plugs\audit\models.py:16
-msgid "ModifiedUser"
-msgstr ""
-
-#: plugs\audit\settings.ini:12
+#: plugs/audit/settings.ini:12
 msgid "Change"
 msgstr ""
 
-#: plugs\audit\settings.ini:12 plugs\generic\templates\generic_view.html:18
-#: plugs\user_admin\templates\UsersManageView\view.html:45
+#: plugs/audit/settings.ini:12 plugs/generic/templates/generic_view.html:78
+#: plugs/rbac_man/templates/PermissionView/view.html:80
+#: plugs/rbac_man/templates/RoleView/view.html:80
+#: plugs/user_admin/templates/UsersManageView/view.html:145
+#: plugs/wiki/settings.ini:19
 msgid "Delete"
 msgstr ""
 
-#: plugs\audit\settings.ini:12 plugs\generic\views.py:96
-#: plugs\generic\views.py:199
-#: plugs\rbac_man\templates\PermissionView\view.html:28
-#: plugs\rbac_man\templates\RoleView\view.html:40
-#: plugs\rbac_man\templates\RoleView\view.html:56
+#: plugs/audit/settings.ini:12 plugs/generic/views.py:102
+#: plugs/generic/views.py:206
+#: plugs/rbac_man/templates/PermissionView/view.html:140
+#: plugs/rbac_man/templates/RoleView/view.html:258
 msgid "Add"
 msgstr ""
 
-#: plugs\forums\views.py:692
-msgid "RE"
-msgstr ""
-
-#: plugs\generic\templates\generic_view.html:12 plugs\generic\views.py:127
-#: plugs\generic\views.py:201 plugs\user_admin\templates\UserView\view.html:29
-#: plugs\user_admin\templates\UsersManageView\view.html:31
-#: plugs\user_admin\templates\UsersManageView\view.html:35
-msgid "Edit"
-msgstr ""
-
-#: plugs\generic\templates\generic_view.html:16
-msgid "Do you want to delete this record?"
-msgstr ""
-
-#: plugs\generic\views.py:70 plugs\generic\views.py:188
-msgid "New"
-msgstr ""
-
-#: plugs\generic\views.py:159 plugs\generic\views.py:203
-msgid "View"
-msgstr ""
-
-#: plugs\layout\bootstrap\templates\layout.html:22
-#: plugs\layout\bootstrap\templates\layout_container.html:22
-#: plugs\layout\default\templates\layout.html:18
-#: plugs\layout\templates\layout.html:22
-msgid "Account Setting"
-msgstr ""
-
-#: plugs\layout\bootstrap\templates\layout.html:24
-#: plugs\layout\bootstrap\templates\layout_container.html:24
-#: plugs\layout\default\templates\layout.html:20
-#: plugs\layout\templates\layout.html:24
-msgid "Logout"
-msgstr ""
-
-#: plugs\layout\bootstrap\templates\layout.html:28
-#: plugs\layout\bootstrap\templates\layout_container.html:28
-msgid "Not signed in yet"
-msgstr ""
-
-#: plugs\layout\bootstrap\templates\layout.html:30
-#: plugs\layout\bootstrap\templates\layout_container.html:30
-#: plugs\layout\bootstrap\templates\login.html:5
-#: plugs\layout\default\templates\layout.html:26
-#: plugs\layout\templates\layout.html:30
-msgid "Login"
-msgstr ""
-
-#: plugs\layout\bootstrap\templates\layout.html:32
-#: plugs\layout\bootstrap\templates\layout_container.html:32
-#: plugs\layout\bootstrap\templates\register.html:5
-#: plugs\layout\default\templates\layout.html:28
-#: plugs\layout\templates\layout.html:32
-msgid "Register"
-msgstr ""
-
-#: plugs\layout\bootstrap\templates\login.bak.html:5
-msgid "Sign in"
-msgstr ""
-
-#: plugs\layout\default\settings.ini:2 plugs\layout\settings.ini:2
+#: plugs/develop/settings.ini:2 plugs/layout/default/settings.ini:2
+#: plugs/layout/settings.ini:2
 msgid "All rights reversed!"
 msgstr ""
 
-#: plugs\layout\default\settings.ini:3 plugs\layout\settings.ini:3
+#: plugs/develop/settings.ini:3
+msgid "Uliweb Development DashBoard"
+msgstr ""
+
+#: plugs/forums/settings.ini:21
+#: plugs/forums/templates/ForumView/forum_index.html:183
+msgid "All Subjects"
+msgstr ""
+
+#: plugs/forums/settings.ini:21
+#: plugs/forums/templates/ForumView/forum_index.html:191
+msgid "Essence"
+msgstr ""
+
+#: plugs/forums/settings.ini:21
+#: plugs/forums/templates/ForumView/forum_index.html:199
+msgid "Top Subjects"
+msgstr ""
+
+#: plugs/forums/settings.ini:25
+msgid "Someone reply your post in forum."
+msgstr ""
+
+#: plugs/forums/settings.ini:26
+msgid "Click here <a href=\"%(url)s\">%(url)s</a> to view the post."
+msgstr ""
+
+#: plugs/forums/settings.ini:34 plugs/forums/templates/forums_layout.html:32
+msgid "Forum"
+msgstr ""
+
+#: plugs/forums/templates/ForumView/forum_index.html:45
+#: plugs/forums/templates/ForumView/forum_index.html:53
+msgid "Forum Home"
+msgstr ""
+
+#: plugs/forums/templates/ForumView/forum_index.html:89
+msgid "Subject"
+msgstr ""
+
+#: plugs/forums/templates/ForumView/forum_index.html:101
+#: plugs/forums/templates/ForumView/forum_index.html:207
+msgid "Author"
+msgstr ""
+
+#: plugs/forums/templates/ForumView/forum_index.html:109
+msgid "Search"
+msgstr ""
+
+#: plugs/forums/templates/ForumView/forum_index.html:129
+msgid "New Post"
+msgstr ""
+
+#: plugs/forums/templates/ForumView/forum_index.html:139
+msgid "This forum has beed set as only forum manager can publish post!"
+msgstr ""
+
+#: plugs/forums/templates/ForumView/forum_index.html:151
+msgid "Please sign in to post new subject!"
+msgstr ""
+
+#: plugs/forums/templates/ForumView/forum_index.html:167
+msgid "Filter:"
+msgstr ""
+
+#: plugs/forums/templates/ForumView/forum_index.html:215
+msgid "Subject/View"
+msgstr ""
+
+#: plugs/forums/templates/ForumView/forum_index.html:223
+msgid "Lastest Post"
+msgstr ""
+
+#: plugs/forums/templates/ForumView/new_reply.html:85
+msgid "New Reply"
+msgstr ""
+
+#: plugs/forums/templates/ForumView/new_topic.html:61
+msgid "New Subject"
+msgstr ""
+
+#: plugs/forums/templates/ForumView/topic_view.html:151
+msgid "By"
+msgstr ""
+
+#: plugs/forums/templates/ForumView/topic_view.html:167
+msgid "replied at"
+msgstr ""
+
+#: plugs/forums/views.py:759
+msgid "RE"
+msgstr ""
+
+#: plugs/generic/templates/generic_view.html:54 plugs/generic/views.py:133
+#: plugs/generic/views.py:208
+#: plugs/rbac_man/templates/PermissionView/view.html:64
+#: plugs/user_admin/templates/UserView/view.html:91
+#: plugs/user_admin/templates/UsersManageView/view.html:99
+#: plugs/user_admin/templates/UsersManageView/view.html:117
+msgid "Edit"
+msgstr ""
+
+#: plugs/generic/templates/generic_view.html:70
+msgid "Do you want to delete this record?"
+msgstr ""
+
+#: plugs/generic/views.py:75 plugs/generic/views.py:195
+msgid "New"
+msgstr ""
+
+#: plugs/generic/views.py:165 plugs/generic/views.py:210
+#: plugs/wiki/templates/WikiView/wiki_revision.html:132
+msgid "View"
+msgstr ""
+
+#: plugs/generic_attachments/models.py:9
+#: plugs/generic_attachments/models.py:12
+msgid "Filepath"
+msgstr ""
+
+#: plugs/generic_attachments/models.py:10
+msgid "Filename"
+msgstr ""
+
+#: plugs/generic_attachments/models.py:11
+msgid "Is Image"
+msgstr ""
+
+#: plugs/generic_attachments/models.py:14
+msgid "Related Object"
+msgstr ""
+
+#: plugs/generic_attachments/models.py:15
+msgid "Submitter"
+msgstr ""
+
+#: plugs/generic_attachments/models.py:16
+msgid "Created Date"
+msgstr ""
+
+#: plugs/generic_attachments/models.py:17
+msgid "Enabled Flag"
+msgstr ""
+
+#: plugs/generic_attachments/models.py:18
+msgid "Deleted Flag"
+msgstr ""
+
+#: plugs/generic_attachments/models.py:19
+msgid "Slug"
+msgstr ""
+
+#: plugs/generic_attachments/templates/inc_generic_attachments_upload.html:40
+#: plugs/wiki/templates/inc_generic_attachments_upload.html:50
+msgid "Uploaded Files"
+msgstr ""
+
+#: plugs/generic_attachments/templates/inc_generic_attachments_upload.html:86
+#: plugs/wiki/templates/inc_generic_attachments_upload.html:135
+msgid "Delete File"
+msgstr ""
+
+#: plugs/generic_attachments/templates/inc_generic_attachments_upload.html:104
+#: plugs/wiki/templates/inc_generic_attachments_upload.html:172
+msgid "You can select multiple files at the same time"
+msgstr ""
+
+#: plugs/generic_attachments/views.py:102
+msgid "Can't find the file record of {0}"
+msgstr ""
+
+#: plugs/layout/bootstrap/templates/layout.html:76
+#: plugs/layout/bootstrap/templates/layout_container.html:75
+#: plugs/layout/default/templates/layout.html:62
+#: plugs/layout/templates/layout.html:66
+msgid "Account Setting"
+msgstr ""
+
+#: plugs/layout/bootstrap/templates/layout.html:84
+#: plugs/layout/bootstrap/templates/layout_container.html:83
+#: plugs/layout/default/templates/layout.html:70
+#: plugs/layout/templates/layout.html:74
+msgid "Logout"
+msgstr ""
+
+#: plugs/layout/bootstrap/templates/layout.html:94
+#: plugs/layout/bootstrap/templates/layout_container.html:93
+msgid "Not signed in yet"
+msgstr ""
+
+#: plugs/layout/bootstrap/templates/layout.html:110
+#: plugs/layout/bootstrap/templates/layout_container.html:101
+#: plugs/layout/bootstrap/templates/login.html:18
+#: plugs/layout/default/templates/layout.html:88
+#: plugs/layout/templates/layout.html:92
+msgid "Login"
+msgstr ""
+
+#: plugs/layout/bootstrap/templates/layout.html:118
+#: plugs/layout/bootstrap/templates/layout_container.html:109
+#: plugs/layout/bootstrap/templates/register.html:17
+#: plugs/layout/default/templates/layout.html:96
+#: plugs/layout/templates/layout.html:100
+msgid "Register"
+msgstr ""
+
+#: plugs/layout/bootstrap/templates/login.bak.html:17
+msgid "Sign in"
+msgstr ""
+
+#: plugs/layout/default/settings.ini:3 plugs/layout/settings.ini:3
 msgid "Uliweb Plugs Demo"
 msgstr ""
 
-#: plugs\layout\default\settings.ini:5 plugs\layout\settings.ini:6
+#: plugs/layout/default/settings.ini:5 plugs/layout/settings.ini:6
+#: plugs/wiki/settings.ini:10
 msgid "Home"
 msgstr ""
 
-#: plugs\layout\default\settings.ini:6
+#: plugs/layout/default/settings.ini:6 plugs/wiki/settings.ini:21
 msgid "Admin"
 msgstr ""
 
-#: plugs\layout\default\settings.ini:7 plugs\layout\settings.ini:7
+#: plugs/layout/default/settings.ini:7 plugs/layout/settings.ini:7
 msgid "About"
 msgstr ""
 
-#: plugs\layout\default\templates\layout.html:24
-#: plugs\layout\templates\layout.html:28
+#: plugs/layout/default/templates/error.html:15
+#: plugs/layout/templates/error.html:15
+msgid "Error"
+msgstr ""
+
+#: plugs/layout/default/templates/error.html:31
+#: plugs/layout/templates/error.html:31
+msgid "Click here to return HomePage"
+msgstr ""
+
+#: plugs/layout/default/templates/layout.html:80
+#: plugs/layout/templates/layout.html:84
 msgid "You've not loginned yet!"
 msgstr ""
 
-#: plugs\messages\forms.py:7
+#: plugs/messages/forms.py:7
 msgid "Send"
 msgstr ""
 
-#: plugs\messages\forms.py:8
+#: plugs/messages/forms.py:8
 msgid "Receiver"
 msgstr ""
 
-#: plugs\messages\forms.py:9
+#: plugs/messages/forms.py:9 plugs/messages/models.py:8
+#: plugs/messages/settings.ini:19
 msgid "Message"
 msgstr ""
 
-#: plugs\rbac_man\templates\PermissionView\edit.html:6
-msgid "Permission Modify"
+#: plugs/messages/models.py:10
+msgid "Message Type"
 msgstr ""
 
-#: plugs\rbac_man\templates\PermissionView\view.html:6
-msgid "Permission"
+#: plugs/messages/models.py:11
+msgid "Content"
 msgstr ""
 
-#: plugs\rbac_man\templates\RoleView\add.html:4
-msgid "Add New Role"
+#: plugs/messages/models.py:12
+msgid "User"
 msgstr ""
 
-#: plugs\rbac_man\templates\RoleView\edit.html:6
-msgid "Role Modify"
+#: plugs/messages/models.py:13
+msgid "Read Flag"
 msgstr ""
 
-#: plugs\rbac_man\templates\RoleView\view.html:8
-msgid "Role"
+#: plugs/messages/models.py:14
+msgid "Create Time"
 msgstr ""
 
-#: plugs\rbac_man\templates\RoleView\view.html:22
-msgid "Users List"
+#: plugs/messages/models.py:15
+msgid "Sender"
 msgstr ""
 
-#: plugs\rbac_man\templates\RoleView\view.html:42
+#: plugs/messages/models.py:16
+msgid "Send Flag"
+msgstr ""
+
+#: plugs/messages/settings.ini:9
+msgid "Notify Message"
+msgstr ""
+
+#: plugs/messages/settings.ini:9
+msgid "System Message"
+msgstr ""
+
+#: plugs/messages/settings.ini:9
+msgid "User Message"
+msgstr ""
+
+#: plugs/messages/settings.ini:22
+msgid "Compose"
+msgstr ""
+
+#: plugs/messages/settings.ini:23
+msgid "Received Message"
+msgstr ""
+
+#: plugs/messages/settings.ini:24
+msgid "Sent Message"
+msgstr ""
+
+#: plugs/messages/templates/MessageView/compose.html:42
+msgid "Send Message"
+msgstr ""
+
+#: plugs/messages/templates/MessageView/list.html:134
+msgid "你确定要删除所有接收消息吗?"
+msgstr ""
+
+#: plugs/messages/templates/MessageView/sent.html:45
+msgid "Are you sure to delete all sent messages?"
+msgstr ""
+
+#: plugs/messages/templates/MessageView/sent.html:53
+msgid "Delete All"
+msgstr ""
+
+#: plugs/messages/templates/MessageView/sent.html:71
+msgid "Delete Message"
+msgstr ""
+
+#: plugs/messages/templates/MessageView/sent.html:79
+msgid "At {} sent to {}"
+msgstr ""
+
+#: plugs/messages/templates/MessageView/sent.html:113
+msgid "Are you sure to delete current message?"
+msgstr ""
+
+#: plugs/messages/views.py:100
+msgid "你无权处理或记录没找到"
+msgstr ""
+
+#: plugs/messages/views.py:141
+msgid "Send message successful!"
+msgstr ""
+
+#: plugs/messages/views.py:155
+msgid "There are something wrong, please fix them"
+msgstr ""
+
+#: plugs/rbac_man/settings.ini:2
+#: plugs/rbac_man/templates/RoleView/view.html:206
 msgid "Permissions"
 msgstr ""
 
-#: plugs\rbac_man\views.py:30 plugs\rbac_man\views.py:53
-#: plugs\rbac_man\views.py:75 plugs\rbac_man\views.py:93
-#: plugs\rbac_man\views.py:247 plugs\rbac_man\views.py:269
-#: plugs\rbac_man\views.py:290 plugs\rbac_man\views.py:317
+#: plugs/rbac_man/settings.ini:3
+#: plugs/rbac_man/templates/PermissionView/view.html:88
+msgid "Roles"
+msgstr ""
+
+#: plugs/rbac_man/templates/PermissionView/edit.html:31
+msgid "Permission Modify"
+msgstr ""
+
+#: plugs/rbac_man/templates/PermissionView/view.html:32
+msgid "Permission"
+msgstr ""
+
+#: plugs/rbac_man/templates/RoleView/add.html:16
+msgid "Add New Role"
+msgstr ""
+
+#: plugs/rbac_man/templates/RoleView/edit.html:31
+msgid "Role Modify"
+msgstr ""
+
+#: plugs/rbac_man/templates/RoleView/view.html:38
+msgid "Role"
+msgstr ""
+
+#: plugs/rbac_man/templates/RoleView/view.html:90
+msgid "Users List"
+msgstr ""
+
+#: plugs/rbac_man/templates/RoleView/view.html:146
+msgid "Add User"
+msgstr ""
+
+#: plugs/rbac_man/templates/RoleView/view.html:154
+msgid "Groups List"
+msgstr ""
+
+#: plugs/rbac_man/templates/RoleView/view.html:198
+msgid "Add Usergroup"
+msgstr ""
+
+#: plugs/rbac_man/views.py:30 plugs/rbac_man/views.py:53
+#: plugs/rbac_man/views.py:75 plugs/rbac_man/views.py:93
+#: plugs/rbac_man/views.py:285 plugs/rbac_man/views.py:307
+#: plugs/rbac_man/views.py:328 plugs/rbac_man/views.py:355
 msgid "Name"
 msgstr ""
 
-#: plugs\rbac_man\views.py:31 plugs\rbac_man\views.py:54
-#: plugs\rbac_man\views.py:76 plugs\rbac_man\views.py:94
-#: plugs\rbac_man\views.py:248 plugs\rbac_man\views.py:270
-#: plugs\rbac_man\views.py:291 plugs\rbac_man\views.py:318
+#: plugs/rbac_man/views.py:31 plugs/rbac_man/views.py:54
+#: plugs/rbac_man/views.py:76 plugs/rbac_man/views.py:94
+#: plugs/rbac_man/views.py:286 plugs/rbac_man/views.py:308
+#: plugs/rbac_man/views.py:329 plugs/rbac_man/views.py:356
 msgid "Description"
 msgstr ""
 
-#: plugs\rbac_man\views.py:32 plugs\rbac_man\views.py:55
-#: plugs\rbac_man\views.py:95
+#: plugs/rbac_man/views.py:32 plugs/rbac_man/views.py:55
+#: plugs/rbac_man/views.py:95
 msgid "Is Reserved"
 msgstr ""
 
-#: plugs\ui\bootstrap\settings.ini:5
-msgid "Total $pages pages / $total records"
+#: plugs/ui/bootstrap/settings.ini:5
+msgid "Total $[pages] pages / $[total] records"
 msgstr ""
 
-#: plugs\ui\bootstrap\settings.ini:6
-#: plugs\ui\bootstrap\templates\inc_paginate.html:4
-#: plugs\ui\jquery\smartpaginator\templates\inc_paginate.html:4
+#: plugs/ui/bootstrap/settings.ini:6
+#: plugs/ui/bootstrap/templates/inc_paginate.html:29
 msgid "Next"
 msgstr ""
 
-#: plugs\ui\bootstrap\settings.ini:7
-#: plugs\ui\bootstrap\templates\inc_paginate.html:6
-#: plugs\ui\jquery\smartpaginator\templates\inc_paginate.html:6
+#: plugs/ui/bootstrap/settings.ini:7
+#: plugs/ui/bootstrap/templates/inc_paginate.html:37
 msgid "Prev"
 msgstr ""
 
-#: plugs\ui\bootstrap\settings.ini:8
-#: plugs\ui\bootstrap\templates\inc_paginate.html:8
-#: plugs\ui\jquery\smartpaginator\templates\inc_paginate.html:8
+#: plugs/ui/bootstrap/settings.ini:8
+#: plugs/ui/bootstrap/templates/inc_paginate.html:45
 msgid "First"
 msgstr ""
 
-#: plugs\ui\bootstrap\settings.ini:9
-#: plugs\ui\bootstrap\templates\inc_paginate.html:10
-#: plugs\ui\jquery\smartpaginator\templates\inc_paginate.html:10
+#: plugs/ui/bootstrap/settings.ini:9
+#: plugs/ui/bootstrap/templates/inc_paginate.html:53
 msgid "Last"
 msgstr ""
 
-#: plugs\ui\bootstrap\templates\inc_paginate.html:12
+#: plugs/ui/bootstrap/templates/inc_paginate.html:61
 msgid "Total $pages pages / $records records"
 msgstr ""
 
-#: plugs\ui\jquery\smartpaginator\templates\inc_paginate.html:12
-msgid "Go"
-msgstr ""
-
-#: plugs\user_admin\forms.py:6 plugs\user_admin\forms.py:14
-#: plugs\user_admin\forms.py:33
+#: plugs/user_admin/forms.py:6 plugs/user_admin/forms.py:14
+#: plugs/user_admin/forms.py:33 plugs/wiki/forms.py:7
 msgid "Save"
 msgstr ""
 
-#: plugs\user_admin\forms.py:7
+#: plugs/user_admin/forms.py:7
 msgid "Change Basic Information"
 msgstr ""
 
-#: plugs\user_admin\forms.py:9
+#: plugs/user_admin/forms.py:9
 msgid "Email:"
 msgstr ""
 
-#: plugs\user_admin\forms.py:10
+#: plugs/user_admin/forms.py:10
 msgid "Portrait:"
 msgstr ""
 
-#: plugs\user_admin\forms.py:16 plugs\user_admin\forms.py:36
+#: plugs/user_admin/forms.py:16 plugs/user_admin/forms.py:36
 msgid "Old Password:"
 msgstr ""
 
-#: plugs\user_admin\forms.py:17 plugs\user_admin\forms.py:37
+#: plugs/user_admin/forms.py:17 plugs/user_admin/forms.py:37
 msgid "Password:"
 msgstr ""
 
-#: plugs\user_admin\forms.py:18 plugs\user_admin\forms.py:38
+#: plugs/user_admin/forms.py:18 plugs/user_admin/forms.py:38
 msgid "Password again:"
 msgstr ""
 
-#: plugs\user_admin\forms.py:25 plugs\user_admin\forms.py:50
+#: plugs/user_admin/forms.py:25 plugs/user_admin/forms.py:50
 msgid "Password is not right."
 msgstr ""
 
-#: plugs\user_admin\forms.py:28 plugs\user_admin\forms.py:53
+#: plugs/user_admin/forms.py:28 plugs/user_admin/forms.py:53
 msgid "Passwords are not the same between two types."
 msgstr ""
 
-#: plugs\user_admin\forms.py:35
+#: plugs/user_admin/forms.py:35
 msgid "Username:"
 msgstr ""
 
-#: plugs\user_admin\forms.py:47
+#: plugs/user_admin/forms.py:47
 msgid "Username is not existed."
 msgstr ""
 
-#: plugs\user_admin\forms.py:65 plugs\user_admin\forms.py:80
+#: plugs/user_admin/forms.py:65 plugs/user_admin/forms.py:80
 msgid "Username can't include illegal characters, such as '<>&' and blank."
 msgstr ""
 
-#: plugs\user_admin\forms.py:68 plugs\user_admin\forms.py:83
+#: plugs/user_admin/forms.py:68 plugs/user_admin/forms.py:83
 msgid "Username can only include letter, number and '._/'."
 msgstr ""
 
-#: plugs\user_admin\forms.py:73
+#: plugs/user_admin/forms.py:73
 msgid "The username is already existed!"
 msgstr ""
 
-#: plugs\user_admin\forms.py:88
+#: plugs/user_admin/forms.py:88
 msgid "Username is already existed."
 msgstr ""
 
-#: plugs\user_admin\templates\UserView\change_password.html:10
-#: plugs\user_admin\templates\user_admin_layout.html:20
-msgid "Change Password"
-msgstr ""
-
-#: plugs\user_admin\templates\UserView\edit.html:10
-msgid "User Information Edit"
-msgstr ""
-
-#: plugs\user_admin\templates\UserView\edit_image.html:22
-msgid "Save Portrait"
-msgstr ""
-
-#: plugs\user_admin\templates\UserView\edit_image.html:26
-msgid "There is no portrait image uploaded yet!"
-msgstr ""
-
-#: plugs\user_admin\templates\UserView\edit_image.html:38
-msgid "Upload"
-msgstr ""
-
-#: plugs\user_admin\templates\UserView\view.html:14
-#: plugs\user_admin\templates\UsersManageView\view.html:14
-msgid "Click to change portrait"
-msgstr ""
-
-#: plugs\user_admin\templates\UsersManageView\add.html:10
-msgid "Create New User"
-msgstr ""
-
-#: plugs\user_admin\templates\UsersManageView\edit.html:10
-msgid "Change User"
-msgstr ""
-
-#: plugs\user_admin\templates\UsersManageView\list.html:10
-msgid "Click here to add new user."
-msgstr ""
-
-#: plugs\user_admin\templates\UsersManageView\view.html:24
-msgid "User Information"
-msgstr ""
-
-#: plugs\user_admin\templates\UsersManageView\view.html:43
-msgid "Do you really wnat to delete the user?"
-msgstr ""
-
-#: plugs\user_admin\templates\user_admin_layout.html:17
+#: plugs/user_admin/settings.ini:13
 msgid "Settings"
 msgstr ""
 
-#: plugs\user_admin\templates\user_admin_layout.html:19
+#: plugs/user_admin/settings.ini:16
 msgid "Information"
 msgstr ""
 
-#: plugs\user_admin\templates\user_admin_layout.html:29
+#: plugs/user_admin/settings.ini:17
+#: plugs/user_admin/templates/UserView/change_password.html:35
+msgid "Change Password"
+msgstr ""
+
+#: plugs/user_admin/settings.ini:22
 msgid "Admin Settings"
 msgstr ""
 
-#: plugs\user_admin\templates\user_admin_layout.html:31
+#: plugs/user_admin/settings.ini:25
 msgid "User Manager"
 msgstr ""
 
-#: plugs\user_admin\views_admin.py:71
+#: plugs/user_admin/templates/UserView/edit.html:35
+msgid "User Information Edit"
+msgstr ""
+
+#: plugs/user_admin/templates/UserView/edit_image.html:65
+msgid "Save Portrait"
+msgstr ""
+
+#: plugs/user_admin/templates/UserView/edit_image.html:76
+msgid "There is no portrait image uploaded yet!"
+msgstr ""
+
+#: plugs/user_admin/templates/UserView/edit_image.html:112
+msgid "Upload"
+msgstr ""
+
+#: plugs/user_admin/templates/UserView/view.html:45
+#: plugs/user_admin/templates/UsersManageView/view.html:45
+msgid "Click to change portrait"
+msgstr ""
+
+#: plugs/user_admin/templates/UsersManageView/add.html:35
+msgid "Create New User"
+msgstr ""
+
+#: plugs/user_admin/templates/UsersManageView/edit.html:35
+msgid "Change User"
+msgstr ""
+
+#: plugs/user_admin/templates/UsersManageView/list.html:43
+msgid "Click here to add new user."
+msgstr ""
+
+#: plugs/user_admin/templates/UsersManageView/view.html:73
+msgid "User Information"
+msgstr ""
+
+#: plugs/user_admin/templates/UsersManageView/view.html:137
+msgid "Do you really wnat to delete the user?"
+msgstr ""
+
+#: plugs/user_admin/views_admin.py:71
 msgid "Save portrait successful"
 msgstr ""
 
-#: plugs\user_admin\views_admin.py:98 plugs\user_admin\views_admin.py:102
+#: plugs/user_admin/views_admin.py:99 plugs/user_admin/views_admin.py:104
 msgid "Password saved successfully."
 msgstr ""
 
-#: plugs\user_admin\views_admin.py:108
+#: plugs/user_admin/views_admin.py:110
 msgid "There are something wrong, please fix them."
 msgstr ""
 
-#: plugs\user_admin\views_admin.py:232
+#: plugs/user_admin/views_admin.py:237
 msgid "You have no previlege to create user."
 msgstr ""
 
-#: plugs\user_admin\views_admin.py:251
+#: plugs/user_admin/views_admin.py:256
 msgid "User is not exists!"
 msgstr ""
 
-#: plugs\user_admin\views_admin.py:273
+#: plugs/user_admin/views_admin.py:278
 msgid "You have no previlege to edit user."
 msgstr ""
 
-#: plugs\user_admin\views_admin.py:283
+#: plugs/user_admin/views_admin.py:288
 msgid "You have no previlege to delete user."
 msgstr ""
 
-#: plugs\user_admin\views_admin.py:293
+#: plugs/user_admin/views_admin.py:299
 msgid "Password reset successfully."
 msgstr ""
 
-#: plugs\user_admin\views_admin.py:296
+#: plugs/user_admin/views_admin.py:302
 msgid "You have no previlege to reset user password."
+msgstr ""
+
+#: plugs/wiki/settings.ini:11
+msgid "History"
+msgstr ""
+
+#: plugs/wiki/settings.ini:12 plugs/wiki/templates/WikiView/wiki_pages.html:17
+msgid "Pages"
+msgstr ""
+
+#: plugs/wiki/settings.ini:13
+msgid "Source"
+msgstr ""
+
+#: plugs/wiki/settings.ini:17
+msgid "Read"
+msgstr ""
+
+#: plugs/wiki/settings.ini:18 plugs/wiki/templates/WikiView/wiki_edit.html:70
+msgid "Write"
+msgstr ""
+
+#: plugs/wiki/settings.ini:20
+#: plugs/wiki/templates/WikiView/wiki_revision.html:116
+msgid "Revert"
+msgstr ""
+
+#: plugs/wiki/templates/WikiView/wiki_edit.html:78
+msgid "Preview"
+msgstr ""
+
+#: plugs/wiki/templates/WikiView/wiki_revision.html:44
+msgid "Rev"
+msgstr ""
+
+#: plugs/wiki/templates/WikiView/wiki_revision.html:52
+msgid "Date"
+msgstr ""
+
+#: plugs/wiki/templates/WikiView/wiki_revision.html:60
+msgid "Modified User"
+msgstr ""
+
+#: plugs/wiki/templates/WikiView/wiki_revision.html:68
+msgid "Actions"
+msgstr ""
+
+#: plugs/wiki/templates/WikiView/wiki_revision.html:76
+msgid "Compare"
+msgstr ""
+
+#: plugs/wiki/templates/WikiView/wiki_revision.html:84
+msgid "Do you really want to revert this version?"
+msgstr ""
+
+#: plugs/wiki/templates/WikiView/wiki_revision.html:140
+msgid "View next %d revisions"
+msgstr ""
+
+#: plugs/wiki/views.py:195
+msgid "You have no right to access the page."
+msgstr ""
+
+#: plugs/wiki/views.py:206
+msgid "You are not logged in. "
+msgstr ""
+
+#: plugs/wiki/views.py:513
+msgid "You have no right to change the acl info."
+msgstr ""
+
+#: plugs/wiki/views.py:615 plugs/wiki/views.py:635
+msgid "The page %s is not existed, please check!"
 msgstr ""
 

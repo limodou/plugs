@@ -5,6 +5,7 @@
 {{block project}}{{<<settings.LAYOUT.PROJECT}}{{end}}
 
 {{block nav}}
+{{include "menu.html"}}
 <ul class="nav">
     {{block menu}}
     {{menu('home')}}
@@ -14,7 +15,6 @@
 
 {{block before_header}}
 {{link "bootstrap_extend.css"}}
-{{include "menu.html"}}
 {{include "inc_show_flashes.html"}}
 {{end}}
 

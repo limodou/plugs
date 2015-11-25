@@ -21,7 +21,7 @@
 {{block user_info}}
 <p class="pull-right user_info">
 {{if hasattr(request, 'user') and request.user:}}
-    <img src="{{=functions.get_user_image(request.user, size=20)}}" align="top"/> {{=unicode(request.user)}} | <a href="/user/view">{{=_('Account Setting')}}</a> | <a href="/logout">{{=_('Logout')}}</a>
+    <img src="{{=functions.get_user_image(request.user, size=20)}}" align="top"/> {{=unicode(request.user)}} | <a href="{{=url_for('plugs.user_admin.views_admin.UserView.view')}}">{{=_('Account Setting')}}</a> | <a href="{{=url_for('uliweb.contrib.auth.views.logout')}}">{{=_('Logout')}}</a>
 {{else:}}
     {{=_('Not signed in yet')}}! <a href="{{=url_for('uliweb.contrib.auth.views.login')}}">{{=_('Login')}}</a> | <a href="/register">{{=_('Register')}}</a>
 {{pass}}

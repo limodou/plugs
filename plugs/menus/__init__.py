@@ -265,13 +265,14 @@ def iter_menu(name, active='', validators=None):
                 _name = x[index]
             else:
                 _name = ''
-            _active = active == j['id'].split(name+'/')[-1]
+            _active = _name == j['id'].split(name+'/')[-1]
             link = j.get('link', '#')
             title = j.get('title', j['name'])
             expand = j.get('expand', False)
             
             d = j.copy()
-            d.update({'active':_active, 'title':title, 'link':link, 'expand':expand, 'index':index+1})
+            d.update({'active':_active, 'title':title, 'link':link,
+                      'expand':expand, 'index':index+1, 'name':j['name']})
             yield 'item', d
             
             for y in p(j, active, index+1):
@@ -282,7 +283,7 @@ def iter_menu(name, active='', validators=None):
         if begin:
             yield 'end', {'index':index}
          
-    for m in p(items, active):
+    for m in p(items, x):
         yield m
     
 def default_menu(name, active='', validators=None, id=None, _class=None):
@@ -302,7 +303,8 @@ def default_menu(name, active='', validators=None, id=None, _class=None):
             if y['expand']:
                 _lica.append('open')
             _licstr = 'class="%s"' % (' '.join(_lica)) if _lica else ''
-            s.extend([indent, '<li ', _licstr, '><a href="', y['link'], '">', str(y['title']), '</a>'])
+            _name = ' name="%s"' % y['name']
+            s.extend([indent, '<li ', _licstr, _name, '><a href="', y['link'], '">', str(y['title']), '</a>'])
         elif _t == 'open':
             pass
         elif _t == 'close':

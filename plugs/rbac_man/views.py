@@ -65,9 +65,6 @@ class RoleView(object):
         """
         
         from uliweb.utils.generic import AddView
-        from functools import partial
-        
-        url = partial(url_for, RoleView.view)
         
         default_data = {'reverse':False}
         
@@ -76,7 +73,7 @@ class RoleView(object):
             {'name':'description', 'verbose_name':_('Description')},
         ]
 
-        view = AddView(self.model, url, default_data=default_data, fields=fields)
+        view = AddView(self.model, url_for(RoleView.view, '{id}'), default_data=default_data, fields=fields)
         return view.run()
     
     def edit(self, id):

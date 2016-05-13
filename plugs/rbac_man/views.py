@@ -73,7 +73,7 @@ class RoleView(object):
             {'name':'description', 'verbose_name':_('Description')},
         ]
 
-        view = AddView(self.model, '/admin/roles/view/{id}', default_data=default_data, fields=fields)
+        view = AddView(self.model, url_for(self.__class__.view, _format=True), default_data=default_data, fields=fields)
         return view.run()
     
     def edit(self, id):

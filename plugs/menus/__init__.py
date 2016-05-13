@@ -265,7 +265,7 @@ def iter_menu(name, active='', validators=None):
                 _name = x[index]
             else:
                 _name = ''
-            _active = _name == j['id'].split(name+'/')[-1]
+            _active = active == j['id'].split(name+'/')[-1]
             link = j.get('link', '#')
             title = j.get('title', j['name'])
             expand = j.get('expand', False)
@@ -283,7 +283,7 @@ def iter_menu(name, active='', validators=None):
         if begin:
             yield 'end', {'index':index}
          
-    for m in p(items, x):
+    for m in p(items, active):
         yield m
     
 def default_menu(name, active='', validators=None, id=None, _class=None):

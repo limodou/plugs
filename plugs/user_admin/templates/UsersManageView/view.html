@@ -28,6 +28,13 @@
             <a class="btn btn-blue" href="{{=url_for('plugs.user_admin.views_admin.UsersManageView.delete',id=object.id)}}" onclick="return confirm('{{=_('Do you really wnat to delete the user?')}}');">{{=_('Delete')}}</a>
             {{pass}}
             </div>
+            <h2>User Groups</h2>
+            <table class="table">
+            <thead><tr><th>Group name</th></tr></thead>
+            {{for usergroup in object.groups.all().order_by('name'):}}
+                <tr><td>{{=usergroup.name}}</td></tr>
+            {{pass}}
+            </table>
         </div>
     </div>
 </div>

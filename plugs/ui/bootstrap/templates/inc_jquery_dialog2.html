@@ -28,8 +28,8 @@
                         $('div.control-group').removeClass('error').find('.help-block.error').remove();
                         if (r.message)
                             show_message(r.message, 'error');
-                        if (r.data){
-                            $.each(r.data, function(key, value){
+                        if (r.errors){
+                            $.each(r.errors, function(key, value){
                                 var f, t;
                                 f = '#' + opts.field_prefix + key;
                                 t = $(f).addClass('error');
@@ -44,8 +44,8 @@
                         t.find('input, select, textarea').poshytip('hide');
                         if (r.message)
                             show_message(r.message, 'error');
-                        if (r.data){
-                            $.each(r.data, function(key, value){
+                        if (r.errors){
+                            $.each(r.errors, function(key, value){
                                 var el = t.find('input[name='+key+'],select[name='+key+'],textarea[name='+key+']');
                                 if (el.is(':hidden')){
                                     el = el.parent();
@@ -72,7 +72,31 @@
         };
     }
     
-    
+    var dialog2 = function(url, options){
+        options = options || {}
+        var opts
+        var default_opts = {
+            autoFocus:false,
+            url:url,
+            width:'800px',
+            autoAjax: true,
+            ajaxFormOptions:{
+                onSuccess: common_ajaxForm_success({
+                    success:function(data){
+                        dialog.dialog2('close');
+                        if (opts.onSuccess) {
+                            opts.onSuccess(dialog, data)
+                        }
+                    }
+                }),
+                dataType: 'json'
+            }
+        }
+        opts = $.extend(true, {}, default_opts, options)
+        var dialog = $('<div></div>').dialog2(opts);
+        return dialog
+    }
+
     $(function(){
     
         $(document).controls();

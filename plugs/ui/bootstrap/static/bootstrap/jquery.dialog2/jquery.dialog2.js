@@ -273,10 +273,14 @@
                         $.error("Form submit failed: " + textStatus);
                     }
                 }, options.ajaxFormOptions || {});
-                
-                $("form.ajax", e)
-					.removeClass("ajax")
-					.ajaxForm(opts);
+
+                if (options.autoAjax)
+                    $("form", e)
+                        .ajaxForm(opts);
+                else
+                    $("form.ajax", e)
+					    .removeClass("ajax")
+					    .ajaxForm(opts);
             }
             
             e.trigger("dialog2.after-ajaxify");
@@ -680,6 +684,7 @@
 		beforeSend: null,
         autoFocus: true,
         url: null,
+        autoAjax: false, //if auto ajaxForm
         ajaxFormOptions: null
     };
     

@@ -78,7 +78,6 @@
         var default_opts = {
             autoFocus:false,
             url:url,
-            width:'800px',
             autoAjax: true,
             ajaxFormOptions:{
                 onSuccess: common_ajaxForm_success({
@@ -94,6 +93,12 @@
         }
         opts = $.extend(true, {}, default_opts, options)
         var dialog = $('<div></div>').dialog2(opts);
+        if (opts.width)
+          dialog.closest('.modal').width(opts.width)
+        dialog.draggable({
+            handle: ".modal-header", cursor: "move"
+        });
+
         return dialog
     }
 

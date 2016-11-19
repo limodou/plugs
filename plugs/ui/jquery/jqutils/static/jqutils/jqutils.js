@@ -350,8 +350,9 @@ var create_result_process = function(target, opt){
             }
         } else if (!r.success){
             if(r.message) show_message(r.message, 'error');
-            if(r.data){
-                $.each(r.data, function(key, value){
+            var error = r.errors || r.data
+            if(error){
+                $.each(error, function(key, value){
                     var el = t.find('input[name='+key+'],select[name='+key+'],textarea[name='+key+']');
                     if (el.is(':hidden')){
                         el = el.parent();
@@ -394,10 +395,11 @@ var create_ajax_callback = function(target, options){
             }
         } else if (!r.success){
             if(r.message) show_message(r.message, 'error');
+            var error = r.errors || r.data
             if(opts.message_type == 'bootstrap'){
                 $('div.control-group').removeClass('error').find('.help-block.error').remove();
-                if(r.data){
-                    $.each(r.data, function(key, value){
+                if(error){
+                    $.each(error, function(key, value){
                         var f, t;
                         f = '#' + opts.field_prefix + key;
                         t = $(f).addClass('error');
@@ -410,8 +412,8 @@ var create_ajax_callback = function(target, options){
                     t.find('input, select, textarea').poshytip('hide');
                 });
                 t.find('input, select, textarea').poshytip('hide');
-                if(r.data){
-                    $.each(r.data, function(key, value){
+                if(error){
+                    $.each(error, function(key, value){
                         var el = t.find('input[name='+key+'],select[name='+key+'],textarea[name='+key+']');
                         if (el.is(':hidden')){
                             el = el.parent();

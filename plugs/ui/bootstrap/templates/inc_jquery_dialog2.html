@@ -68,6 +68,7 @@
                         }
                     }
                 }
+                if (opts.post_error) opts.post_error.call(this, r);
             }
         };
     }

@@ -261,11 +261,7 @@ def iter_menu(name, active='', validators=None):
                 
             yield 'open', {'index':index}
             
-            if index < len(x):
-                _name = x[index]
-            else:
-                _name = ''
-            _active = active == j['id'].split(name+'/')[-1]
+            _active = active == j['id'][len(name)+1:]
             link = j.get('link', '#')
             title = j.get('title', j['name'])
             expand = j.get('expand', False)

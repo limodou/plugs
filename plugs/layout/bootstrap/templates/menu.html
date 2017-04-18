@@ -10,7 +10,8 @@ def menu(current='home', menus=None):
                 if esub.get('name', '') == current:
                     out.write('<li class="active"><a href="%s">%s</a></li>' % (esub.get('link', ''), esub.get('title', '')), escape=False)
                 else:
-                    out.write('<li><a href="%s">%s</a></li>' % (esub.get('link', ''), esub.get('title', '')), escape=False)
+                    link = settings.DOMAINS.static.get('url_prefix', '') + esub.get('link', '')
+                    out.write('<li><a href="%s">%s</a></li>' % (link, esub.get('title', '')), escape=False)
                 pass
             pass
             out.write('</ul>', escape=False)
@@ -20,6 +21,7 @@ def menu(current='home', menus=None):
             else:
                 id, caption, link = x
             pass
+            link = settings.DOMAINS.static.get('url_prefix', '') + link
             if id == current:
                 out.write('<li class="active"><a href="%s"><span>%s</span></a>' % (link, caption), escape=False)
             else:
@@ -38,7 +40,7 @@ def sub_menu(menu_items, *items):
         first = None
         items = ()
     pass
-    
+
     out.xml('<ul class="simplemenu noaccordion nav nav-list">')
     for x in menu_items:
         if x['name'] == first:
